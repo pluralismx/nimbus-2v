@@ -1,41 +1,49 @@
 <template>
     <aside>
-
-        <div class="header-container">
-            <h1>Prospectos</h1>
-            <span>crear</span>
-        </div>
-
+        <NotesTitleBarComponent />
+        <NewNoteComponent />
+        <NoteComponent />
+        <NoteComponent />
+        <NoteComponent />
     </aside>
 </template>
 <script>
+    import NotesTitleBarComponent from './NotesTitleBarComponent.vue';
+    import NewNoteComponent from './NewNoteComponent.vue';
+    import NoteComponent from './NoteComponent.vue';
+
     export default {
         name: 'NotesParentComponent',
+        components: {
+            NotesTitleBarComponent,
+            NewNoteComponent,
+            NoteComponent
+        }
     }
 </script>
 <style scoped>
+    
+    /* Mobile first */
 
     aside {
         background-color: var(--primary);
-        height: 100%;
-        width: 100%;
-        z-index: 85;
+        grid-column: 1/2;
+        grid-row: 2/3;
         padding: 1rem;
-        overflow-y: scroll;
-        box-sizing: border-box;
-    }
-
-    h1 {
-        margin: 0;
-    }
-
-    .header-container {
         display: flex;
-        justify-content: space-between;
+        flex-direction: column;
         align-items: center;
-        color: var(--basic);
-        padding-bottom: .5rem;
-        border-bottom: 1px solid var(--basic);
+        overflow-y: scroll;
     }
+
+    /* Desktop */
+
+    @media only screen and (min-width: 1024px) {
+        aside {
+            grid-column: 1/2;
+            grid-row: 2/3;
+        }
+    }
+
 
 </style>

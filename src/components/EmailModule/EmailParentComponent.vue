@@ -1,11 +1,6 @@
 <template>
     <section>
-
-        <div class="header-container">
-            <h1>Campaña de correo</h1>
-            <span>crear</span>
-        </div>
-
+        Email parent component
     </section>
 </template>
 <script>
@@ -13,28 +8,29 @@
         name: 'EmailParentComponent'
     }
 </script>
-<style scoped>
+<style>
+    
+    /* Mobile first */
 
     section {
+        grid-column: 1/2;
+        grid-row: 2/3;
         background-color: var(--basic);
-        height: 100%;
-        width: 100%;
-        z-index: 85;
-        padding: 1rem;
-        box-sizing: border-box;
     }
 
-    h1 {
-        margin: 0;
+    /* Desktop */
+
+    @media only screen and (min-width: 1024px) {
+        section {
+            grid-column: 2/3;
+            grid-row: 2/3;
+        }
+
+        .wide {
+            grid-column: 1/3;
+            grid-row: 2/3;
+        }
     }
 
-    .header-container {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        color: var(--shadows);
-        padding-bottom: .5rem;
-        border-bottom: 1px solid var(--shadows);
-        margin-bottom: 2rem;
-    }
+
 </style>

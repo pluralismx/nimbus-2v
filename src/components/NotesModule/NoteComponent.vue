@@ -1,30 +1,31 @@
 <template>
     <article class="note-container">
         <div class="note-header">
-            <input type="text" placeholder="Título">
+            <input type="text">
         </div>
         <div class="note-body">
-            <textarea placeholder="Escribe algo interesante"></textarea>
+            <textarea name="cuerpo de la nota" placeholder="Escribe algo interesante" v-model="content"></textarea>
         </div>
         <div class="note-footer">
-            <button class="btn-primary">guardar</button>
+            <button class="btn-warning">eliminar</button>
+            <button class="btn-primary">editar</button>
+            <button class="btn-primary">copiar</button>
         </div>
     </article>
 </template>
 <script>
     export default {
-        name: 'NotesTitleBarComponent'
+        name: 'NoteComponent'
     }
 </script>
 <style scoped>
 
-    /* Mobile first */
-
     .note-container {
-        background-color: var(--basic);
+        background-color: var(--shadows);
         border-radius: .5rem;
-        box-shadow: 2px 2px 3px var(--shadows);
+        box-shadow: 2px 2px 3px black;
         box-sizing: border-box;
+        height: 50%;
         width: 90%;
         min-height: 50%;
         margin-bottom: 2rem;
@@ -32,7 +33,7 @@
 
     .note-header {
         height: 15%;
-        border-bottom: 1px solid var(--primary);
+        border-bottom: 1px solid var(--accent);
     }
 
     .note-header input{
@@ -42,7 +43,7 @@
         box-sizing: border-box;
         padding: 1rem;
         border: none;
-        color: var(--shadows);
+        color: var(--accent);
         font-size: 16px;
     }
 
@@ -53,7 +54,7 @@
     .note-body {
         height: 70%;
         background-color: transparent;
-        border-bottom: 1px solid var(--primary);
+        border-bottom: 1px solid var(--accent);
     }
 
     .note-body textarea {
@@ -64,7 +65,7 @@
         background-color: transparent;
         border: none;
         font-family: 'regular';
-        color: var(--shadows);
+        color: var(--accent);
     }
 
     .note-body textarea:focus{
@@ -73,12 +74,17 @@
 
     .note-footer {
         display: flex;
-        flex-direction: column;
-        justify-content: center;
+        flex-direction: row;
+        justify-content: space-evenly;
         align-items: center;
         height: 15%;
         background-color: transparent;
         border: none;
+        padding: 0 .5rem;
     }
 
+    button {
+        width: 30%;
+    }
+    
 </style>
