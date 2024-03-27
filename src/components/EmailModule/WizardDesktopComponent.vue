@@ -6,6 +6,7 @@
 
         <!-- Aside -->
         <WizardAsideComponent />
+
         <!-- Preview -->
 
     </div>

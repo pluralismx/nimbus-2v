@@ -1,12 +1,17 @@
 <template>
     <div>
         <h1>Notes</h1>
-        <span>add</span>
+        <span @click="toggleNewNote">add</span>
     </div>
 </template>
 <script>
     export default {
-        name: 'NotesTitleBarComponent'
+        name: 'NotesTitleBarComponent',
+        methods: {
+            toggleNewNote() {
+                this.$emit('toggle-NewNote');
+            }
+        }
     }
 </script>
 <style scoped>

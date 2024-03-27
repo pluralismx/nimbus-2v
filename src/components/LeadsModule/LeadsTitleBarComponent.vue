@@ -1,12 +1,17 @@
 <template>
     <div>
-        <h1>Leads</h1>
-        <span>add</span>
+        <h1>Prospectos</h1>
+        <span @click="saveLead">agregar</span>
     </div>
 </template>
 <script>
     export default {
-        name: 'LeadsTitleBarComponent'
+        name: 'LeadsTitleBarComponent',
+        methods: {
+            saveLead(){
+                this.$emit('save-lead');
+            }
+        }
     }
 </script>
 <style scoped>

@@ -1,7 +1,11 @@
 <template>
     <aside>
-        <NotesTitleBarComponent />
-        <NewNoteComponent />
+        <NotesTitleBarComponent 
+            @toggle-NewNote="handleNewNote"
+        />
+        <NewNoteComponent 
+            v-if="isVisibleNewNote"
+        />
         <NoteComponent />
         <NoteComponent />
         <NoteComponent />
@@ -18,6 +22,20 @@
             NotesTitleBarComponent,
             NewNoteComponent,
             NoteComponent
+        },
+        data() {
+            return {
+                isVisibleNewNote: false
+            }
+        },
+        methods: {
+            handleNewNote(){
+                if (this.isVisibleNewNote == false){
+                    this.isVisibleNewNote = true;
+                }else {
+                    this.isVisibleNewNote = false;
+                }
+            }
         }
     }
 </script>

@@ -14,7 +14,7 @@
                     <label>Logotipo</label>
                     <div>
                         <input class="input-primary" type="text">
-                        <button class="btn-primary">imagen...</button>
+                        <button class="btn-primary" @click="uploadImage">imagen...</button>
                     </div>
                 </div>
                 <!-- Banner -->
@@ -22,7 +22,7 @@
                     <label>Pancarta</label>
                     <div>
                         <input class="input-primary" type="text">
-                        <button class="btn-primary">imagen...</button>
+                        <button class="btn-primary" @click="uploadImage">imagen...</button>
                     </div>
                 </div>
             </div>
@@ -68,7 +68,7 @@
                     <label>Imagen 1</label>
                     <div>
                         <input class="input-primary" type="text">
-                        <button class="btn-primary">imagen...</button>
+                        <button class="btn-primary" @click="uploadImage">imagen...</button>
                     </div>
                 </div>
 
@@ -85,7 +85,7 @@
                     <label>Imagen 2</label>
                     <div>
                         <input class="input-primary" type="text">
-                        <button class="btn-primary">imagen...</button>
+                        <button class="btn-primary" @click="uploadImage">imagen...</button>
                     </div>
                 </div>
 
@@ -145,7 +145,7 @@
                     <label>Logotipo</label>
                     <div>
                         <input class="input-primary" type="text">
-                        <button class="btn-primary">imagen...</button>
+                        <button class="btn-primary" @click="uploadImage">imagen...</button>
                     </div>
                 </div>
                 <!-- Slogan -->
@@ -183,7 +183,12 @@
 </template>
 <script>
     export default {
-        name: 'NewsLetterSettingsComponent'
+        name: 'NewsLetterSettingsComponent',
+        methods: {
+            uploadImage(){
+                this.$emit('upload-image');
+            }
+        }
     }
 </script>
 <style scoped>

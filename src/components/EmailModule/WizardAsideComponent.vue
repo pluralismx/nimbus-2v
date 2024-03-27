@@ -7,11 +7,18 @@
         <!-- Newsletter -->
         <NewsLetterSettingsComponent 
             v-show="template == 'newsletter'"
+            @upload-image="handleUploadImage"
         />
 
         <!-- Promotional -->
         <PromotionalSettingsComponent 
             v-show="template == 'promotional'"
+            @upload-image="handleUploadImage"
+        />
+
+        <!-- Modals -->
+        <ImageUploadModalComponent 
+            v-show="isVisibleUploadImageModal"
         />
 
     </aside>
@@ -20,22 +27,28 @@
     import TemplateSelectionComponent from './TemplateSelectionComponent.vue'
     import NewsLetterSettingsComponent from './NewsLetterSettingsComponent.vue';
     import PromotionalSettingsComponent from './PromotionalSettingsComponent.vue';
+    import ImageUploadModalComponent from './ImageUploadModalComponent.vue';
 
     export default {
         name: 'WizardAsideComponent',
         components: {
             TemplateSelectionComponent,
             NewsLetterSettingsComponent,
-            PromotionalSettingsComponent
+            PromotionalSettingsComponent,
+            ImageUploadModalComponent
         },
         data() {
             return {
                 template: null,
+                isVisibleUploadImageModal: false
             }
         },
         methods: {
             handleToggleTemplate(template){
                 this.template = template;
+            },
+            handleUploadImage(){
+                this.isVisibleUploadImageModal = true;
             }
         }
     }

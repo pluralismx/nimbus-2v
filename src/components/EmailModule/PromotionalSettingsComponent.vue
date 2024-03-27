@@ -14,7 +14,7 @@
                     <label>Logotipo</label>
                     <div>
                         <input class="input-primary" type="text">
-                        <button class="btn-primary">imagen...</button>
+                        <button class="btn-primary" @click="uploadImage">imagen...</button>
                     </div>
                 </div>
                 <!-- Banner -->
@@ -22,7 +22,7 @@
                     <label>Logotipo</label>
                     <div>
                         <input class="input-primary" type="text">
-                        <button class="btn-primary">imagen...</button>
+                        <button class="btn-primary" @click="uploadImage">imagen...</button>
                     </div>
                 </div>
             </div>
@@ -41,7 +41,7 @@
                     <label>Logotipo</label>
                     <div>
                         <input class="input-primary" type="text">
-                        <button class="btn-primary">imagen...</button>
+                        <button class="btn-primary" @click="uploadImage">imagen...</button>
                     </div>
                 </div>
                 <!-- Feature 1 -->
@@ -81,7 +81,7 @@
                     <label>Imagen</label>
                     <div>
                         <input class="input-primary" type="text">
-                        <button class="btn-primary">imagen...</button>
+                        <button class="btn-primary" @click="uploadImage">imagen...</button>
                     </div>
                 </div>
                 <!-- Beneficio 1 -->
@@ -153,7 +153,7 @@
                     <label>Logotipo</label>
                     <div>
                         <input class="input-primary" type="text">
-                        <button class="btn-primary">imagen...</button>
+                        <button class="btn-primary" @click="uploadImage">imagen...</button>
                     </div>
                 </div>
                 <!-- Slogan -->
@@ -191,7 +191,12 @@
 </template>
 <script>
     export default {
-        name: 'PromotionalSettingsComponent'
+        name: 'PromotionalSettingsComponent',
+        methods: {
+            uploadImage(){
+                this.$emit('upload-image');
+            }
+        }
     }
 </script>
 <style>

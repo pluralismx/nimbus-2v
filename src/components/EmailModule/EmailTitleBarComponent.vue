@@ -1,12 +1,17 @@
 <template>
     <div>
         <h1>Email</h1>
-        <span>previsualizar</span>
+        <span @click="emailPreview">previsualizar</span>
     </div>
 </template>
 <script>
     export default {
-        name: 'EmailTitleBarComponent'
+        name: 'EmailTitleBarComponent',
+        methods: {
+            emailPreview(){
+                this.$emit('email-preview');
+            }
+        }
     }
 </script>
 <style scoped>

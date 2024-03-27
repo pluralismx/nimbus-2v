@@ -1,11 +1,18 @@
 <template>
     <section>
-        <LeadsTitleBarComponent />
+        <LeadsTitleBarComponent 
+            @save-lead="handleSaveLead"
+        />
         <!-- Mobile devices -->
         <LeadComponent v-if="smViewport"/>
 
         <!-- Desktop devices -->
         <LeadsTableComponent v-else />
+
+        <!-- Modals -->
+        <SaveLeadModalComponent 
+            v-show="isVisibleSaveLeadModal"
+        />
     </section>
 </template>
 <script>
@@ -13,13 +20,15 @@
     import LeadsTitleBarComponent from './LeadsTitleBarComponent.vue';
     import LeadComponent from './LeadComponent.vue';
     import LeadsTableComponent from './LeadsTableComponent.vue';
+    import SaveLeadModalComponent from './SaveLeadModalComponent.vue'
 
     export default {
         name: 'LeadsParentComponent',
         components: {
             LeadsTitleBarComponent,
             LeadComponent,
-            LeadsTableComponent
+            LeadsTableComponent,
+            SaveLeadModalComponent
         },
         props: {
             smViewport: {
@@ -27,6 +36,16 @@
                 required: true
             }
         },
+        data() {
+            return {
+                isVisibleSaveLeadModal: false
+            }
+        },
+        methods: {
+            handleSaveLead(){
+                this.isVisibleSaveLeadModal = true;
+            }
+        }
     }
 </script>
 <style scoped>
