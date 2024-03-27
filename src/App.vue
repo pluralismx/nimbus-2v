@@ -8,6 +8,7 @@
     <!-- Dashboard -->
     <DashboardComponent 
         v-if="isLogged"
+        :smViewport = smViewport
     />
 
 </template>
@@ -23,9 +24,24 @@
             LoginParentComponent,
             DashboardComponent
         },
+        computed: {
+            isSmallViewport(){
+                return window.innerWidth < 768;
+            }
+        },
+        watch: {
+            isSmallViewport: {
+                handler(newVal){
+                    console.log(newVal);
+                    this.smViewport = newVal;
+                },
+                immediate: true
+            }
+        },
         data() {
             return {
-                isLogged: true
+                isLogged: true,
+                smViewport: null
             }
         }
     }

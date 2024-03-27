@@ -17,11 +17,13 @@
         <LeadsParentComponent 
             v-show="isVisibleLeads" 
             :class="{ 'wide' : !isVisibleNotes }" 
+            :smViewport = smViewport
         />
 
         <EmailParentComponent 
             v-show="isVisibleEmail"
-            :class="{ 'wide' : !isVisibleNotes }" 
+            :class="{ 'wide' : !isVisibleNotes }"
+            :smViewport = smViewport
         />
 
         <!-- Status bar -->
@@ -46,6 +48,12 @@ export default {
         LeadsParentComponent,
         EmailParentComponent,
         StatusbarParentComponent
+    },
+    props: {
+        smViewport: {
+            type: Boolean,
+            required: true
+        }
     },
     data() {
         return {

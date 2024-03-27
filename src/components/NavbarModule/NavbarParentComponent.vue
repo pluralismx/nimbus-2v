@@ -74,7 +74,7 @@
     /* Actual styles */
 
     img {
-        width: 40px;
+        width: 38px;
     }
 
     select {
