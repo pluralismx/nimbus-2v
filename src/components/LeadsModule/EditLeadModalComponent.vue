@@ -6,8 +6,8 @@
 
             <!-- Title -->
             <div class="modal-header">
-                <span>Agregar prospecto</span>
-                <span class="close-cross" @click="cancelSaveLead">&times;</span>
+                <span>Editar prospecto</span>
+                <span class="close-cross" @click="cancelEditLead">&times;</span>
             </div>
 
             <!-- Form -->
@@ -30,18 +30,13 @@
                         <option selected disabled>Status...</option>
                     </select>
                 </div>
-                <div class="input-block">
-                    <textarea cols="30" rows="10"></textarea>
-                </div>
             </div>
 
             <!-- Buttons -->
             <div class="modal-footer">
                 <div class="buttons-block">
-
-                    <button class="btn-warning">guardar</button>
-                    <button class="btn-primary" @click="cancelSaveLead">cancel</button>
-
+                    <button class="btn-warning">aceptar</button>
+                    <button class="btn-primary" @click="cancelEditLead">cancel</button>
                 </div>
             </div>
             
@@ -53,10 +48,10 @@
 
 <script>
 export default {
-    name: 'SaveLeadModalComponent',
+    name: 'EditLeadModalComponent',
     methods: {
-        cancelSaveLead(){
-            this.$emit('cancel-save-lead');
+        cancelEditLead(){
+            this.$emit('cancel-edit-lead');
         }
     }
 }

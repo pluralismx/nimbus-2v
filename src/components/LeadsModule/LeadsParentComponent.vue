@@ -4,7 +4,9 @@
             @save-lead="handleSaveLead"
         />
         <!-- Mobile devices -->
-        <LeadComponent v-if="smViewport"/>
+        <LeadComponent v-if="smViewport"
+            @show-edit-lead-modal="handleShowEditLeadModal"
+        />
 
         <!-- Desktop devices -->
         <LeadsTableComponent v-else />
@@ -12,7 +14,14 @@
         <!-- Modals -->
         <SaveLeadModalComponent 
             v-show="isVisibleSaveLeadModal"
+            @cancel-save-lead="handleCancelSaveLead"
         />
+
+        <EditLeadModalComponent
+            v-show="isVisibleEditLeadModal"
+            @cancel-edit-lead="handleCancelEditLead"
+        />
+
     </section>
 </template>
 <script>
@@ -20,7 +29,8 @@
     import LeadsTitleBarComponent from './LeadsTitleBarComponent.vue';
     import LeadComponent from './LeadComponent.vue';
     import LeadsTableComponent from './LeadsTableComponent.vue';
-    import SaveLeadModalComponent from './SaveLeadModalComponent.vue'
+    import SaveLeadModalComponent from './SaveLeadModalComponent.vue';
+    import EditLeadModalComponent from './EditLeadModalComponent.vue';
 
     export default {
         name: 'LeadsParentComponent',
@@ -28,7 +38,8 @@
             LeadsTitleBarComponent,
             LeadComponent,
             LeadsTableComponent,
-            SaveLeadModalComponent
+            SaveLeadModalComponent,
+            EditLeadModalComponent
         },
         props: {
             smViewport: {
@@ -38,12 +49,22 @@
         },
         data() {
             return {
-                isVisibleSaveLeadModal: false
+                isVisibleSaveLeadModal: false,
+                isVisibleEditLeadModal: false
             }
         },
         methods: {
-            handleSaveLead(){
+            handleSaveLead() {
                 this.isVisibleSaveLeadModal = true;
+            },
+            handleCancelSaveLead() {
+                this.isVisibleSaveLeadModal = false;
+            },
+            handleShowEditLeadModal() {
+                this.isVisibleEditLeadModal = true;
+            },
+            handleCancelEditLead() {
+                this.isVisibleEditLeadModal = false;
             }
         }
     }

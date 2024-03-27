@@ -29,7 +29,7 @@
             <div class="lead-actions">
                 <button class="btn-warning">Llamar</button>
                 <button class="btn-primary">Notas</button>
-                <button class="btn-primary">Editar</button>
+                <button class="btn-primary" @click="showEditLeadModal">Editar</button>
                 <button class="btn-primary">Eliminar</button>
             </div>
         </div>
@@ -37,7 +37,12 @@
 </template>
 <script>
     export default {
-        name: 'LeadComponent'
+        name: 'LeadComponent',
+        methods: {
+            showEditLeadModal(){
+                this.$emit('show-edit-lead-modal');
+            }
+        }
     }
 </script>
 <style scoped>

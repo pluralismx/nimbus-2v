@@ -24,7 +24,7 @@
     </aside>
 </template>
 <script>
-    import TemplateSelectionComponent from './TemplateSelectionComponent.vue'
+    import TemplateSelectionComponent from './TemplateSelectionComponent.vue';
     import NewsLetterSettingsComponent from './NewsLetterSettingsComponent.vue';
     import PromotionalSettingsComponent from './PromotionalSettingsComponent.vue';
     import ImageUploadModalComponent from './ImageUploadModalComponent.vue';
