@@ -65,6 +65,7 @@
         border: none;
         font-family: 'regular';
         color: var(--shadows);
+        resize: none;
     }
 
     .note-body textarea:focus{

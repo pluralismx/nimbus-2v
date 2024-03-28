@@ -38,10 +38,8 @@
             <!-- Buttons -->
             <div class="modal-footer">
                 <div class="buttons-block">
-
                     <button class="btn-warning">guardar</button>
                     <button class="btn-primary" @click="cancelSaveLead">cancel</button>
-
                 </div>
             </div>
             

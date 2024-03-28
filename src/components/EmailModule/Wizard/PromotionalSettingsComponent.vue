@@ -1,6 +1,6 @@
 <template>
-    
     <section>
+
         <!-- Header and banner -->
         <div class="settings-container">
             <!-- Title -->
@@ -14,90 +14,98 @@
                     <label>Logotipo</label>
                     <div>
                         <input class="input-primary" type="text">
-                        <button class="btn-primary" @click="uploadImage">imagen...</button>
+                        <button class="btn-primary" @click="openImageModal">imagen...</button>
                     </div>
                 </div>
                 <!-- Banner -->
                 <div class="image-input-block">
-                    <label>Pancarta</label>
+                    <label>Logotipo</label>
                     <div>
                         <input class="input-primary" type="text">
-                        <button class="btn-primary" @click="uploadImage">imagen...</button>
+                        <button class="btn-primary" @click="openImageModal">imagen...</button>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Introduction -->
+        <!-- Features -->
         <div class="settings-container">
             <!-- Title -->
             <div class="settings-header">
-                <span>Introducción</span>
+                <span>Características</span>
             </div>
+            <!-- Content -->
             <div class="settings-body">
-                <!-- Heading -->
+                <!-- Image -->
+                <div class="image-input-block">
+                    <label>Logotipo</label>
+                    <div>
+                        <input class="input-primary" type="text">
+                        <button class="btn-primary" @click="openImageModal">imagen...</button>
+                    </div>
+                </div>
+                <!-- Feature 1 -->
                 <div class="text-input-block">
-                    <label>Título</label>
+                    <label>Característica 1</label>
                     <div>
                         <input class="input-primary" type="text">
                     </div>
                 </div>
-
-                <!-- Content -->
+                <!-- Feature 2 -->
                 <div class="text-input-block">
-                    <label>Texto</label>
+                    <label>Característica 2</label>
                     <div>
-                        <textarea></textarea>
+                        <input class="input-primary" type="text">
+                    </div>
+                </div>
+                <!-- Feature 3 -->
+                <div class="text-input-block">
+                    <label>Característica 3</label>
+                    <div>
+                        <input class="input-primary" type="text">
                     </div>
                 </div>
             </div>
-
         </div>
 
-        <!-- Content -->
+        <!-- Benefits -->
         <div class="settings-container">
-
             <!-- Title -->
             <div class="settings-header">
-                <span>Contenido</span>
+                <span>Beneficios</span>
             </div>
-
+            <!-- Content -->
             <div class="settings-body">
-                <!-- Image 1 -->
+                <!-- Image -->
                 <div class="image-input-block">
-                    <label>Imagen 1</label>
+                    <label>Imagen</label>
                     <div>
                         <input class="input-primary" type="text">
-                        <button class="btn-primary" @click="uploadImage">imagen...</button>
+                        <button class="btn-primary" @click="openImageModal">imagen...</button>
                     </div>
                 </div>
-
-                <!-- Text 1 -->
+                <!-- Beneficio 1 -->
                 <div class="text-input-block">
-                    <label>Texto</label>
-                    <div>
-                        <textarea></textarea>
-                    </div>
-                </div>
-
-                <!-- Image 2 -->
-                <div class="image-input-block">
-                    <label>Imagen 2</label>
+                    <label>Beneficio 1</label>
                     <div>
                         <input class="input-primary" type="text">
-                        <button class="btn-primary" @click="uploadImage">imagen...</button>
                     </div>
                 </div>
-
-                <!-- Text 2 -->
+                <!-- Beneficio 2 -->
                 <div class="text-input-block">
-                    <label>Texto</label>
+                    <label>Beneficio 2</label>
                     <div>
-                        <textarea></textarea>
+                        <input class="input-primary" type="text">
+                    </div>
+                </div>
+                <!-- Beneficio 3 -->
+                <div class="text-input-block">
+                    <label>Beneficio 3</label>
+                    <div>
+                        <input class="input-primary" type="text">
                     </div>
                 </div>
             </div>
-            
         </div>
 
         <!-- Social -->
@@ -145,7 +153,7 @@
                     <label>Logotipo</label>
                     <div>
                         <input class="input-primary" type="text">
-                        <button class="btn-primary" @click="uploadImage">imagen...</button>
+                        <button class="btn-primary" @click="openImageModal">imagen...</button>
                     </div>
                 </div>
                 <!-- Slogan -->
@@ -178,20 +186,20 @@
                 </div>
             </div>
         </div>
-    </section>
 
+    </section>
 </template>
 <script>
     export default {
-        name: 'NewsLetterSettingsComponent',
+        name: 'PromotionalSettingsComponent',
         methods: {
-            uploadImage(){
-                this.$emit('upload-image');
+            openImageModal(){
+                this.$emit('open-image-modal');
             }
         }
     }
 </script>
-<style scoped>
+<style>
 
     .settings-container {
         margin-top: 2rem;
@@ -255,4 +263,5 @@
         font-family: 'Regular';
         padding: 4px;
     }
+    
 </style>

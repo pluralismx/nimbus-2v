@@ -155,3 +155,10 @@ ul {
     padding: 0 6px;
     box-shadow: 1px 1px 4px var(--shadows);
 }
+
+.modal-close {
+    background-color: var(--warn);
+    box-sizing: border-box;
+    padding: 0px 4px;
+    border-radius: 2px;
+}

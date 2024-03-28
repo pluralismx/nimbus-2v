@@ -6,26 +6,11 @@
 
             <div class="modal-header">
                 <span>Seleccionar imagen</span>
-                <span class="close-cross">&times;</span>
+                <span class="modal-close" @click="closeModal">&times;</span>
             </div>
             <div class="modal-body">
                 <div class="img-thumbnail">
-                    <img src="../../assets/images/logo.jpg">
-                </div>
-                <div class="img-thumbnail">
-                    <img src="../../assets/images/logotipo.png">
-                </div>
-                <div class="img-thumbnail">
-                    <img src="../../assets/images/logo.jpg">
-                </div>
-                <div class="img-thumbnail">
-                    <img src="../../assets/images/logotipo.png">
-                </div>
-                <div class="img-thumbnail">
-                    <img src="../../assets/images/logo.jpg">
-                </div>
-                <div class="img-thumbnail">
-                    <img src="../../assets/images/logotipo.png">
+                    <img src="../../../assets/images/logo.jpg">
                 </div>
             </div>
 
@@ -37,12 +22,12 @@
                         Buscar en este dispositivo...
                         <input id="input_image" type="file" />
                     </label>
-                    <button class="btn-primary"><img src="../../assets/images/white-upload.png" width="20"/></button>
+                    <button class="btn-primary"><img src="../../../assets/images/white-upload.png" width="20"/></button>
                 </div>
 
                 <div class="modal-image-footer-row">            
                     <input type="text">
-                    <button class="btn-warning"><img src="../../assets/images/white-checkmark.png" width="20"/></button>
+                    <button class="btn-warning"><img src="../../../assets/images/white-checkmark.png" width="20"/></button>
                 </div>
            </div>
 
@@ -54,7 +39,12 @@
 
 <script>
 export default {
-    name: 'ImageUploadModalComponent'
+    name: 'ImageUploadModalComponent',
+    methods: {
+        closeModal(){
+            this.$emit('close-image-modal');
+        }
+    }
 }
 </script>
 

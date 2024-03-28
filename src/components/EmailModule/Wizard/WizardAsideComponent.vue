@@ -1,38 +1,37 @@
 <template>
-    <div class="wizard-container">
-
-        <!-- Template Selection -->
+    <aside class="wizard-aside">
         <TemplateSelectionComponent 
             @toggle-template="handleToggleTemplate"
         />
 
-        <!-- News letter -->
+        <!-- Newsletter -->
         <NewsLetterSettingsComponent 
             v-show="template == 'newsletter'"
-            @upload-image="handleUploadImage"
+            @open-image-modal="handleOpenImageModal"
         />
 
         <!-- Promotional -->
         <PromotionalSettingsComponent 
             v-show="template == 'promotional'"
-            @upload-image="handleUploadImage"
+            @open-image-modal="handleOpenImageModal"
         />
 
         <!-- Modals -->
         <ImageUploadModalComponent 
             v-show="isVisibleUploadImageModal"
+            @close-image-modal="handleCloseImageModal"
         />
-        
-    </div>
+
+    </aside>
 </template>
 <script>
-    import TemplateSelectionComponent from './TemplateSelectionComponent'
-    import NewsLetterSettingsComponent from './NewsLetterSettingsComponent'
+    import TemplateSelectionComponent from './TemplateSelectionComponent.vue';
+    import NewsLetterSettingsComponent from './NewsLetterSettingsComponent.vue';
     import PromotionalSettingsComponent from './PromotionalSettingsComponent.vue';
-    import ImageUploadModalComponent from './ImageUploadModalComponent.vue';
+    import ImageUploadModalComponent from '../Modals/ImageUploadModalComponent.vue';
 
     export default {
-        name: 'WizardComponent',
+        name: 'WizardAsideComponent',
         components: {
             TemplateSelectionComponent,
             NewsLetterSettingsComponent,
@@ -49,12 +48,25 @@
             handleToggleTemplate(template){
                 this.template = template;
             },
-            handleUploadImage(){
+            handleOpenImageModal(){
                 this.isVisibleUploadImageModal = true;
+            },
+            handleCloseImageModal() {
+                this.isVisibleUploadImageModal = false;
             }
         }
     }
 </script>
-<style>
+<style scoped>
 
+    .wizard-aside {
+        grid-column: 1/2;
+        grid-row: 2/3;
+        background-color: var(--basic);
+        border-right: 1px solid var(--primary);
+        border-bottom-left-radius: .5rem;
+        padding: 2rem;
+        overflow-y: auto;
+    }
+    
 </style>

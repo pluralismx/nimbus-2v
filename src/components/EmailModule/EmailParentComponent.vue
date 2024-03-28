@@ -5,7 +5,10 @@
         />
 
         <!-- Mobile -->
-        <WizardComponent v-if="smViewport"/>
+        <WizardComponent 
+            v-if="smViewport"
+            @change-preview-template="handleChangePreviewTemplate"
+        />
 
         <!-- Desktop -->
         <WizardDesktopComponent v-else/>
@@ -13,6 +16,8 @@
         <!-- Modals -->
         <EmailPreviewModalComponent 
             v-show="isVisibleEmailPreviewModal"
+            :previewTemplate="previewTemplate"
+            @close-email-preview="handleCloseEmailPreview"
         />
 
         <ImageUploadModalComponent 
@@ -23,10 +28,10 @@
 </template>
 <script>
     import EmailTitleBarComponent from './EmailTitleBarComponent.vue';
-    import WizardComponent from './WizardComponent.vue';
-    import WizardDesktopComponent from './WizardDesktopComponent.vue';
-    import EmailPreviewModalComponent from './EmailPreviewModalComponent.vue';
-    import ImageUploadModalComponent from './ImageUploadModalComponent.vue';
+    import WizardComponent from './Wizard/WizardComponent.vue';
+    import WizardDesktopComponent from './Wizard/WizardDesktopComponent.vue';
+    import EmailPreviewModalComponent from './Modals/EmailPreviewModalComponent.vue';
+    import ImageUploadModalComponent from './Modals/ImageUploadModalComponent.vue';
 
     export default {
         name: 'EmailParentComponent',
@@ -46,7 +51,8 @@
         data() {
             return {
                 isVisibleEmailPreviewModal: false,
-                isVisibleImageUploadModal: false
+                isVisibleImageUploadModal: false,
+                previewTemplate: null
             }
         },
         methods: {
@@ -55,6 +61,12 @@
             },
             handleUploadImage(){
                 this.isVisibleImageUploadModal = true;
+            },
+            handleChangePreviewTemplate(template) {
+                this.previewTemplate = template;
+            },
+            handleCloseEmailPreview() {
+                this.isVisibleEmailPreviewModal = false;
             }
         },
     }

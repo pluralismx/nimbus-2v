@@ -33,7 +33,9 @@
 
     .note-header {
         height: 15%;
-        border-bottom: 1px solid var(--accent);
+        background-color: var(--accent);
+        border-top-left-radius: .5rem;
+        border-top-right-radius: .5rem;
     }
 
     .note-header input{
@@ -43,7 +45,7 @@
         box-sizing: border-box;
         padding: 1rem;
         border: none;
-        color: var(--accent);
+        color: var(--shadows);
         font-size: 16px;
     }
 
@@ -66,6 +68,7 @@
         border: none;
         font-family: 'regular';
         color: var(--accent);
+        resize: none;
     }
 
     .note-body textarea:focus{
