@@ -39,7 +39,7 @@
                 <div class="text-input-block">
                     <label>Título</label>
                     <div>
-                        <input class="input-primary" type="text">
+                        <input v-model="templateData.title" class="input-primary" type="text">
                     </div>
                 </div>
 
@@ -47,7 +47,7 @@
                 <div class="text-input-block">
                     <label>Texto</label>
                     <div>
-                        <textarea></textarea>
+                        <textarea v-model="templateData.content"></textarea>
                     </div>
                 </div>
             </div>
@@ -76,7 +76,7 @@
                 <div class="text-input-block">
                     <label>Texto</label>
                     <div>
-                        <textarea></textarea>
+                        <textarea v-model="templateData.side_text_a"></textarea>
                     </div>
                 </div>
 
@@ -93,7 +93,7 @@
                 <div class="text-input-block">
                     <label>Texto</label>
                     <div>
-                        <textarea></textarea>
+                        <textarea v-model="templateData.side_text_b"></textarea>
                     </div>
                 </div>
             </div>
@@ -112,21 +112,21 @@
                 <div class="text-input-block">
                     <label>Facebook URL</label>
                     <div>
-                        <input class="input-primary" type="text">
+                        <input v-bind="templateData.facebook_link" class="input-primary" type="text">
                     </div>
                 </div>
                 <!-- Instagram -->
                 <div class="text-input-block">
                     <label>Instagram URL</label>
                     <div>
-                        <input class="input-primary" type="text">
+                        <input v-bind="templateData.instagram_link" class="input-primary" type="text">
                     </div>
                 </div>
                 <!-- Youtube -->
                 <div class="text-input-block">
                     <label>Youtube URL</label>
                     <div>
-                        <input class="input-primary" type="text">
+                        <input v-bind="templateData.youtube_link" class="input-primary" type="text">
                     </div>
                 </div>
             </div>
@@ -152,28 +152,28 @@
                 <div class="text-input-block">
                     <label>Slogan</label>
                     <div>
-                        <input class="input-primary" type="text">
+                        <input v-model="templateData.slogan" class="input-primary" type="text">
                     </div>
                 </div>
                 <!-- Address -->
                 <div class="text-input-block">
                     <label>Dirección</label>
                     <div>
-                        <input class="input-primary" type="text">
+                        <input v-model="templateData.address" class="input-primary" type="text">
                     </div>
                 </div>
                 <!-- E-mail -->
                 <div class="text-input-block">
                     <label>E-mail</label>
                     <div>
-                        <input class="input-primary" type="text">
+                        <input v-model="templateData.email" class="input-primary" type="text">
                     </div>
                 </div>
                 <!-- Phone -->
                 <div class="text-input-block">
                     <label>Teléfono</label>
                     <div>
-                        <input class="input-primary" type="text">
+                        <input v-model="templateData.phone" class="input-primary" type="text">
                     </div>
                 </div>
             </div>
@@ -182,11 +182,76 @@
 
 </template>
 <script>
+    import { render } from '../Templates/Newsletter.js'
     export default {
         name: 'NewsLetterSettingsComponent',
+        props: {
+            isSelected: {
+                type: String,
+                required: true
+            },
+            theme: {
+                type: String,
+                required: true
+            }
+        },
+        computed: {
+            setTheme() {
+                return this.theme;
+            }
+        },
+        watch: {
+            setTheme: {
+                handler(newVal) {
+                    this.templateData.theme = newVal;
+                },
+                immediate: true,
+                deep: true
+            },
+            isSelected: {
+                handler(newVal){
+                    if(newVal === 'newsletter'){
+                        this.html();
+                    }
+                },
+                immediate: true,
+                deep: true
+            },
+            templateData: {
+                handler(){
+                    if(this.isSelected === 'newsletter'){
+                        this.html();
+                    }
+                },
+                immediate: true,
+                deep: true
+            }
+        },
+        data() {
+            return {
+                templateData: {
+                    theme: null,
+                    title: null,
+                    content: null,
+                    side_text_a: null,
+                    side_text_b: null,
+                    facebook_link: null,
+                    instagram_link: null,
+                    youtube_link: null,
+                    slogan: null,
+                    address: null,
+                    email: null,
+                    phone: null
+                }
+            }
+        },
         methods: {
             openImageModal(){
                 this.$emit('open-image-modal');
+            },
+            html(){
+                let html = render(this.templateData);
+                this.$emit('update-html-template', html);
             }
         }
     }

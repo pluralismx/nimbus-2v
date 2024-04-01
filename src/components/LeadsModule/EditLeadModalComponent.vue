@@ -1,5 +1,5 @@
 <template>
-    
+
     <div class="modal-screen">
 
         <div class="modal-container">
@@ -39,7 +39,7 @@
                     <button class="btn-primary" @click="cancelEditLead">cancel</button>
                 </div>
             </div>
-            
+
         </div>
 
     </div>
@@ -50,7 +50,7 @@
 export default {
     name: 'EditLeadModalComponent',
     methods: {
-        cancelEditLead(){
+        cancelEditLead() {
             this.$emit('cancel-edit-lead');
         }
     }
@@ -58,68 +58,72 @@ export default {
 </script>
 
 <style scoped>
+.modal-container {
+    width: 75%;
+    border-radius: .5rem;
+    box-shadow: 4px 4px 16px var(--shadows);
+}
 
+.modal-header {
+    padding: .5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: var(--primary);
+    border-top-left-radius: .5rem;
+    border-top-right-radius: .5rem;
+    color: var(--basic);
+}
+
+.modal-body {
+    padding: .5rem;
+    background-color: var(--basic);
+}
+
+.input-block {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 1rem 0;
+}
+
+.input-block input {
+    width: 60%;
+}
+
+.input-block select {
+    width: 100%;
+}
+
+.input-block textarea {
+    width: 100%;
+    resize: none;
+    border: none;
+}
+
+.modal-footer {
+    padding-top: 0;
+    padding-left: .5rem;
+    padding-bottom: .5rem;
+    padding-right: .5rem;
+    border-bottom-left-radius: .5rem;
+    border-bottom-right-radius: .5rem;
+    background-color: var(--basic);
+}
+
+.buttons-block {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.buttons-block button {
+    width: 100px;
+}
+
+@media only screen and (min-width: 1024px) {
     .modal-container {
-        width: 75%;
-        border-radius: .5rem;
-        background-color: var(--basic);
+        width: 15%;
     }
-
-    .modal-header {
-        padding: .5rem;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        background-color: var(--primary);
-        border-top-left-radius: .5rem;
-        border-top-right-radius: .5rem;
-        color: var(--basic);
-    }
-
-    .modal-body {
-        padding: .5rem;
-        background-color: var(--basic);
-    }
-
-    .input-block {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin: 1rem 0;
-    }
-
-    .input-block input {
-        width: 60%;
-    }
-
-    .input-block select {
-        width: 100%;
-    }
-
-    .input-block textarea {
-        width: 100%;
-        resize: none;
-        border: none;
-    }
-
-    .modal-footer {
-        padding-top: 0;
-        padding-left: .5rem;
-        padding-bottom: .5rem;
-        padding-right: .5rem;
-        border-bottom-left-radius: .5rem;
-        border-bottom-right-radius: .5rem;
-        background-color: var(--basic);
-    }
-
-    .buttons-block {
-        display: flex;
-        align-items: center;
-        justify-content: space-evenly;
-    }
-
-    .buttons-block button {
-        width: 100px;
-    }
-
+}
 </style>

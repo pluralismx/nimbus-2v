@@ -20,9 +20,9 @@
                 <div class="modal-image-footer-row">
                     <label for="input_image">
                         Buscar en este dispositivo...
-                        <input id="input_image" type="file" />
+                        <input id="input_image" type="file" @change="selectImageToUpload"/>
                     </label>
-                    <button class="btn-primary"><img src="../../../assets/images/white-upload.png" width="20"/></button>
+                    <button class="btn-primary" @click="uploadImage"><img src="../../../assets/images/white-upload.png" width="20"/></button>
                 </div>
 
                 <div class="modal-image-footer-row">            
@@ -38,11 +38,35 @@
 </template>
 
 <script>
+
+import axios from '@/lib/axios.js';
+
 export default {
     name: 'ImageUploadModalComponent',
+    data() {
+        return {
+            imageToUpload: null,
+            images: []
+        }
+    },
     methods: {
         closeModal(){
             this.$emit('close-image-modal');
+        },
+        selectImageToUpload(event) {
+            this.imageToUpload = event.target.files[0];
+        },
+        uploadImage() {
+            let formData = new FormData();
+            formData.append("image", this.imageToUpload);
+
+            axios.post('image/uploadImage', formData)
+                .then(response => {
+                    console.log('Image uploaded successfully:', response.data);
+                })
+                .catch(error => {
+                    console.error('Error uploading image:', error);
+                });
         }
     }
 }

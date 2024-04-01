@@ -28,7 +28,7 @@
             </div>
             <div class="lead-actions">
                 <button class="btn-warning">Llamar</button>
-                <button class="btn-primary">Notas</button>
+                <button class="btn-primary" @click="showNotesModal">Notas</button>
                 <button class="btn-primary" @click="showEditLeadModal">Editar</button>
                 <button class="btn-primary">Eliminar</button>
             </div>
@@ -39,8 +39,11 @@
     export default {
         name: 'LeadComponent',
         methods: {
-            showEditLeadModal(){
+            showEditLeadModal() {
                 this.$emit('show-edit-lead-modal');
+            },
+            showNotesModal() {
+                this.$emit('show-notes-modal');
             }
         }
     }

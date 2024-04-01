@@ -48,21 +48,21 @@
                 <div class="text-input-block">
                     <label>Característica 1</label>
                     <div>
-                        <input class="input-primary" type="text">
+                        <input v-model="templateData.feature_a" class="input-primary" type="text">
                     </div>
                 </div>
                 <!-- Feature 2 -->
                 <div class="text-input-block">
                     <label>Característica 2</label>
                     <div>
-                        <input class="input-primary" type="text">
+                        <input v-model="templateData.feature_b" class="input-primary" type="text">
                     </div>
                 </div>
                 <!-- Feature 3 -->
                 <div class="text-input-block">
                     <label>Característica 3</label>
                     <div>
-                        <input class="input-primary" type="text">
+                        <input v-model="templateData.feature_c" class="input-primary" type="text">
                     </div>
                 </div>
             </div>
@@ -88,21 +88,21 @@
                 <div class="text-input-block">
                     <label>Beneficio 1</label>
                     <div>
-                        <input class="input-primary" type="text">
+                        <input v-model="benefit_a" class="input-primary" type="text">
                     </div>
                 </div>
                 <!-- Beneficio 2 -->
                 <div class="text-input-block">
                     <label>Beneficio 2</label>
                     <div>
-                        <input class="input-primary" type="text">
+                        <input v-model="benefit_b" class="input-primary" type="text">
                     </div>
                 </div>
                 <!-- Beneficio 3 -->
                 <div class="text-input-block">
                     <label>Beneficio 3</label>
                     <div>
-                        <input class="input-primary" type="text">
+                        <input v-model="benefit_c" class="input-primary" type="text">
                     </div>
                 </div>
             </div>
@@ -190,11 +190,78 @@
     </section>
 </template>
 <script>
+    import { render } from '../Templates/Promotional.js';
     export default {
         name: 'PromotionalSettingsComponent',
+        props: {
+            isSelected: {
+                type: String,
+                required: false
+            },
+            theme: {
+                type: String,
+                required: true
+            }
+        },
+        computed: {
+            setTheme() {
+                return this.theme;
+            }
+        },
+        watch: {
+            setTheme: {
+                handler(newVal) {
+                    this.templateData.theme = newVal;
+                },
+                immediate: true,
+                deep: true
+            },
+            isSelected: {
+                handler(newVal){
+                    if(newVal === 'promotional'){
+                        this.html();
+                    }
+                },
+                immediate: true,
+                deep: true
+            },
+            templateData: {
+                handler(){
+                    if(this.isSelected === 'promotional'){
+                        this.html();
+                    }
+                },
+                immediate: true,
+                deep: true
+            }
+        },
+        data() {
+            return {
+                templateData: {
+                    theme: null,
+                    feature_a: null,
+                    feature_b: null,
+                    feature_c: null,
+                    benefit_a: null,
+                    benefit_b: null,
+                    benefit_c: null,
+                    facebook_link: null,
+                    instagram_link: null,
+                    youtube_link: null,
+                    slogan: null,
+                    address: null,
+                    email: null,
+                    phone: null
+                }
+            }
+        },
         methods: {
             openImageModal(){
                 this.$emit('open-image-modal');
+            },
+            html(){
+                let html = render(this.templateData);
+                this.$emit('update-html-template', html);
             }
         }
     }

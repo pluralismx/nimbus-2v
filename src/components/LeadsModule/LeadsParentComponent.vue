@@ -6,6 +6,7 @@
         <!-- Mobile devices -->
         <LeadComponent v-if="smViewport"
             @show-edit-lead-modal="handleShowEditLeadModal"
+            @show-notes-modal="handleShowNotesModal"
         />
 
         <!-- Desktop devices -->
@@ -22,6 +23,11 @@
             @cancel-edit-lead="handleCancelEditLead"
         />
 
+        <NotesLeadModalComponent 
+            v-show="isVisibleNotesLeadModal"
+            @close-notes-modal="handleCloseNotesModal"
+        />
+
     </section>
 </template>
 <script>
@@ -31,6 +37,7 @@
     import LeadsTableComponent from './LeadsTableComponent.vue';
     import SaveLeadModalComponent from './SaveLeadModalComponent.vue';
     import EditLeadModalComponent from './EditLeadModalComponent.vue';
+    import NotesLeadModalComponent from './NotesLeadModalComponent'
 
     export default {
         name: 'LeadsParentComponent',
@@ -39,7 +46,8 @@
             LeadComponent,
             LeadsTableComponent,
             SaveLeadModalComponent,
-            EditLeadModalComponent
+            EditLeadModalComponent,
+            NotesLeadModalComponent
         },
         props: {
             smViewport: {
@@ -50,7 +58,8 @@
         data() {
             return {
                 isVisibleSaveLeadModal: false,
-                isVisibleEditLeadModal: false
+                isVisibleEditLeadModal: false,
+                isVisibleNotesLeadModal: false
             }
         },
         methods: {
@@ -65,6 +74,12 @@
             },
             handleCancelEditLead() {
                 this.isVisibleEditLeadModal = false;
+            },
+            handleShowNotesModal() {
+                this.isVisibleNotesLeadModal = true;
+            },
+            handleCloseNotesModal() {
+                this.isVisibleNotesLeadModal = false;
             }
         }
     }

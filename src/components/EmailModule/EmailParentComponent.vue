@@ -7,7 +7,7 @@
         <!-- Mobile -->
         <WizardComponent 
             v-if="smViewport"
-            @change-preview-template="handleChangePreviewTemplate"
+            @update-html-template="handleUpdateHtmlTemplate"
         />
 
         <!-- Desktop -->
@@ -52,7 +52,8 @@
             return {
                 isVisibleEmailPreviewModal: false,
                 isVisibleImageUploadModal: false,
-                previewTemplate: null
+                previewTemplate: null,
+                theme: null
             }
         },
         methods: {
@@ -62,12 +63,15 @@
             handleUploadImage(){
                 this.isVisibleImageUploadModal = true;
             },
-            handleChangePreviewTemplate(template) {
-                this.previewTemplate = template;
-            },
             handleCloseEmailPreview() {
                 this.isVisibleEmailPreviewModal = false;
+            },
+
+            // Email
+            handleUpdateHtmlTemplate(template) {
+                this.previewTemplate = template;
             }
+
         },
     }
 </script>

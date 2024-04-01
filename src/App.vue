@@ -32,7 +32,6 @@
         watch: {
             isSmallViewport: {
                 handler(newVal){
-                    console.log(newVal);
                     this.smViewport = newVal;
                 },
                 immediate: true

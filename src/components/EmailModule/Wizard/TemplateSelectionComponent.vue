@@ -7,14 +7,16 @@
             <div class="select-block">
                 <label>Plantilla</label>
                 <select @change="toggleTemplate($event.target.value)">
+                    <option selected disabled>seleccionar...</option>
                     <option value="promotional">promotional</option>
                     <option value="newsletter">news letter</option>
                 </select>
             </div>
             <div class="select-block">
                 <label>Tema</label>
-                <select>
-                    <option>Jadeite</option>
+                <select @change="toggleTheme($event.target.value)">
+                    <option selected disabled>seleccionar...</option>
+                    <option v-for="(theme, index) in themes" :key="index" :value="theme.hex">{{ theme.name }}</option>
                 </select>
             </div>
         </div>
@@ -26,6 +28,25 @@
         methods: {
             toggleTemplate(template){
                 this.$emit('toggle-template', template);
+            },
+            toggleTheme(theme){
+                this.$emit('toggle-theme', theme);
+            }
+        },
+        data() {
+            return {
+                themes: [
+                    {"name": "Goldstone", "hex":"#630006"},
+                    {"name": "Jasper", "hex":"#a00f16"},
+                    {"name": "Carnelian", "hex":"#ba4a00"},
+                    {"name": "Aventurine", "hex":"#e48600"},
+                    {"name": "Amethyst", "hex":"#4d1564"},
+                    {"name": "Garnet", "hex":"#780132"},
+                    {"name": "Dumortierte", "hex":"#12376a"},
+                    {"name": "Jadeite", "hex":"#037e99"},
+                    {"name": "Jade", "hex":"#25654e"},
+                    {"name": "Apatite", "hex":"#003e48"}
+                ]
             }
         }
     }

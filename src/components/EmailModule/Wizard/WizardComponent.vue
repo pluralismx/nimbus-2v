@@ -4,18 +4,25 @@
         <!-- Template Selection -->
         <TemplateSelectionComponent 
             @toggle-template="handleToggleTemplate"
+            @toggle-theme="handleToggleTheme"
         />
 
         <!-- News letter -->
         <NewsLetterSettingsComponent 
             v-show="template == 'newsletter'"
+            :isSelected="template"
+            :theme="theme"
             @open-image-modal="handleOpenImageModal"
+            @update-html-template="handleUpdateHtmlTemplate"
         />
 
         <!-- Promotional -->
         <PromotionalSettingsComponent 
             v-show="template == 'promotional'"
+            :isSelected="template"
+            :theme="theme"
             @open-image-modal="handleOpenImageModal"
+            @update-html-template="handleUpdateHtmlTemplate"
         />
 
         <!-- Modals -->
@@ -43,19 +50,29 @@
         data() {
             return {
                 template: null,
+                theme: null,
                 isVisibleUploadImageModal: false
             }
         },
         methods: {
+
+            // Layout
             handleToggleTemplate(template){
                 this.template = template;
-                this.$emit('change-preview-template', template);
             },
             handleOpenImageModal(){
                 this.isVisibleUploadImageModal = true;
             },
             handleCloseImageModal() {
                 this.isVisibleUploadImageModal = false;
+            },
+
+            // Email
+            handleUpdateHtmlTemplate(template) {
+                this.$emit('update-html-template', template);
+            },
+            handleToggleTheme(theme) {
+                this.theme = theme;
             }
         }
     }
