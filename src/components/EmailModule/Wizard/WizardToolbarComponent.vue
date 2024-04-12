@@ -1,8 +1,8 @@
 <template>
     <div class="wizard-toolbar">
         <ul>
-            <li>Plantilla</li>
-            <li>Destinatarios</li>
+            <li @click="showSettings">Plantilla</li>
+            <li @click="showRecipients">Destinatarios</li>
             <li>PC</li>
             <li>Móvil</li>
             <li>Configuración</li>
@@ -11,7 +11,17 @@
 </template>
 <script>
     export default {
-        name: 'WizardToolbarComponent'
+        name: 'WizardToolbarComponent',
+        methods: {
+            showSettings(){
+                console.log('settings');
+                this.$emit('show-template-settings');
+            },
+            showRecipients(){
+                console.log('recipients');
+                this.$emit('show-recipients-settings');
+            }
+        }
     }
 </script>
 <style scoped>

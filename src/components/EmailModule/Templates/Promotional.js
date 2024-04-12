@@ -28,7 +28,7 @@ export function render(data) {
             <table role="header" style="border-spacing:0;font-size:18px;width: 100%;" align="center" cellspacing="0">
             <tr>
                 <td style="border-spacing:0;background-color: ${data.theme}; text-align: center; padding: 16px;">
-                <img src="https://crm.pluralis.com.mx/uploads/images/${data.logo}" alt="Logo" width="180px">
+                <img src="${data.logo}" alt="Logo" width="180px">
                 </td>
             </tr>
             </table>
@@ -36,7 +36,7 @@ export function render(data) {
             <table role="banner" style="border-spacing:0;font-size:18px;width: 100%;">
             <tr>
                 <td style="border-spacing:0;padding:0px">
-                <img src="https://crm.pluralis.com.mx/uploads/images/${data.banner}" alt="Banner" width="100%"/>
+                <img src="${data.banner}" alt="Banner" width="100%"/>
                 </td>
             </tr>
             </table>
@@ -44,7 +44,7 @@ export function render(data) {
             <table role="offers" style="border-spacing:0;font-size:18px;width: 100%; background-color: #FFFFFF;" cellspacing="0">
             <tr>
                 <td align="center" style="border-spacing:0;padding-top: 32px; padding-bottom: 16px; width: 50%;">
-                <img src="https://crm.pluralis.com.mx/uploads/images/${data.features}" alt="illustration" width="70%"/>
+                <img src="${data.features}" alt="illustration" width="70%"/>
                 <h3>Caracteristicas</h3>
                 <ul style="list-style: none; padding: 0; line-height: 1.5;">
                     <li>${data.feature_a}</li>
@@ -53,7 +53,7 @@ export function render(data) {
                 </ul>
                 </td>
                 <td align="center" style="border-spacing:0;padding-top: 32px; padding-bottom: 16px; width: 50%;">
-                <img src="https://crm.pluralis.com.mx/uploads/images/${data.benefits}" alt="illustration" width="70%"/>
+                <img src="${data.benefits}" alt="illustration" width="70%"/>
                 <h3>Beneficios</h3>
                 <ul style="list-style: none; padding: 0; line-height: 1.5;">
                     <li>${data.benefit_a}</li>
@@ -68,9 +68,9 @@ export function render(data) {
             <tr>
                 <td align="center" style="border-spacing:0;padding: 16px;">
                 <p style="color: #ffffff;">Conectese con nosotros</p>
-                <a href="${data.facebook_link}"><img src="https://crm.pluralis.com.mx/assets/images/white-facebook.png" alt="facebook" width="30" style="margin-left: 4px; margin-right: 4px;"></a>
-                <a href="${data.instagram_link}"><img src="https://crm.pluralis.com.mx/assets/images/white-instagram.png" alt="instagram" width="30" style="margin-left: 4px; margin-right: 4px;"></a>
-                <a href="${data.youtube_link}"><img src="https://crm.pluralis.com.mx/assets/images/white-youtube.png" alt="youtube" width="30" style="margin-left: 4px; margin-right: 4px;"></a>
+                <a href="${data.facebook_link}"><img src="http://localhost/api-nimbus-2/uploads/white-facebook.png" alt="facebook" width="30" style="margin-left: 4px; margin-right: 4px;"></a>
+                <a href="${data.instagram_link}"><img src="http://localhost/api-nimbus-2/uploads/white-instagram.png" alt="instagram" width="30" style="margin-left: 4px; margin-right: 4px;"></a>
+                <a href="${data.youtube_link}"><img src="http://localhost/api-nimbus-2/uploads/white-youtube.png" alt="youtube" width="30" style="margin-left: 4px; margin-right: 4px;"></a>
                 </td>
             </tr>
             </table>
@@ -78,7 +78,7 @@ export function render(data) {
             <table width="100%" style="border-spacing:0;font-size:18px;background-color: #efefef;" cellspacing="0">
             <tr>
                 <td align="center" style="border-spacing:0;padding: 16px;">
-                <img src="https://crm.pluralis.com.mx/uploads/images/${data.footer}" alt="Logo" width="140px">
+                <img src="${data.footer}" alt="Logo" width="140px">
                 <p>${data.slogan}</p>
                 <p>${data.address}</p>
                 <p><a href="mailto:${data.email}">${data.email}</a></p>

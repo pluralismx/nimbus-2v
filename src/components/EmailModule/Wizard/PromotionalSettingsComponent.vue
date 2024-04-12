@@ -239,15 +239,20 @@
             return {
                 templateData: {
                     theme: null,
+                    logo: "http://localhost/api-nimbus-2/uploads/logo-template.png",
+                    banner: "http://localhost/api-nimbus-2/uploads/banner-template.png",
+                    features: "http://localhost/api-nimbus-2/uploads/illustration-template.png",
                     feature_a: null,
                     feature_b: null,
                     feature_c: null,
+                    benefits: "http://localhost/api-nimbus-2/uploads/illustration-template.png",
                     benefit_a: null,
                     benefit_b: null,
                     benefit_c: null,
                     facebook_link: null,
                     instagram_link: null,
                     youtube_link: null,
+                    footer: "http://localhost/api-nimbus-2/uploads/logo-template.png",
                     slogan: null,
                     address: null,
                     email: null,
@@ -266,7 +271,7 @@
         }
     }
 </script>
-<style>
+<style scoped>
 
     .settings-container {
         margin-top: 2rem;

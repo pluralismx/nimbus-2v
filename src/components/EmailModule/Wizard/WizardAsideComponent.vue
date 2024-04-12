@@ -6,14 +6,19 @@
 
         <!-- Newsletter -->
         <NewsLetterSettingsComponent 
-            v-show="template == 'newsletter'"
+            v-show="template == 'newsletter' && !recipientsSettings && templateSettings"
             @open-image-modal="handleOpenImageModal"
         />
 
         <!-- Promotional -->
         <PromotionalSettingsComponent 
-            v-show="template == 'promotional'"
+            v-show="template == 'promotional' && !recipientsSettings && templateSettings"
             @open-image-modal="handleOpenImageModal"
+        />
+
+        <!-- Recipients -->
+        <RecipientsSettingsComponent 
+            v-show="recipientsSettings && !templateSettings"
         />
 
         <!-- Modals -->
@@ -22,6 +27,8 @@
             @close-image-modal="handleCloseImageModal"
         />
 
+
+
     </aside>
 </template>
 <script>
@@ -29,6 +36,7 @@
     import NewsLetterSettingsComponent from './NewsLetterSettingsComponent.vue';
     import PromotionalSettingsComponent from './PromotionalSettingsComponent.vue';
     import ImageUploadModalComponent from '../Modals/ImageUploadModalComponent.vue';
+    import RecipientsSettingsComponent from './RecipientsSettingsComponent.vue';
 
     export default {
         name: 'WizardAsideComponent',
@@ -36,11 +44,23 @@
             TemplateSelectionComponent,
             NewsLetterSettingsComponent,
             PromotionalSettingsComponent,
-            ImageUploadModalComponent
+            ImageUploadModalComponent,
+            RecipientsSettingsComponent
+        },
+        props: {
+            recipientsSettings: {
+                type: Boolean,
+                required: true
+            },
+            templateSettings: {
+                type: Boolean,
+                required: true
+            }
         },
         data() {
             return {
                 template: null,
+                recipients: false,
                 isVisibleUploadImageModal: false
             }
         },

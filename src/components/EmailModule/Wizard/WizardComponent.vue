@@ -9,7 +9,7 @@
 
         <!-- News letter -->
         <NewsLetterSettingsComponent 
-            v-show="template == 'newsletter'"
+            v-show="template == 'newsletter' && recipients == false"
             :isSelected="template"
             :theme="theme"
             @open-image-modal="handleOpenImageModal"
@@ -18,11 +18,16 @@
 
         <!-- Promotional -->
         <PromotionalSettingsComponent 
-            v-show="template == 'promotional'"
+            v-show="template == 'promotional' && recipients == false"
             :isSelected="template"
             :theme="theme"
             @open-image-modal="handleOpenImageModal"
             @update-html-template="handleUpdateHtmlTemplate"
+        />
+
+        <!-- Recipients -->
+        <RecipientsSettingsComponent 
+            v-show="recipients"
         />
 
         <!-- Modals -->
@@ -38,6 +43,7 @@
     import NewsLetterSettingsComponent from './NewsLetterSettingsComponent'
     import PromotionalSettingsComponent from './PromotionalSettingsComponent.vue';
     import ImageUploadModalComponent from '../Modals/ImageUploadModalComponent.vue';
+    import RecipientsSettingsComponent from '../Wizard/RecipientsSettingsComponent.vue'
 
     export default {
         name: 'WizardComponent',
@@ -45,7 +51,14 @@
             TemplateSelectionComponent,
             NewsLetterSettingsComponent,
             PromotionalSettingsComponent,
-            ImageUploadModalComponent
+            ImageUploadModalComponent,
+            RecipientsSettingsComponent
+        },
+        props: {
+            recipients: {
+                type: Boolean,
+                required: false
+            }
         },
         data() {
             return {

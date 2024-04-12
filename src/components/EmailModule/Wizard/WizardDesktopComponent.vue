@@ -2,24 +2,51 @@
     <div class="wizard-container">
 
         <!-- Tool bar -->
-        <WizardToolbarComponent />
+        <WizardToolbarComponent 
+            @show-template-settings="handleShowTemplateSettings"
+            @show-recipients-settings="handleRecipientsSettings"
+        />
 
         <!-- Aside -->
-        <WizardAsideComponent />
+        <WizardAsideComponent 
+            :recipientsSettings = this.recipientsSettings
+            :templateSettings = this.templateSettings
+        />
 
         <!-- Preview -->
-
+        <WizardPreviewComponent />
     </div>
 </template>
 <script>
-    import WizardToolbarComponent from './WizardToolbarComponent.vue';
-    import WizardAsideComponent from './WizardAsideComponent.vue';
+    import WizardToolbarComponent from './WizardToolbarComponent.vue'
+    import WizardAsideComponent from './WizardAsideComponent.vue'
+    import WizardPreviewComponent from './WizardPreviewComponent.vue'
 
     export default {
         name: 'WizardDesktopComponent',
         components: {
             WizardToolbarComponent,
-            WizardAsideComponent
+            WizardAsideComponent,
+            WizardPreviewComponent
+        },
+        data(){
+            return {
+                templateSettings: false,
+                recipientsSettings: false,
+            }
+        },
+        methods: {
+            handleShowTemplateSettings() {
+                if(!this.templateSettings){
+                    this.templateSettings = true;
+                }
+            },
+            handleRecipientsSettings() {
+                if(!this.recipientsSettings){
+                    this.recipientsSettings = false;
+                    
+                }
+            }
         }
     }
 </script>

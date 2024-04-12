@@ -1,13 +1,16 @@
 <template>
     <section>
         <EmailTitleBarComponent 
+            :smViewport="smViewport"
             @email-preview="handleEmailPreview"
+            @show-recipient-settings="handleShowRecipientSettings"
         />
 
         <!-- Mobile -->
         <WizardComponent 
             v-if="smViewport"
             @update-html-template="handleUpdateHtmlTemplate"
+            :recipients="isVisibleRecipientsSettings"
         />
 
         <!-- Desktop -->
@@ -52,6 +55,7 @@
             return {
                 isVisibleEmailPreviewModal: false,
                 isVisibleImageUploadModal: false,
+                isVisibleRecipientsSettings: false,
                 previewTemplate: null,
                 theme: null
             }
@@ -70,6 +74,13 @@
             // Email
             handleUpdateHtmlTemplate(template) {
                 this.previewTemplate = template;
+            },
+            handleShowRecipientSettings(){
+                if(!this.isVisibleRecipientsSettings){
+                    this.isVisibleRecipientsSettings = true;
+                }else{
+                    this.isVisibleRecipientsSettings = false;
+                }
             }
 
         },

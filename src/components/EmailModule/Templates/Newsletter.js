@@ -39,7 +39,7 @@ export function render(data) {
             <table role="header" style="border-spacing:0;font-size:18px;width: 100%;" align="center" cellspacing="0">
             <tr>
                 <td style="border-spacing:0;background-color: ${data.theme}; text-align: center; padding: 16px;">
-                <img src="localhost:8080/public/uploads/images/${data.logo}" alt="Logo" width="180px">
+                <img src="${data.logo}" alt="Logo" width="180px">
                 </td>
             </tr>
             </table>
@@ -47,7 +47,7 @@ export function render(data) {
             <table role="banner" style="border-spacing:0;font-size:18px;width: 100%; align="center" cellspacing="0">
             <tr>
                 <td style="border-spacing:0;padding:0px;">
-                <img src="localhost:8080/public/uploads/images/${data.banner}" alt="Banner" width="100%"/>
+                <img src="${data.banner}" alt="Banner" width="100%"/>
                 </td>
             </tr>
             </table>
@@ -64,7 +64,7 @@ export function render(data) {
             <table role="offers" style="border-spacing:0;font-size:18px;width: 100%; background-color: #FFFFFF;" cellspacing="0">
             <tr>
                 <td class="stacked" align="center" style="border-spacing:0;padding-top: 32px; padding-bottom: 16px; padding-left: 8px; padding-right: 8px;" width="50%" valign="top">
-                <img src="localhost:8080/public/uploads/images/${data.picture_a}" alt="illustration" width="100%"/>
+                <img src="${data.picture_a}" alt="illustration" width="100%"/>
                 </td>
                 <td class="stacked" align="center" style="border-spacing:0;padding-top: 32px; padding-bottom: 16px;" valign="top">
                 <p style="padding: 16px; padding-top: 0px; line-height: 1.5;">${data.side_text_a}</p>
@@ -75,7 +75,7 @@ export function render(data) {
             <table role="offers" style="border-spacing:0;font-size:18px;width: 100%; background-color: #FFFFFF;" cellspacing="0">
             <tr>
                 <td class="stacked" align="center" style="border-spacing:0;padding-top: 32px; padding-bottom: 16px; padding-left: 8px; padding-right: 8px;" width="50%" valign="top">
-                <img src="localhost:8080/public/uploads/images/${data.picture_b}" alt="illustration" width="100%"/>
+                <img src="${data.picture_b}" alt="illustration" width="100%"/>
                 </td>
                 <td class="stacked" align="center" style="border-spacing:0;padding-top: 32px; padding-bottom: 16px;" valign="top">
                 <p style="padding: 16px; padding-top: 0px; line-height: 1.5;">${data.side_text_b}</p>
@@ -87,9 +87,9 @@ export function render(data) {
             <tr>
                 <td align="center" style="border-spacing:0;padding: 16px;">
                 <p style="color: #ffffff;">Connect with us</p>
-                <a href="${data.facebook_link}"><img src="http://localhost:8080/src/assets/images/white-facebook.png" alt="facebook" width="30" style="margin-left: 4px; margin-right: 4px;"></a>
-                <a href="${data.instagram_link}"><img src="http://localhost:8080/src/assets/images/white-instagram.png" alt="instagram" width="30" style="margin-left: 4px; margin-right: 4px;"></a>
-                <a href="${data.youtube_link}"><img src="http://localhost:8080/src/assets/images/white-youtube.png" alt="youtube" width="30" style="margin-left: 4px; margin-right: 4px;"></a>
+                <a href="${data.facebook_link}"><img src="http://localhost/api-nimbus-2/uploads/white-facebook.png" alt="facebook" width="30" style="margin-left: 4px; margin-right: 4px;"></a>
+                <a href="${data.instagram_link}"><img src="http://localhost/api-nimbus-2/uploads/white-instagram.png" alt="instagram" width="30" style="margin-left: 4px; margin-right: 4px;"></a>
+                <a href="${data.youtube_link}"><img src="http://localhost/api-nimbus-2/uploads/white-youtube.png" alt="youtube" width="30" style="margin-left: 4px; margin-right: 4px;"></a>
                 </td>
             </tr>
             </table>
@@ -97,7 +97,7 @@ export function render(data) {
             <table width="100%" style="border-spacing:0;font-size:18px;background-color: #efefef;" cellspacing="0">
             <tr>
                 <td align="center" style="border-spacing:0;padding: 16px;">
-                <img src="localhost:8080/public/uploads/images/${data.footer}" alt="Logo" width="140px">
+                <img src="${data.footer}" alt="Logo" width="140px">
                 <p>${data.slogan}</p>
                 <p>${data.address}</p>
                 <p><a href="mailto:${data.email}">${data.email}</a></p>

@@ -1,15 +1,40 @@
 <template>
-    <div>
+    <div class="bar">
         <h1>Email</h1>
-        <span @click="emailPreview">previsualizar</span>
+        <div class="controls" v-if="smViewport">
+            <span @click="emailPreview">previsualizar | </span>
+            <span v-show="recipientsSpan" @click="recipientsSettings">destinatarios</span>
+            <span v-show="!recipientsSpan" @click="recipientsSettings">configuración</span>
+        </div>
     </div>
 </template>
 <script>
     export default {
         name: 'EmailTitleBarComponent',
+        props: {
+            smViewport: {
+                type: Boolean,
+                required: true
+            }
+        },
+        data() {
+            return {
+                recipientsSpan: true
+            }
+        },
         methods: {
             emailPreview(){
                 this.$emit('email-preview');
+            },
+            recipientsSettings() {
+                if(this.recipientsSpan){
+                    this.recipientsSpan = false;
+                    this.$emit('show-recipient-settings');
+                }else {
+                    this.recipientsSpan = true;
+                    this.$emit('show-recipient-settings');
+                }
+                
             }
         }
     }
@@ -18,7 +43,7 @@
 
     /* Mobile first */
 
-    div {
+    .bar {
         display: flex;
         align-items: center;
         justify-content: space-between;
