@@ -6,19 +6,25 @@
 
         <!-- Newsletter -->
         <NewsLetterSettingsComponent 
-            v-show="template == 'newsletter' && !recipientsSettings && templateSettings"
+            v-show="template == 'newsletter' && templateSettings == true"
             @open-image-modal="handleOpenImageModal"
+            @update-html-template="handleUpdateHtmlTemplate"
+            :isSelected="template"
+            :theme="theme"
         />
 
         <!-- Promotional -->
         <PromotionalSettingsComponent 
-            v-show="template == 'promotional' && !recipientsSettings && templateSettings"
+            v-show="template == 'promotional' && templateSettings == true"
             @open-image-modal="handleOpenImageModal"
+            @update-html-template="handleUpdateHtmlTemplate"
+            :isSelected="template"
+            :theme="theme"
         />
 
         <!-- Recipients -->
         <RecipientsSettingsComponent 
-            v-show="recipientsSettings && !templateSettings"
+            v-show="recipientsSettings == true"
         />
 
         <!-- Modals -->
@@ -60,7 +66,6 @@
         data() {
             return {
                 template: null,
-                recipients: false,
                 isVisibleUploadImageModal: false
             }
         },
@@ -73,7 +78,10 @@
             },
             handleCloseImageModal() {
                 this.isVisibleUploadImageModal = false;
-            }
+            },
+            handleUpdateHtmlTemplate(template) {
+                this.$emit('update-html-template', template);
+            },
         }
     }
 </script>

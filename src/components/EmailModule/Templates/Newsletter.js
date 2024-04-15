@@ -30,6 +30,26 @@ export function render(data) {
                 padding-top: 0px !important;
             }
         }
+        @container (max-width: 600px) {
+            .webkit {
+                width: 100% !important;
+                max-width: 600px !important;
+            }
+            .stacked {
+                display: block;
+                width: 100%;
+                padding-right: 0px !important;
+                padding-left: 0px !important;
+            }
+            .stacked img{
+                width: 80%;
+                padding-right: 0px !important;
+                padding-left: 0px !important;
+            }
+            .stacked:not(:first-child){
+                padding-top: 0px !important;
+            }
+        }
         </style>
     </head>
     <body style="margin:0px;background-color:#f7f9fc;font-family:Arial, Helvetica, sans-serif;">
@@ -119,5 +139,6 @@ export function render(data) {
     `;
 
     return btoa(html);
+    // return html;
 
 }

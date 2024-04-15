@@ -3,8 +3,8 @@
         <ul>
             <li @click="showSettings">Plantilla</li>
             <li @click="showRecipients">Destinatarios</li>
-            <li>PC</li>
-            <li>Móvil</li>
+            <li @click="activateDesktopPreview">PC</li>
+            <li @click="activateMobilePreview">Móvil</li>
             <li>Configuración</li>
         </ul>
     </div>
@@ -13,13 +13,17 @@
     export default {
         name: 'WizardToolbarComponent',
         methods: {
-            showSettings(){
-                console.log('settings');
+            showSettings() {
                 this.$emit('show-template-settings');
             },
-            showRecipients(){
-                console.log('recipients');
+            showRecipients() {
                 this.$emit('show-recipients-settings');
+            },
+            activateDesktopPreview() {
+                this.$emit('activate-desktop-preview');
+            },
+            activateMobilePreview() {
+                this.$emit('activate-mobile-preview');
             }
         }
     }

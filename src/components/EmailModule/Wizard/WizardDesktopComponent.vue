@@ -5,16 +5,23 @@
         <WizardToolbarComponent 
             @show-template-settings="handleShowTemplateSettings"
             @show-recipients-settings="handleRecipientsSettings"
+            @activate-desktop-preview="handleDesktopPreview"
+            @activate-mobile-preview="handleMobilePreview"
         />
 
         <!-- Aside -->
         <WizardAsideComponent 
             :recipientsSettings = this.recipientsSettings
             :templateSettings = this.templateSettings
+            @update-html-template = "handleUpdateHtmlTemplate"
         />
 
         <!-- Preview -->
-        <WizardPreviewComponent />
+        <WizardPreviewComponent
+            :desktopPreview = this.desktopPreview
+            :mobilePreview = this.mobilePreview
+            :previewTemplate = this.previewTemplate
+        />
     </div>
 </template>
 <script>
@@ -33,19 +40,38 @@
             return {
                 templateSettings: false,
                 recipientsSettings: false,
+                desktopPreview: true,
+                mobilePreview: false,
+                previewTemplate: ''
             }
         },
         methods: {
             handleShowTemplateSettings() {
-                if(!this.templateSettings){
+                if(this.templateSettings == false){
                     this.templateSettings = true;
+                    this.recipientsSettings = false;
                 }
             },
             handleRecipientsSettings() {
-                if(!this.recipientsSettings){
-                    this.recipientsSettings = false;
-                    
+                if(this.recipientsSettings == false){
+                    this.recipientsSettings = true;
+                    this.templateSettings = false;
                 }
+            },
+            handleDesktopPreview() {
+                if(this.desktopPreview == false){
+                    this.desktopPreview = true;
+                    this.mobilePreview = false;
+                }
+            },
+            handleMobilePreview() {
+                if(this.mobilePreview == false){
+                    this.mobilePreview = true;
+                    this.desktopPreview = false;
+                }
+            },
+            handleUpdateHtmlTemplate(template) {
+                this.previewTemplate = template;
             }
         }
     }

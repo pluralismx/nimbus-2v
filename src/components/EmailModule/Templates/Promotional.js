@@ -19,6 +19,15 @@ export function render(data) {
                 font-size: 12px !important;
             }
         }
+        @container (max-width: 600px){
+            .webkit {
+                width: 100% !important;
+                max-width: 600px !important;
+            }
+            table {
+                font-size: 12px !important;
+            }
+        }
         </style>
     </head>
     <body style="margin:0px;background-color:#f7f9fc;font-family:Arial, Helvetica, sans-serif;">
