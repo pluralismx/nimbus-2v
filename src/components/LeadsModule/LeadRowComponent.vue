@@ -44,7 +44,8 @@
     }
 
     .select-status {
-        color: white;
+        color: var(--shadows);
+        width: 75%;
     }
 
     button {

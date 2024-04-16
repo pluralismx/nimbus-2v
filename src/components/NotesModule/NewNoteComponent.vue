@@ -19,15 +19,16 @@
 <style scoped>
 
     /* Mobile first */
-
     .note-container {
         background-color: var(--basic);
         border-radius: .5rem;
         box-shadow: 2px 2px 3px var(--shadows);
         box-sizing: border-box;
-        width: 90%;
-        min-height: 50%;
+        width: 100%;
+        height: 45vh;
         margin-bottom: 2rem;
+        position: relative;
+        z-index: 85;
     }
 
     .note-header {
@@ -81,5 +82,6 @@
         background-color: transparent;
         border: none;
     }
+
 
 </style>

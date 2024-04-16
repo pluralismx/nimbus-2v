@@ -38,7 +38,7 @@
         },
         data(){
             return {
-                templateSettings: false,
+                templateSettings: true,
                 recipientsSettings: false,
                 desktopPreview: true,
                 mobilePreview: false,
@@ -85,5 +85,9 @@
         border-radius: .5rem;
         box-shadow: 3px 3px 6px var(--shadows);
         min-height: 0;
+        margin-top: 0;
+        margin-left: 1rem;
+        margin-bottom: 1rem;
+        margin-right: 1rem;
     }
 </style>

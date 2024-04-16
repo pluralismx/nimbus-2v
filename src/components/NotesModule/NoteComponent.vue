@@ -25,10 +25,10 @@
         border-radius: .5rem;
         box-shadow: 2px 2px 3px black;
         box-sizing: border-box;
-        height: 50%;
-        width: 90%;
-        min-height: 50%;
+        height: 45vh;
+        width: 100%;
         margin-bottom: 2rem;
+        transition: transform 300ms;
     }
 
     .note-header {

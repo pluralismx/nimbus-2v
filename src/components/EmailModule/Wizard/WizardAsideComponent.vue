@@ -2,6 +2,7 @@
     <aside class="wizard-aside">
         <TemplateSelectionComponent 
             @toggle-template="handleToggleTemplate"
+            @toggle-theme="handleToggleTheme"
         />
 
         <!-- Newsletter -->
@@ -66,12 +67,16 @@
         data() {
             return {
                 template: null,
+                theme: null,
                 isVisibleUploadImageModal: false
             }
         },
         methods: {
             handleToggleTemplate(template){
                 this.template = template;
+            },
+            handleToggleTheme(theme) {
+                this.theme = theme;
             },
             handleOpenImageModal(){
                 this.isVisibleUploadImageModal = true;

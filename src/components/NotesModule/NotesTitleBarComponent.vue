@@ -25,8 +25,13 @@
         padding-bottom: .5rem;
         border-bottom: 1px solid var(--basic);
         color: var(--basic);
-        margin-bottom: 1.5rem;
-        width: 100%;
+        background-color: var(--primary);
+        box-sizing: border-box
+    }
+
+    span:hover {
+        cursor: pointer;
+        color: var(--accent);
     }
 
 </style>

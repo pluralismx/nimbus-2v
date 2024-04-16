@@ -53,6 +53,9 @@
                     </div>
                 </div>
             </div>
+            <div class="settings-footer">
+                <button class="btn-warning">Enviar</button>
+            </div>
         </div>
     </section>
 </template>
@@ -104,4 +107,15 @@
     width: 100%;
     box-sizing: border-box;
 }
+
+.settings-footer {
+    padding-top: 0;
+    padding-left: 1rem;
+    padding-bottom: 1rem;
+    padding-right: 1rem;
+    display: flex;
+    justify-content: center;
+}
+
+
 </style>

@@ -19,7 +19,7 @@
                 </div>
                 <!-- Banner -->
                 <div class="image-input-block">
-                    <label>Logotipo</label>
+                    <label>Pancarta</label>
                     <div>
                         <input class="input-primary" type="text">
                         <button class="btn-primary" @click="openImageModal">imagen...</button>
@@ -38,7 +38,7 @@
             <div class="settings-body">
                 <!-- Image -->
                 <div class="image-input-block">
-                    <label>Logotipo</label>
+                    <label>Imagen</label>
                     <div>
                         <input class="input-primary" type="text">
                         <button class="btn-primary" @click="openImageModal">imagen...</button>
@@ -88,21 +88,21 @@
                 <div class="text-input-block">
                     <label>Beneficio 1</label>
                     <div>
-                        <input v-model="benefit_a" class="input-primary" type="text">
+                        <input v-model="templateData.benefit_a" class="input-primary" type="text">
                     </div>
                 </div>
                 <!-- Beneficio 2 -->
                 <div class="text-input-block">
                     <label>Beneficio 2</label>
                     <div>
-                        <input v-model="benefit_b" class="input-primary" type="text">
+                        <input v-model="templateData.benefit_b" class="input-primary" type="text">
                     </div>
                 </div>
                 <!-- Beneficio 3 -->
                 <div class="text-input-block">
                     <label>Beneficio 3</label>
                     <div>
-                        <input v-model="benefit_c" class="input-primary" type="text">
+                        <input v-model="templateData.benefit_c" class="input-primary" type="text">
                     </div>
                 </div>
             </div>
@@ -160,28 +160,28 @@
                 <div class="text-input-block">
                     <label>Slogan</label>
                     <div>
-                        <input class="input-primary" type="text">
+                        <input v-model="templateData.slogan" class="input-primary" type="text">
                     </div>
                 </div>
                 <!-- Address -->
                 <div class="text-input-block">
                     <label>Dirección</label>
                     <div>
-                        <input class="input-primary" type="text">
+                        <input v-model="templateData.address" class="input-primary" type="text">
                     </div>
                 </div>
                 <!-- E-mail -->
                 <div class="text-input-block">
                     <label>E-mail</label>
                     <div>
-                        <input class="input-primary" type="text">
+                        <input v-model="templateData.email" class="input-primary" type="text">
                     </div>
                 </div>
                 <!-- Phone -->
                 <div class="text-input-block">
                     <label>Teléfono</label>
                     <div>
-                        <input class="input-primary" type="text">
+                        <input v-model="templateData.phone" class="input-primary" type="text">
                     </div>
                 </div>
             </div>
