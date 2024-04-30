@@ -231,22 +231,22 @@
             return {
                 templateData: {
                     theme: null,
-                    logo: "http://localhost/api-nimbus-2/uploads/logo-template.png",
-                    banner: "http://localhost/api-nimbus-2/uploads/banner-template.png",
+                    logo: "http://localhost/api-nimbus/storage/assets/logo-template.png",
+                    banner: "http://localhost/api-nimbus/storage/assets/banner-template.png",
                     title: 'Daedalus et Icarus',
                     content: 'Daedalus faber ingeniosus, exsilium petens ab insula Creta, alas ex pennis et cera confecit. Ea alis Icarum, filium suum, primum instruxit, monens eum ne ad solis radios appropinquaret. Sed cupiditate ductus, Icarus monita patris neglexit, altius volans et ad caelum appropinquans. Cera, solis ardore liquefacta, alas eius dissolvit. Icarus igitur in mare decidit et perit.',
-                    picture_a: "http://localhost/api-nimbus-2/uploads/illustration-template.png",
+                    picture_a: "http://localhost/api-nimbus/storage/assets/illustration-template.png",
                     side_text_a: "Daedalus, dolens filii mortem, alia nave navigat ad terram Siciliam, ubi regem Cocalum invenit. Cocalus, benignus rex, Daedalum benigne excipit et in suam amicitiam recipit. Tum Daedalus in Sicilia moratur, artem suam fabrum ostendens et Cocalo multa praeclara opera fabricante.",
-                    picture_b: "http://localhost/api-nimbus-2/uploads/illustration-template.png",
+                    picture_b: "http://localhost/api-nimbus/storage/assets/illustration-template.png",
                     side_text_b: "Interim, Creta rex Minos, filium suum deplorans, Daedalum quaerit. Sed Daedalus se Latium ad regem Ancum movet, ubi pacem et asylum invenit. Sic Daedalus et Icarus fabulae in historia perpetua memoriae manent, exemplo peritiae et prudentiae, sed etiam temeritatis et tristitiae.",
                     facebook_link: null,
                     instagram_link: null,
                     youtube_link: null,
-                    footer: "http://localhost/api-nimbus-2/uploads/logo-template.png",
-                    slogan: null,
-                    address: null,
-                    email: null,
-                    phone: null
+                    footer: "http://localhost/api-nimbus/storage/assets/logo-template.png",
+                    slogan: "Pluralis - Desarrollo Web",
+                    address: "Ave. Alejandro Von Humboldt #19264, Tijuana, Mexico CP 22434",
+                    email: "contacto@pluralis.com.mx",
+                    phone: "+52 (664) 252 2024"
                 }
             }
         },

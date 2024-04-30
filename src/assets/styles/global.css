@@ -156,6 +156,11 @@ ul {
     box-shadow: 1px 1px 4px var(--shadows);
 }
 
+.close-cross:hover {
+    box-shadow: 0px 0px 12px var(--warn);
+    cursor: pointer;
+}
+
 .modal-close {
     background-color: var(--warn);
     box-sizing: border-box;

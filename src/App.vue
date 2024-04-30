@@ -2,19 +2,22 @@
 
     <!-- Login -->
     <LoginParentComponent
-        v-if="!isLogged"
+        @user-logged-in="handleUserLoggedIn"
+        v-if="!identity"
     />
 
     <!-- Dashboard -->
     <DashboardComponent 
-        v-if="isLogged"
+        v-if="identity"
         :smViewport = smViewport
+        :identity = identity
+        @user-logged-out="handleUserLoggedOut"
     />
 
 </template>
 
 <script>
-
+    import axios from '@/lib/axios'
     import LoginParentComponent from './components/LoginModule/LoginParentComponent.vue';
     import DashboardComponent from './components/Dashboard/DashboardComponent.vue';
 
@@ -39,8 +42,25 @@
         },
         data() {
             return {
-                isLogged: true,
-                smViewport: null
+                smViewport: null,
+                identity: null,
+            }
+        },
+        methods: {
+            handleUserLoggedIn(identity){
+                this.identity = identity;
+                console.log(this.identity);
+            },
+            handleUserLoggedOut(){
+                axios.get('api/logout', {"withCredentials": true})
+                    .then(res=>{
+                        if(res.data == 'success'){
+                            this.identity = null;
+                        }
+                    })
+                    .catch(error=>{
+                        console.log(error);
+                    })
             }
         }
     }

@@ -14,6 +14,7 @@
             <li><img src="../../assets/images/white-note.png" @click="toggleTool('notes')"></li>
             <li><img src="../../assets/images/white-funel.png" @click="toggleTool('leads')"></li>
             <li><img src="../../assets/images/white-email.png" @click="toggleTool('email')"></li>
+            <li><img src="../../assets/images/white-manager.png" @click="toggleTool('team')"></li>
             <li><img src="../../assets/images/white-logout.png"></li>
         </ul>
 
@@ -32,16 +33,46 @@
 
         <!-- User menu -->
         <ul class="user-menu desktop">
-            <li><span>Cerrar sesión</span></li>
+            <li><span @click="logout">Cerrar sesión |&nbsp;</span></li>
+            <li><span @click="toggleTool('team-desktop')">Admin</span></li>
         </ul>
     </nav>
 </template>
 <script>
+    import axios from '@/lib/axios';
     export default {
         name: 'NavbarParentComponent',
+        props: {
+            userId: {
+                type: String,
+                required: true
+            }
+        },
+        data() {
+            return {
+                websites: null
+            }
+        },
+        created() {
+            // console.log(this.userId);
+            this.loadWebsites(this.userId);
+        },
         methods: {
             toggleTool(selection){
                 this.$emit('toggle-tool', selection);
+            },
+            loadWebsites(id){
+                axios.get('/api/website/records/'+id, { 'withCredentials': true })
+                .then(res=>{
+                    this.websites = res.data.websites;
+                    console.log(this.websites);
+                })
+                .catch(error=>{
+                    console.log(error);
+                });
+            },
+            logout(){
+                this.$emit('user-logged-out');
             }
         }
     }

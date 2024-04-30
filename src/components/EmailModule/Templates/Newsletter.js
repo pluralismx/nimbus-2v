@@ -107,9 +107,9 @@ export function render(data) {
             <tr>
                 <td align="center" style="border-spacing:0;padding: 16px;">
                 <p style="color: #ffffff;">Connect with us</p>
-                <a href="${data.facebook_link}"><img src="http://localhost/api-nimbus-2/uploads/white-facebook.png" alt="facebook" width="30" style="margin-left: 4px; margin-right: 4px;"></a>
-                <a href="${data.instagram_link}"><img src="http://localhost/api-nimbus-2/uploads/white-instagram.png" alt="instagram" width="30" style="margin-left: 4px; margin-right: 4px;"></a>
-                <a href="${data.youtube_link}"><img src="http://localhost/api-nimbus-2/uploads/white-youtube.png" alt="youtube" width="30" style="margin-left: 4px; margin-right: 4px;"></a>
+                <a href="${data.facebook_link}"><img src="http://localhost/api-nimbus/storage/assets/white-facebook.png" alt="facebook" width="30" style="margin-left: 4px; margin-right: 4px;"></a>
+                <a href="${data.instagram_link}"><img src="http://localhost/api-nimbus/storage/assets/white-instagram.png" alt="instagram" width="30" style="margin-left: 4px; margin-right: 4px;"></a>
+                <a href="${data.youtube_link}"><img src="http://localhost/api-nimbus/storage/assets/white-youtube.png" alt="youtube" width="30" style="margin-left: 4px; margin-right: 4px;"></a>
                 </td>
             </tr>
             </table>

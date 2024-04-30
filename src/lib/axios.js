@@ -2,7 +2,7 @@ import Axios from 'axios';
 
 const axios = Axios.create({
 
-    baseURL: "http://localhost/api-nimbus-2/"
+    baseURL: "http://localhost/api-nimbus/public/"
 
 });
 

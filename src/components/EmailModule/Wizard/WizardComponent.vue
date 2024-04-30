@@ -25,6 +25,13 @@
             @update-html-template="handleUpdateHtmlTemplate"
         />
 
+        <!-- Custom -->
+        <CustomEmailEditorComponent 
+            v-show="template == 'custom' && recipients == false"
+            @update-html-template="handleUpdateHtmlTemplate"
+            :isSelected="template"
+        />
+
         <!-- Recipients -->
         <RecipientsSettingsComponent 
             v-show="recipients"
@@ -42,6 +49,7 @@
     import TemplateSelectionComponent from './TemplateSelectionComponent'
     import NewsLetterSettingsComponent from './NewsLetterSettingsComponent'
     import PromotionalSettingsComponent from './PromotionalSettingsComponent.vue';
+    import CustomEmailEditorComponent from './CustomEmailEditorComponent.vue';
     import ImageUploadModalComponent from '../Modals/ImageUploadModalComponent.vue';
     import RecipientsSettingsComponent from '../Wizard/RecipientsSettingsComponent.vue'
 
@@ -51,6 +59,7 @@
             TemplateSelectionComponent,
             NewsLetterSettingsComponent,
             PromotionalSettingsComponent,
+            CustomEmailEditorComponent,
             ImageUploadModalComponent,
             RecipientsSettingsComponent
         },

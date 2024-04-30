@@ -5,7 +5,9 @@
 
         <!-- Navigation bar -->
         <NavbarParentComponent 
-            @toggle-tool="handleToggleTool" 
+            @toggle-tool="handleToggleTool"
+            @user-logged-out="handleUserLoggedOut"
+            :userId = identity.sub
         />
 
         <!-- Aside -->
@@ -26,6 +28,11 @@
             :smViewport = smViewport
         />
 
+        <AdminParentComponent 
+            v-show="isVisibleTeam"
+            :class="{ 'wide' : !isVisibleNotes }"
+        />
+
         <!-- Status bar -->
         <StatusbarParentComponent />
 
@@ -38,6 +45,7 @@ import NavbarParentComponent from '../NavbarModule/NavbarParentComponent.vue';
 import NotesParentComponent from '../NotesModule/NotesParentComponent.vue';
 import LeadsParentComponent from '../LeadsModule/LeadsParentComponent.vue';
 import EmailParentComponent from '../EmailModule/EmailParentComponent.vue';
+import AdminParentComponent from '../AdminModule/AdminParentComponent.vue';
 import StatusbarParentComponent from '../StatusbarModule/StatusbarParentComponent.vue';
 
 export default {
@@ -47,11 +55,20 @@ export default {
         NotesParentComponent,
         LeadsParentComponent,
         EmailParentComponent,
+        AdminParentComponent,
         StatusbarParentComponent
     },
     props: {
         smViewport: {
             type: Boolean,
+            required: true
+        },
+        identity: {
+            type: Object,
+            required: true
+        },
+        websiteId: {
+            type: Number,
             required: true
         }
     },
@@ -59,7 +76,8 @@ export default {
         return {
             isVisibleNotes: false,
             isVisibleLeads: false,
-            isVisibleEmail: false
+            isVisibleEmail: false,
+            isVisibleTeam: false
         }
     },
     methods: {
@@ -71,6 +89,7 @@ export default {
                         this.isVisibleNotes = true;
                         this.isVisibleLeads = false;
                         this.isVisibleEmail = false;
+                        this.isVisibleTeam = false;
                     } else {
                         this.isVisibleNotes = false;
                     }
@@ -87,6 +106,7 @@ export default {
                         this.isVisibleLeads = true;
                         this.isVisibleNotes = false;
                         this.isVisibleEmail = false;
+                        this.isVisibleTeam = false;
                     } else {
                         this.isVisibleLeads = false;
                     }
@@ -104,6 +124,7 @@ export default {
                         this.isVisibleEmail = true;
                         this.isVisibleNotes = false;
                         this.isVisibleLeads = false;
+                        this.isVisibleTeam = false;
                     } else {
                         this.isVisibleEmail = false;
                     }
@@ -112,11 +133,34 @@ export default {
                     if (this.isVisibleEmail == false) {
                         this.isVisibleEmail = true;
                         this.isVisibleLeads = false;
+                        this.isVisibleTeam = false;
                     } else {
                         this.isVisibleEmail = false;
                     }
                     break;
+                case 'team':
+                    if (this.isVisibleTeam == false) {
+                        this.isVisibleTeam = true;
+                        this.isVisibleNotes = false;
+                        this.isVisibleLeads = false;
+                        this.isVisibleEmail = false;
+                    } else {
+                        this.isVisibleTeam = false;
+                    }
+                    break;
+                case 'team-desktop':
+                    if (this.isVisibleTeam == false) {
+                        this.isVisibleTeam = true;
+                        this.isVisibleLeads = false;
+                        this.isVisibleEmail = false;
+                    } else {
+                        this.isVisibleTeam = false;
+                    }
+                    break;
             }
+        },
+        handleUserLoggedOut(){
+            this.$emit('user-logged-out');
         }
     }
 }

@@ -23,6 +23,13 @@
             :theme="theme"
         />
 
+        <!-- Custom -->
+        <CustomEmailEditorComponent 
+            v-show="template == 'custom' && templateSettings == true"
+            @update-html-template="handleUpdateHtmlTemplate"
+            :isSelected="template"
+        />
+
         <!-- Recipients -->
         <RecipientsSettingsComponent 
             v-show="recipientsSettings == true"
@@ -42,6 +49,7 @@
     import TemplateSelectionComponent from './TemplateSelectionComponent.vue';
     import NewsLetterSettingsComponent from './NewsLetterSettingsComponent.vue';
     import PromotionalSettingsComponent from './PromotionalSettingsComponent.vue';
+    import CustomEmailEditorComponent from './CustomEmailEditorComponent.vue'
     import ImageUploadModalComponent from '../Modals/ImageUploadModalComponent.vue';
     import RecipientsSettingsComponent from './RecipientsSettingsComponent.vue';
 
@@ -51,6 +59,7 @@
             TemplateSelectionComponent,
             NewsLetterSettingsComponent,
             PromotionalSettingsComponent,
+            CustomEmailEditorComponent,
             ImageUploadModalComponent,
             RecipientsSettingsComponent
         },
@@ -67,7 +76,7 @@
         data() {
             return {
                 template: null,
-                theme: null,
+                theme: "#037e99",
                 isVisibleUploadImageModal: false
             }
         },

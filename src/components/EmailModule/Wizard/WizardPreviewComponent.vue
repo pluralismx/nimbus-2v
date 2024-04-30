@@ -24,12 +24,35 @@
             }
         },
         computed: {
-            htmlTemplate(){
+            htmlTemplate() {
                 let b64 = this.previewTemplate;
-                let html = atob(b64);
+                let html;
+                
+                // Check if previewTemplate is base64 encoded
+                try {
+                    // Try to decode base64
+                    html = atob(b64);
+                    
+                    // If successful, check if it's valid HTML
+                    let parser = new DOMParser();
+                    let doc = parser.parseFromString(html, 'text/html');
+                    
+                    // If parsing succeeds, it's valid HTML
+                    if (doc.documentElement.nodeName === 'HTML') {
+                        return html;
+                    } else {
+                        // If parsing fails, it's not valid HTML
+                        throw new Error('Not valid HTML');
+                    }
+                } catch (error) {
+                    // If decoding or parsing fails, treat it as plain text
+                    html = b64;
+                }
+                
                 return html;
             }
         }
+
     }
 </script>
 <style>
@@ -44,7 +67,7 @@
     }
     .preview-container {
         box-sizing: border-box;
-        background-color: var(--basic);
+        background-color: #aaa;
         width: 100%;
         height: 100%;
         border-radius: .5rem;

@@ -10,6 +10,7 @@
                     <option selected disabled>seleccionar...</option>
                     <option value="promotional">promotional</option>
                     <option value="newsletter">news letter</option>
+                    <option value="custom">personalizado</option>
                 </select>
             </div>
             <div class="select-block">
