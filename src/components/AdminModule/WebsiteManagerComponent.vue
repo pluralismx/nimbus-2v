@@ -7,22 +7,49 @@
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td>Pluralis</td>
-                <td>http://www.pluralis.com.mx</td>
-            </tr>
-            <tr>
-                <td>Dental house</td>
-                <td>http://www.dentalhouse.com.mx</td>
-            </tr>
-            <tr>
-                <td>Picopen</td>
-                <td>http://www.picopen.com.mx</td>
-            </tr>
+            <WebsiteTableRowComponent 
+                v-for="website in ownersWebsites" :key="website.id" :website="website"
+            />
         </tbody>
     </table>
 </template>
-<script></script>
+<script>
+import WebsiteTableRowComponent from './WebsiteTableRowComponent'
+export default {
+    name: 'WebsiteTableComponent',
+    components: {
+        WebsiteTableRowComponent
+    },
+    props: {
+        websites: {
+            type: Array,
+            required: true
+        }
+    },
+    data() {
+        return {
+            ownersWebsites: []
+        }
+    },
+    computed: {
+        websitesComputed(){
+            return this.websites;
+        }
+    },
+    watch: {
+        websitesComputed: {
+            handler(newVal){
+                this.ownersWebsites = newVal
+                console.log(this.ownersWebsites);
+            },
+            immediate: true,
+            deep: true
+        }
+    },
+
+
+}
+</script>
 <style scoped>
 table {
     width: 100%;
@@ -40,22 +67,6 @@ thead tr th {
     text-align: left;
     padding: .5rem;
     width: 50%;
-}
-
-tbody tr td {
-    text-align: left;
-    padding: .5rem;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-}
-
-tbody tr {
-    border-bottom: 1px solid var(--shadows);
-}
-
-tbody tr:last-child{
-    border-bottom: none;
 }
 
 </style>

@@ -54,8 +54,14 @@ export default {
             this.$emit('cancel-create-website');
         },
         createWebsite() {
+            
             let formData = new FormData();
+            let identity = localStorage.getItem('identity');
+            let credentials = JSON.parse(identity);
+            let owner = credentials.sub;
+
             const data = {
+                'owner': owner,
                 'name': this.name,
                 'url': this.url
             }
@@ -63,7 +69,10 @@ export default {
             formData.append('json', json);
             axios.post('api/website/add', formData, { "withCredentials":  true})
                 .then(res=>{
-                    console.log(res.data);
+                    if(res.data.status=='success'){
+                        let website = JSON.parse(res.data.website);
+                        this.$emit('website-created', website);
+                    }
                 })
                 .catch(error=> {
                     console.log(error);

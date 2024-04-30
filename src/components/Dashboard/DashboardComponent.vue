@@ -7,7 +7,6 @@
         <NavbarParentComponent 
             @toggle-tool="handleToggleTool"
             @user-logged-out="handleUserLoggedOut"
-            :userId = identity.sub
         />
 
         <!-- Aside -->
@@ -63,14 +62,6 @@ export default {
             type: Boolean,
             required: true
         },
-        identity: {
-            type: Object,
-            required: true
-        },
-        websiteId: {
-            type: Number,
-            required: true
-        }
     },
     data() {
         return {

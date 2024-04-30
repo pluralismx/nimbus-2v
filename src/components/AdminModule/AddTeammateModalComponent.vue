@@ -13,11 +13,12 @@
             <!-- Body -->
             <div class="modal-body">
                 <div class="input-block">
-                    <input class="input-primary" type="text" placeholder="juan@ejemplo.com">
-                    <button class="btn-primary"><img src="../../assets/images/white-magnifier.png"/></button>
+                    <input v-model="email" class="input-primary" type="text" placeholder="juan@ejemplo.com">
+                    <button @click="searchContact()" class="btn-primary"><img src="../../assets/images/white-magnifier.png"/></button>
                 </div>
+
                 <!-- Contact card -->
-                <div class="contact-card">
+                <div v-if="result" @click="selectContact()" class="contact-card" :class="{'selected': selection}">
                     <div class="contact-card-body">
                         <!-- Picture -->
                         <div class="contact-card-avatar">
@@ -25,12 +26,13 @@
                         </div>
                         <!-- Info -->
                         <div class="contact-card-info">
-                            <p>Gerardo Topete Pérez</p>
+                            <p>{{ result.name }}&nbsp;{{ result.surname }}</p>
                         </div>
                     </div>
                 </div>
+
                 <!-- Default -->
-                <div class="contact-card">
+                <div v-if="!result" class="contact-card">
                     <div class="contact-card-body">
                         <!-- Picture -->
                         <div class="contact-card-avatar">
@@ -59,11 +61,47 @@
 </template>
 
 <script>
+import axios from '@/lib/axios'
 export default {
     name: 'AddTeammateModalComponent',
+    data(){
+        return {
+            'email': null,
+            'result': '',
+            'selection': ''
+        }
+    },
     methods: {
         cancelAddTeammate(){
             this.$emit('cancel-add-teammate');
+        },
+        searchContact() {
+            let email = this.email;
+            let formData = new FormData();
+            const data = {
+                'email':email
+            }
+            let json = JSON.stringify(data);
+            formData.append('json', json);
+            axios.post('api/users/search', formData, { "withCredentials": true })
+                .then(res=>{
+                    if(res.data.status == 'success'){
+                        this.result = res.data.user;
+                    }else {
+                        this.result = '';
+                    }
+                })
+                .catch(error=>{
+                    console.log(error);
+                });
+        },
+        selectContact() {
+            if(this.selection == ''){
+                this.selection = this.result.email;
+            }else {
+                this.selection = ''
+            }
+            
         }
     }
 }
@@ -120,6 +158,11 @@ export default {
         border-radius: .5rem;
         box-shadow: 2px 2px 5px var(--shadows);
         margin-bottom: 1rem;
+    }
+
+    .selected {
+        background-color: var(--warn);
+        color: white;
     }
 
     .contact-card-body {

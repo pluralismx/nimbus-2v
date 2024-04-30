@@ -7,28 +7,17 @@
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td>Omar Lopez</td>
-                <td>Pluralis</td>
-            </tr>
-            <tr>
-                <td>Isai Nava</td>
-                <td>Pluralis</td>
-            </tr>
-            <tr>
-                <td>Cesar Ornelas</td>
-                <td>Pluralis</td>
-            </tr>
-            <tr>
-                <td>Pablo Villalpando</td>
-                <td>Dental house</td>
-            </tr>
+            <TeamTableRowComponent />
         </tbody>
     </table>
 </template>
 <script>
+import TeamTableRowComponent from './TeamTableRowComponent'
 export default {
     name: 'TeamTableComponent',
+    components: {
+        TeamTableRowComponent
+    }
 }
 </script>
 <style scoped>
@@ -50,20 +39,6 @@ thead tr th {
     width: 50%;
 }
 
-tbody tr td {
-    text-align: left;
-    padding: .5rem;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-}
 
-tbody tr {
-    border-bottom: 1px solid var(--shadows);
-}
-
-tbody tr:last-child{
-    border-bottom: none;
-}
 
 </style>

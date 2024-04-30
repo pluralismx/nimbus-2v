@@ -3,14 +3,13 @@
     <!-- Login -->
     <LoginParentComponent
         @user-logged-in="handleUserLoggedIn"
-        v-if="!identity"
+        v-if="isLogged==false"
     />
 
     <!-- Dashboard -->
     <DashboardComponent 
-        v-if="identity"
+        v-if="isLogged==true"
         :smViewport = smViewport
-        :identity = identity
         @user-logged-out="handleUserLoggedOut"
     />
 
@@ -43,19 +42,20 @@
         data() {
             return {
                 smViewport: null,
-                identity: null,
+                isLogged: false,
             }
         },
         methods: {
             handleUserLoggedIn(identity){
-                this.identity = identity;
-                console.log(this.identity);
+                let credentials = JSON.stringify(identity);
+                localStorage.setItem('identity', credentials);
+                this.isLogged = true;
             },
             handleUserLoggedOut(){
                 axios.get('api/logout', {"withCredentials": true})
                     .then(res=>{
                         if(res.data == 'success'){
-                            this.identity = null;
+                            this.isLogged = false;
                         }
                     })
                     .catch(error=>{

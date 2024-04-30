@@ -12,10 +12,12 @@
                 </div>
                 <!-- Body -->
                 <div class="settings-body">
-                    <WebsiteManagerComponent />
+                    <WebsiteManagerComponent 
+                        :websites="ownersWebsites"
+                    />
                 </div>
                 <div class="settings-container-footer">
-                    <button @click="toogleCreateWebsitemodal" class="btn-primary">crear</button>
+                    <button @click="toggleCreateWebsitemodal" class="btn-primary">crear</button>
                 </div>
             </div>
 
@@ -30,7 +32,7 @@
                     <TeamTableComponent />
                 </div>
                 <div class="settings-container-footer">
-                    <button @click="toogleInviteTeammateModal" class="btn-primary">invitar</button>
+                    <button @click="toggleInviteTeammateModal" class="btn-primary">invitar</button>
                 </div>
             </div>
         </div>
@@ -38,16 +40,18 @@
         <!-- Modals -->
         <CreateWebsiteModalComponent 
             v-show="isVisibleCreateWebsiteModal"
-            @cancel-create-website="toogleCreateWebsitemodal"
+            @cancel-create-website="toggleCreateWebsitemodal"
+            @website-created="handleWebsiteCreated"
         />
 
         <AddTeammateModalComponent
             v-show="isVisibleAddTeammateModal" 
-            @cancel-add-teammate="toogleInviteTeammateModal"
+            @cancel-add-teammate="toggleInviteTeammateModal"
         />
     </section>
 </template>
 <script>
+import axios from '@/lib/axios'
 import AdminPanelTitleBarComponent from './AdminPanelTitleBarComponent.vue'
 import WebsiteManagerComponent from './WebsiteManagerComponent.vue'
 import TeamTableComponent from './TeamTableComponent.vue'
@@ -67,23 +71,59 @@ export default {
     data() {
         return {
             isVisibleCreateWebsiteModal: false,
-            isVisibleAddTeammateModal: false
+            isVisibleAddTeammateModal: false,
+            ownersWebsites: null
         }
     },
+    created() {
+        this.loadOwnersWebsites();
+    },
     methods: {
-        toogleCreateWebsitemodal() {
+        toggleCreateWebsitemodal() {
             if(this.isVisibleCreateWebsiteModal == false) {
                 this.isVisibleCreateWebsiteModal = true;
             }else {
                 this.isVisibleCreateWebsiteModal = false;
             }
         },
-        toogleInviteTeammateModal() {
+        toggleInviteTeammateModal() {
             if(this.isVisibleAddTeammateModal == false) {
                 this.isVisibleAddTeammateModal = true;
             }else {
                 this.isVisibleAddTeammateModal = false;
             }
+        },
+        loadOwnersWebsites() {
+            let identity = localStorage.getItem('identity');
+            let credentials = JSON.parse(identity);
+            let id = credentials.sub;
+            axios.get('api/website/adminWebsites/' + id, { "withCredentials": true })
+                .then(res => {
+                    if(res.data.status == 'success'){
+                        this.ownersWebsites = res.data.websites;
+                    }
+                })
+                .catch(error => {
+                    console.log(error);
+                })
+        },
+        loadTeammates() {
+            let identity = localStorage.getItem('identity');
+            let credentials = JSON.parse(identity);
+            let id = credentials.sub;
+            axios.get('api/website/adminWebsites/' + id, { "withCredentials": true })
+                .then(res => {
+                    if(res.data.status == 'success'){
+                        this.ownersWebsites = res.data.websites;
+                    }
+                })
+                .catch(error => {
+                    console.log(error);
+                })
+        },
+        handleWebsiteCreated(website){
+            this.toggleCreateWebsitemodal();
+            this.ownersWebsites.push(website);
         }
     },
 

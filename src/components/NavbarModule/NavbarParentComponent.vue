@@ -42,12 +42,6 @@
     import axios from '@/lib/axios';
     export default {
         name: 'NavbarParentComponent',
-        props: {
-            userId: {
-                type: String,
-                required: true
-            }
-        },
         data() {
             return {
                 websites: null
@@ -65,7 +59,6 @@
                 axios.get('/api/website/records/'+id, { 'withCredentials': true })
                 .then(res=>{
                     this.websites = res.data.websites;
-                    console.log(this.websites);
                 })
                 .catch(error=>{
                     console.log(error);
