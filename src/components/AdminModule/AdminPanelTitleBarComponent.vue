@@ -1,15 +1,15 @@
 <template>
     <div>
         <h1>Panel administrativo</h1>
-        <!-- <span @click="createWebsiteModal()">crear</span> -->
+        <span @click="showNotificationModal()">&#128235;</span>
     </div>
 </template>
 <script>
     export default {
         name: 'AdminPanelTitleBarComponent',
         methods: {
-            createWebsiteModal() {
-                this.$emit('toggle-create-website-modal');
+            showNotificationModal() {
+                this.$emit('show-notification-modal');
             }
         }
     }
@@ -27,6 +27,10 @@
         color: var(--shadows);
         margin-bottom: 1.5rem;
         width: 100%;
+    }
+
+    span {
+        font-size: 1.5rem;
     }
 
 </style>

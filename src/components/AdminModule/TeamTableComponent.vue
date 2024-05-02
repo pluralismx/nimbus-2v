@@ -7,7 +7,9 @@
             </tr>
         </thead>
         <tbody>
-            <TeamTableRowComponent />
+            <TeamTableRowComponent 
+                v-for="contact in contacts" :key="contact.id" :contact="contact"
+            />
         </tbody>
     </table>
 </template>
@@ -17,6 +19,12 @@ export default {
     name: 'TeamTableComponent',
     components: {
         TeamTableRowComponent
+    },
+    props: {
+        contacts: {
+            type: Array,
+            required: true
+        }
     }
 }
 </script>

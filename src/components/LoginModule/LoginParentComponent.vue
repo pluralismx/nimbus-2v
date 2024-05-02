@@ -37,7 +37,7 @@
         name: 'LoginParentComponent',
         data() {
             return {
-                email: 'alexis@pluralis.com.mx',
+                email: 'megan@pluralis.com.mx',
                 password: 'dick',
                 identity: {}
             }

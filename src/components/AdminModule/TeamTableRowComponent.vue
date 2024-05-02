@@ -1,16 +1,21 @@
 <template>
 
     <tr>
-        <td></td>
-        <td></td>
+        <td>{{ contact.name }} {{ contact.surname }}</td>
+        <td>{{ contact.email }}</td>
     </tr>
 
 </template>
 <script>
 export default {
-    name: 'TeamTableRowComponent'
+    name: 'TeamTableRowComponent',
+    props: {
+        contact: {
+            type: Array,
+            required: true
+        }
+    }
 }
-
 </script>
 <style>
 tbody tr td {

@@ -49,8 +49,8 @@
             <!-- Buttons -->
             <div class="modal-footer">
                 <div class="buttons-block">
-                    <button class="btn-warning">invitar</button>
-                    <button class="btn-primary" @click="cancelAddTeammate">cancel</button>
+                    <button class="btn-warning" @click="sendInvitation()">invitar</button>
+                    <button class="btn-primary" @click="cancelAddTeammate()">cancel</button>
                 </div>
             </div>
             
@@ -97,11 +97,34 @@ export default {
         },
         selectContact() {
             if(this.selection == ''){
-                this.selection = this.result.email;
+                this.selection = this.result.id;
             }else {
                 this.selection = ''
             }
+        },
+        sendInvitation() {
+
+            let string = localStorage.getItem('identity');
+            let object = JSON.parse(string);
+            let sender = object.sub;
+            const data = {
+                'sender': sender,
+                'receiver': this.selection
+            }
+            let json = JSON.stringify(data);
+            console.log(json);
+            let formData = new FormData();
+            formData.append('json', json);
             
+            axios.post('api/friendrequest/send', formData, {"withCredentials":true})
+                .then(res=>{
+                    console.log(res.data);
+                })
+                .catch(error=>{
+                    console.log(error);
+                })
+
+
         }
     }
 }
@@ -184,6 +207,8 @@ export default {
         display: flex;
         align-items: center;
     }
+
+    /* Footer */
 
     .modal-footer {
         padding-top: 0;

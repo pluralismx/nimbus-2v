@@ -1,7 +1,9 @@
 <template>
     <section>
         <!-- Title bar-->
-        <AdminPanelTitleBarComponent />
+        <AdminPanelTitleBarComponent 
+            @show-notification-modal="toggleNotificationsModal"
+        />
 
         <div class="panel-container">
             <!-- Website manager -->
@@ -29,7 +31,9 @@
                 </div>
                 <!-- Body -->
                 <div class="settings-body">
-                    <TeamTableComponent />
+                    <TeamTableComponent 
+                        :contacts="contacts"
+                    />
                 </div>
                 <div class="settings-container-footer">
                     <button @click="toggleInviteTeammateModal" class="btn-primary">invitar</button>
@@ -48,6 +52,13 @@
             v-show="isVisibleAddTeammateModal" 
             @cancel-add-teammate="toggleInviteTeammateModal"
         />
+
+        <NotificationsModalComponent 
+            v-show="isVisibleNotificationsModal"
+            :friendRequests="friendRequests"
+            @close-notification-modal="toggleNotificationsModal"
+            @friend-request-answered="handleFriendRequestAnswered"
+        />
     </section>
 </template>
 <script>
@@ -58,6 +69,7 @@ import TeamTableComponent from './TeamTableComponent.vue'
 // Modals
 import CreateWebsiteModalComponent from './CreateWebsiteModal.vue'
 import AddTeammateModalComponent from './AddTeammateModalComponent.vue'
+import NotificationsModalComponent from './NotificationsModalComponent.vue'
 
 export default {
     name: 'AdminParentComponent',
@@ -66,17 +78,24 @@ export default {
         TeamTableComponent,
         WebsiteManagerComponent,
         CreateWebsiteModalComponent,
-        AddTeammateModalComponent
+        AddTeammateModalComponent,
+        NotificationsModalComponent
     },
     data() {
         return {
             isVisibleCreateWebsiteModal: false,
             isVisibleAddTeammateModal: false,
-            ownersWebsites: null
+            isVisibleNotificationsModal: false,
+            ownersWebsites: null,
+            friendRequests: '',
+            friendRequestAnswer: null,
+            contacts: ''
         }
     },
-    created() {
+    mounted() {
         this.loadOwnersWebsites();
+        this.loadFriendRequests();
+        this.loadFriends();
     },
     methods: {
         toggleCreateWebsitemodal() {
@@ -121,9 +140,75 @@ export default {
                     console.log(error);
                 })
         },
-        handleWebsiteCreated(website){
+        handleWebsiteCreated(website) {
             this.toggleCreateWebsitemodal();
             this.ownersWebsites.push(website);
+        },
+        toggleNotificationsModal() {
+            if(this.isVisibleNotificationsModal == false) {
+                this.isVisibleNotificationsModal = true;
+            }else {
+                this.isVisibleNotificationsModal = false;
+            }
+        },
+        loadFriendRequests() {
+            let identity = localStorage.getItem('identity');
+            let credentials = JSON.parse(identity);
+            let id = credentials.sub;
+
+            axios.get('api/friendrequest/get/'+id, { "withCredentials": true })
+                .then(res => {
+                    if(res.data.status == 'success'){
+                        this.friendRequests = res.data.friendRequests;
+                        console.log(this.friendRequests);
+                    }
+                })
+                .catch(error => {
+                    console.log(error);
+                })
+        },
+        handleFriendRequestAnswered(answer, id, contact_id){
+            
+            let identity = localStorage.getItem('identity');
+            let credentials = JSON.parse(identity);
+            let user_id = credentials.sub;
+            
+            const data = {
+                "request_id":id,
+                "status":answer,
+                "user_id": user_id,
+                "contact_id": contact_id
+            }
+
+            let json = JSON.stringify(data);
+            let formData = new FormData();
+            formData.append('json', json);
+
+            axios.post('api/friendrequest/answer', formData, { "withCredentials": true })
+                .then(res => {
+                    console.log(res.data);
+                    this.isVisibleNotificationsModal = false;
+
+                })
+                .catch(error => {
+                    console.log(error);
+                })  
+        },
+        loadFriends(){
+            let identity = localStorage.getItem('identity');
+            let credentials = JSON.parse(identity);
+            let user_id = credentials.sub;
+
+            axios.get('api/friends/myfriends/'+user_id, { "withCredentials": true })
+                .then(res => {
+                    if(res.data.status == 'success'){
+                        this.contacts = res.data.contacts;
+                        console.log(this.contacts);
+                    }
+                })
+                .catch(error => {
+                    console.log(error);
+                })  
         }
     },
 

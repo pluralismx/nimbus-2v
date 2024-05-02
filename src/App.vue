@@ -55,6 +55,7 @@
                 axios.get('api/logout', {"withCredentials": true})
                     .then(res=>{
                         if(res.data == 'success'){
+                            console.log(res.data);
                             this.isLogged = false;
                         }
                     })
