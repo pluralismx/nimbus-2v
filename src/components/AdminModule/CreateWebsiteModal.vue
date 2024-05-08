@@ -50,10 +50,10 @@ export default {
         }
     },
     methods: {
-        cancelCreateWebsite(){
+        cancelCreateWebsite: function (){
             this.$emit('cancel-create-website');
         },
-        createWebsite() {
+        createWebsite: function () {
             
             let formData = new FormData();
             let identity = localStorage.getItem('identity');
@@ -70,8 +70,7 @@ export default {
             axios.post('api/website/add', formData, { "withCredentials":  true})
                 .then(res=>{
                     if(res.data.status=='success'){
-                        let website = JSON.parse(res.data.website);
-                        this.$emit('website-created', website);
+                        this.$emit('website-created');
                     }
                 })
                 .catch(error=> {
@@ -154,7 +153,7 @@ export default {
 
 @media only screen and (min-width: 1024px) {
     .modal-container {
-        width: 15%;
+        width: 450px;
     }
 }
 

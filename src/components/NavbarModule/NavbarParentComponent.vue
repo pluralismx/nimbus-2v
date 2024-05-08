@@ -42,27 +42,42 @@
     import axios from '@/lib/axios';
     export default {
         name: 'NavbarParentComponent',
+        props: {
+            userId: {
+                type: Number,
+                required: true
+            }
+        },
         data() {
             return {
-                websites: null
+                websites: ''
             }
         },
         created() {
-            // console.log(this.userId);
             this.loadWebsites(this.userId);
         },
         methods: {
             toggleTool(selection){
                 this.$emit('toggle-tool', selection);
             },
-            loadWebsites(id){
-                axios.get('/api/website/records/'+id, { 'withCredentials': true })
-                .then(res=>{
-                    this.websites = res.data.websites;
-                })
-                .catch(error=>{
-                    console.log(error);
-                });
+            loadWebsites: async function (user_id){
+                try {
+                // Make an Axios GET request to fetch friends
+                const response = await axios.get('api/friends/myfriends/' + user_id, { withCredentials: true });
+
+                // Check if the response status is success
+                if (response.data.status === 'success') {
+                    // Resolve the promise with the contacts data
+                    return response.data.websites;
+                } else {
+                    // If the response status is not success, handle the error
+                    throw new Error('Failed to fetch friends. Response status: ' + response.data.status);
+                }
+            } catch (error) {
+                // Catch any errors that occurred during the Axios request
+                console.error('Error fetching friends:', error);
+                throw error; // Rethrow the error to propagate it further
+            }
             },
             logout(){
                 this.$emit('user-logged-out');

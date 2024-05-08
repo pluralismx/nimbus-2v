@@ -33,6 +33,9 @@ select:focus {
 }
 
 /* Buttons */
+.compact {
+    padding: 4px !important;
+}
 
 .btn-primary {
     background-color: var(--primary);

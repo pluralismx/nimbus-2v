@@ -4,7 +4,8 @@
     <div id="dashboard">
 
         <!-- Navigation bar -->
-        <NavbarParentComponent 
+        <NavbarParentComponent
+            :userId="identity.sub" 
             @toggle-tool="handleToggleTool"
             @user-logged-out="handleUserLoggedOut"
         />
@@ -62,6 +63,10 @@ export default {
             type: Boolean,
             required: true
         },
+        identity: {
+            type: Object,
+            required: true
+        }
     },
     data() {
         return {

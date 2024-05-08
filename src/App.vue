@@ -10,6 +10,7 @@
     <DashboardComponent 
         v-if="isLogged==true"
         :smViewport = smViewport
+        :identity = identity
         @user-logged-out="handleUserLoggedOut"
     />
 
@@ -43,19 +44,18 @@
             return {
                 smViewport: null,
                 isLogged: false,
+                identity: ''
             }
         },
         methods: {
-            handleUserLoggedIn(identity){
-                let credentials = JSON.stringify(identity);
-                localStorage.setItem('identity', credentials);
+            handleUserLoggedIn(){
+                this.identity = JSON.parse(localStorage.getItem('identity'));
                 this.isLogged = true;
             },
             handleUserLoggedOut(){
                 axios.get('api/logout', {"withCredentials": true})
                     .then(res=>{
                         if(res.data == 'success'){
-                            console.log(res.data);
                             this.isLogged = false;
                         }
                     })

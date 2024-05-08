@@ -22,7 +22,7 @@
 
                     <!-- Login -->
                     <div class="login-block">
-                        <button @click="signIn()" class="btn-primary">continuar</button>
+                        <button @click="logIn()" class="btn-primary">continuar</button>
                         <br>
                         <span>¿Olvidó su contraseña?</span>
                     </div>
@@ -37,54 +37,58 @@
         name: 'LoginParentComponent',
         data() {
             return {
-                email: 'megan@pluralis.com.mx',
-                password: 'dick',
-                identity: {}
+                email: 'gerardo@pluralis.com.mx',
+                password: '1234'
             }
         },
         methods: {
-            signIn() {
-                let email = this.email;
-                let password = this.password;
-                let formData = new FormData();
-
-                const json = {
-                    'email': email,
-                    'password': password,
-                    'getToken': null
+            logIn: async function() {
+                const data = {
+                    'email': this.email,
+                    'password': this.password
                 }
-
-                formData.append('json', JSON.stringify(json));
-
-                axios.post('api/login', formData)
-                    .then(res => {
-                        if(res.data == 'success'){
-                            // se genero la cookie
-                            axios.post('api/login', formData, { 'withCredentials': true })
-                                .then(res => {
-                                    if(res.data.status == 'success'){
-                                        this.identity = res.data.identity;
-                                    }else {
-                                        this.identity = {};
-                                    }
-                                    this.$emit('user-logged-in', this.identity);
-                                })
-                                .catch(error => {
-                                    console.log(error);
-                                });
-                        }else {
-                            this.identity = {};
+                const json = JSON.stringify(data);
+                let formData = new FormData();
+                formData.append('json', json);
+                try {
+                    const login = await axios.post('api/login', formData, {"withCredentials": true})
+                    if(login) {
+                        const identity = await this.getIdentity();
+                        if(identity){
+                            this.$emit('user-logged-in');
                         }
-                    })
-                    .catch(error => {
-                        console.log(error);
-                    });
+                    }else {
+                        console.log("No se pudo ejecutar el metodo getIdentity()");
+                    }
+                } catch (error) {
+                    console.log(error); 
+                }
+                
+            },
+            getIdentity: async function() {
+                const data = {
+                    'email': this.email,
+                    'password': this.password,
+                }
+                const json = JSON.stringify(data);
+                let formData = new FormData();
+                formData.append('json', json);
+                try {
+                    const login = await axios.post('api/login', formData, {"withCredentials": true});
+                    if(login.data.status == "success"){
+                        let identity = JSON.stringify(login.data.identity);
+                        localStorage.setItem('identity', identity);
+                        return true;
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    return false;
+                }
             }
         }
     }
 </script>
 <style scoped>
-
     .login-main-container {
         height: 100vh;
         width: 100vw;
