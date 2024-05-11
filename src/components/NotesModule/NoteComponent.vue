@@ -1,13 +1,13 @@
 <template>
     <article class="note-container">
         <div class="note-header">
-            <input type="text">
+            <input type="text" v-model="title">
         </div>
         <div class="note-body">
             <textarea name="cuerpo de la nota" placeholder="Escribe algo interesante" v-model="content"></textarea>
         </div>
         <div class="note-footer">
-            <button class="btn-warning">eliminar</button>
+            <button class="btn-warning" @click="deleteNote()">eliminar</button>
             <button class="btn-primary">editar</button>
             <button class="btn-primary">copiar</button>
         </div>
@@ -15,7 +15,24 @@
 </template>
 <script>
     export default {
-        name: 'NoteComponent'
+        name: 'NoteComponent',
+        props: {
+            note: {
+                type: Object,
+                required: true
+            }
+        },
+        data() {
+            return {
+                title: this.note.title,
+                content: this.note.content
+            }
+        },
+        methods: {
+            deleteNote: function () {
+                
+            }
+        }
     }
 </script>
 <style scoped>

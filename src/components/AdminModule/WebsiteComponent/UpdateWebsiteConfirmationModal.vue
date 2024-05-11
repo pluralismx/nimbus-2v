@@ -6,20 +6,20 @@
 
             <!-- Title -->
             <div class="modal-header">
-                <span>Eliminar sitio</span>
-                <span class="close-cross" @click="cancelDeleteWebsite">&times;</span>
+                <span>Actualizar sitio</span>
+                <span class="close-cross" @click="cancelUpdateWebsite">&times;</span>
             </div>
 
             <!-- Form -->
             <div class="modal-body">
-                <p>Esta seguro que desea eliminar el sitio?</p>
+                <p>Esta seguro que desea modificar el sitio?</p>
             </div>
 
             <!-- Buttons -->
             <div class="modal-footer">
                 <div class="buttons-block">
-                    <button class="btn-warning" @click="deleteWebsite">eliminar</button>
-                    <button class="btn-primary" @click="cancelDeleteWebsite">cancelar</button>
+                    <button class="btn-warning" @click="updateWebsite">actualizar</button>
+                    <button class="btn-primary" @click="cancelUpdateWebsite">cancelar</button>
                 </div>
             </div>
             
@@ -33,11 +33,11 @@
 export default {
     name: 'DeleteWebsiteConfirmationModal',
     methods: {
-        cancelDeleteWebsite: function (){
-            this.$emit('cancel-delete-website');
+        cancelUpdateWebsite: function (){
+            this.$emit('cancel-update-website');
         },
-        deleteWebsite: function () {
-            this.$emit('proceed-deleting-website');
+        updateWebsite: function () {
+            this.$emit('proceed-updating-website');
         }
     }
 }

@@ -7,7 +7,7 @@
             <!-- Title -->
             <div class="modal-header">
                 <span>Crear sitio</span>
-                <span class="close-cross" @click="cancelCreateWebsite">&times;</span>
+                <span class="close-cross" @click="closeModal()">&times;</span>
             </div>
 
             <!-- Form -->
@@ -29,8 +29,8 @@
             <!-- Buttons -->
             <div class="modal-footer">
                 <div class="buttons-block">
-                    <button class="btn-warning" @click="createWebsite">crear</button>
-                    <button class="btn-primary" @click="cancelCreateWebsite">cancel</button>
+                    <button class="btn-warning" @click="createWebsite()">crear</button>
+                    <button class="btn-primary" @click="closeModal()">cancel</button>
                 </div>
             </div>
             
@@ -42,18 +42,18 @@
 <script>
 import axios from '@/lib/axios'
 export default {
-    name: 'CreateWebsiteModalComponent',
+    name: 'ModalCreateWebsiteComponent',
     data() {
         return {
-            name: null,
-            url: null
+            name: 'Pluralis',
+            url: 'http://www.pluralis.com.mx'
         }
     },
     methods: {
-        cancelCreateWebsite: function (){
-            this.$emit('cancel-create-website');
+        closeModal: function (){
+            this.$emit('close-modal');
         },
-        createWebsite: function () {
+        createWebsite: async function () {
             
             let formData = new FormData();
             let identity = localStorage.getItem('identity');
@@ -65,17 +65,14 @@ export default {
                 'name': this.name,
                 'url': this.url
             }
-            let json = JSON.stringify(data);
-            formData.append('json', json);
-            axios.post('api/website/add', formData, { "withCredentials":  true})
-                .then(res=>{
-                    if(res.data.status=='success'){
-                        this.$emit('website-created');
-                    }
-                })
-                .catch(error=> {
-                    console.log(error);
-                })
+            formData.append('json', JSON.stringify(data));
+            const response = await axios.post('api/website/create', formData, { "withCredentials":  true});
+            if(response.data.status == 'success') {
+                this.$emit('website-created');
+            }else{
+                console.log('error');
+            }
+
         }
     }
 }

@@ -3,17 +3,17 @@
         <td>{{ website.name }}</td>
         <td>{{ website.url }}</td>
         <td>
-            <button class="btn-primary compact" @click="showDeleteConfirmationModal">eliminar</button>
+            <button class="btn-primary compact" @click="deleteWebsite()">eliminar</button>
             <button class="btn-primary compact" @click="toggleEditWebsiteRow">editar</button>
         </td>
     </tr>
 
     <!-- Edit website row -->
     <tr v-show="editWebsite">
-        <td><input class="compact" type="text" :value="website.name" /></td>
-        <td><input class="compact" type="text" :value="website.url" /></td>
+        <td><input v-model="new_name" class="compact" type="text"></td>
+        <td><input v-model="new_url" class="compact" type="text"></td>
         <td>
-            <button class="btn-primary compact" @click="showDeleteConfirmationModal">aceptar</button>
+            <button class="btn-warning compact" @click="updateWebsite">aceptar</button>
             <button class="btn-primary compact" @click="toggleEditWebsiteRow">cancelar</button>
         </td>
     </tr>
@@ -27,30 +27,16 @@ export default {
             required: true
         }
     },
-    computed: {
-        computedWebsite(){
-            this.website;
-        }
-    },
-    watch: {
-        computedWebsite: {
-            handler(newVal) {
-                this.websiteCopy
-            }
-        }
-    },
     data() {
         return {
             editWebsite: false,
-            
+            new_name: this.website.name,
+            new_url: this.website.url
         }
     },
     methods: {
         websiteSelected: function () {
             this.$emit('website-selected', this.website);
-        },
-        showDeleteConfirmationModal: function () {
-            this.$emit('delete-website', this.website.id);
         },
         toggleEditWebsiteRow: function () {
             if(this.editWebsite == true){
@@ -58,7 +44,21 @@ export default {
             }else {
                 this.editWebsite = true;
             }
+        },
+        deleteWebsite: function () {
+            this.$emit('authorization-need', "delete-website", this.website);
+        },
+        updateWebsite: function () {
+
+            const newWebsiteData = {
+                'id_website': this.website.id,
+                'name':this.new_name,
+                'url':this.new_url
+            }
+            this.$emit('authorization-need', "update-website", newWebsiteData);
+            this.toggleEditWebsiteRow();
         }
+
     }
 }
 </script>
@@ -95,5 +95,9 @@ tbody tr td:nth-last-child(1) {
 tbody tr td button {
     width: 30%;
     margin-left: .5rem;
+}
+
+tbody tr:nth-last-child(2){
+    border-bottom: none;
 }
 </style>

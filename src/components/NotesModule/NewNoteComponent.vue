@@ -1,19 +1,58 @@
 <template>
     <article class="note-container">
         <div class="note-header">
-            <input type="text" placeholder="Título">
+            <input v-model="title" type="text" placeholder="Título">
         </div>
         <div class="note-body">
-            <textarea placeholder="Escribe algo interesante"></textarea>
+            <textarea v-model="content" placeholder="Escribe algo interesante"></textarea>
         </div>
         <div class="note-footer">
-            <button class="btn-primary">guardar</button>
+            <button class="btn-primary" @click="saveNote">guardar</button>
         </div>
     </article>
 </template>
 <script>
+import axios from '@/lib/axios';
+
     export default {
-        name: 'NotesTitleBarComponent'
+        name: 'NotesTitleBarComponent',
+        props: {
+            websiteId: {
+                type: Number,
+                required: true
+            }
+        },
+        data () {
+            return {
+                title: '',
+                content: ''
+            }
+        },
+        methods: {
+            saveNote: async function () {
+
+                let identity = localStorage.getItem('identity');
+                let credentials = JSON.parse(identity);
+                let user_id = credentials.sub;
+
+                let formData = new FormData();
+                const json = {
+                    'id_user': user_id,
+                    'id_website': this.websiteId,
+                    'title': this.title,
+                    'content': this.content
+                }
+
+                formData.append('json', JSON.stringify(json));
+
+                const response = await axios.post('api/note/create', formData, {"withCredentials": true});
+                if(response.data.status=="success"){
+                    console.log("note created");
+                }else{
+                    console.log(response.data);
+                }
+            }
+        }
     }
 </script>
 <style scoped>

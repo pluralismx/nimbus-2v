@@ -7,10 +7,12 @@
         </div>
 
         <div class="notes-container" :class="{'showNewNote': isVisibleNewNote, 'hideNewNote': isVisibleNewNote == false }">
-            <NewNoteComponent />
-            <NoteComponent />
-            <NoteComponent />
-            <NoteComponent />
+            <NewNoteComponent 
+                :websiteId="website"
+            />
+            <NoteComponent 
+                v-for="note in notes" :key="note.id" :note="note"
+            />
         </div>
 
     </aside>
@@ -26,6 +28,16 @@
             NotesTitleBarComponent,
             NewNoteComponent,
             NoteComponent
+        },
+        props: {
+            notes: {
+                type: Array,
+                required: true
+            },
+            website: {
+                type: Number,
+                required: true
+            }
         },
         data() {
             return {

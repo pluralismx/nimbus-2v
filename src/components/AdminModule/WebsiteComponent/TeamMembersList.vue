@@ -1,63 +1,60 @@
 <template>
     <div class="website-teammates-container">
         <!-- Website agents-->
-        <span>Usuarios asignados a {{ website.name }}</span>
+        <span>Usuarios asignados a <span class="span-website-name">{{ websiteTeamData.website_name }}</span></span>
         <div class="table-container">
             <table>
                 <thead>
                     <tr>
-                        <th>Usuario</th>
+                        <th>Integrante</th>
                         <th>Rol</th>
-                        <th>acciones</th>
+                        <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
                     <!-- WebsiteTeamTableRowComponent -->
-                    <WebsiteTeamTableRowComponent 
-                        v-for="member in websiteUsersUpdated" :key="member.id" :member="member"
+                    <TeamMembersListRowComponent 
+                        v-for="member in websiteTeamData.team" :key="member.id" :member="member"
+                        @teammate-deleted="handleTeammateDeleted"
                     />
                 </tbody>
             </table>
         </div>
         <div class="table-container-footer">
-            <select class="compact" v-model="selectedUser"> 
-                <option v-for="contact in contacts" :key="contact.id" :value="contact">{{ contact.name }} {{ contact.surname }}</option>
+            <select class="compact" v-model="asignedUser"> 
+                <option v-for="friend in friends" :key="friend.id" :value="friend">{{ friend.name }} {{ friend.surname }}</option>
             </select>
-            <button class="btn-warning compact" @click="asignUser()">asignar</button>
+            <button class="btn-warning compact" @click="addTeammate()">asignar</button>
         </div>
     </div>
 </template>
 <script>
 import axios from '@/lib/axios'
-import WebsiteTeamTableRowComponent from './WebsiteTeamTableRowComponent.vue'
+import TeamMembersListRowComponent from './TeamMembersListRow'
 export default {
-    name: 'WebsiteTeamComponent',
+    name: 'TeamMembersListComponent',
     components: {
-        WebsiteTeamTableRowComponent
+        TeamMembersListRowComponent
     },
     props: {
-        contacts: {
-            type: Array,
+        websiteTeam: {
+            type: {},
             required: true
         },
-        website: {
-            type: Object,
-            required: true
-        },
-        websiteUsers: {
+        friends: {
             type: Array,
             required: true
         }
     },
     computed: {
-        computedWebsiteUsers() {
-            return this.websiteUsers;
+        websiteTeamComputed() {
+            return this.websiteTeam;
         }
     },
     watch: {
-        computedWebsiteUsers: {
+        websiteTeamComputed: {
             handler(newVal){
-                this.websiteUsersUpdated = newVal;
+                this.websiteTeamData = newVal;
             },
             immediate: true,
             deep: true
@@ -65,31 +62,32 @@ export default {
     },
     data() {
         return {
-            selectedUser: undefined,
-            websiteUsersUpdated: {}
+            websiteTeamData: {},
+            asignedUser: {}
         }
     },
     methods: {
-        asignUser: function () {
-            // console.log('website id: '+this.websiteId);
-            // console.log('user id: '+this.selectedUser.id);
-            
+        addTeammate: async function () {
             let formData = new FormData();
             const json = {
-                'id_website': this.website.id,
-                'id_user': this.selectedUser.id
+                'id_website': this.websiteTeamData.website_id,
+                'id_user': this.asignedUser.id
             }
             formData.append('json', JSON.stringify(json));
-            axios.post('api/website/asignuser', formData, {"withCredentials":true})
-                .then(res=>{
-                    if(res.data.status == "success"){
-                        this.websiteUsersUpdated.push(this.selectedUser);
-                    }
-                })
-                .catch(error=>{
-                    console.log(error);
-                });
+            const response = await axios.post('api/team/asignTeammate', formData, {"withCredentials":true})
+            if(response.data.status == 'success'){
+                this.$emit('teammate-added');
+            }else{
+                console.log(response.data);
+            }
 
+        },
+        handleTeammateDeleted: function (id) {
+            this.websiteTeamData.team.forEach((teammate, index)=>{
+                if(teammate.website_user_id == id){
+                    this.websiteTeamData.team.splice(index, 1);
+                }
+            });
         }
     }
 }
@@ -113,6 +111,10 @@ export default {
 
 span {
     margin: .5rem 0;
+}
+
+.span-website-name {
+    color: var(--primary);
 }
 
 .table-container {
@@ -152,6 +154,12 @@ thead {
 
 thead tr th {
     text-align: left;
+    padding: .5rem;
+    width: 50%;
+}
+
+thead tr th:nth-last-child(1) {
+    text-align: center;
     padding: .5rem;
     width: 50%;
 }

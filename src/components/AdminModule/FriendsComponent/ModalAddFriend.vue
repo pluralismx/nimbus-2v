@@ -7,14 +7,14 @@
             <!-- Header -->
             <div class="modal-header">
                 <span>Añadir colaborador</span>
-                <span class="close-cross" @click="cancelAddTeammate">&times;</span>
+                <span class="close-cross" @click="closeModal">&times;</span>
             </div>
 
             <!-- Body -->
             <div class="modal-body">
                 <div class="input-block">
                     <input v-model="email" class="input-primary" type="text" placeholder="juan@ejemplo.com">
-                    <button @click="searchContact()" class="btn-primary"><img src="../../assets/images/white-magnifier.png"/></button>
+                    <button @click="searchContact()" class="btn-primary"><img src="../../../assets/images/white-magnifier.png"/></button>
                 </div>
 
                 <!-- Contact card -->
@@ -22,7 +22,7 @@
                     <div class="contact-card-body">
                         <!-- Picture -->
                         <div class="contact-card-avatar">
-                            <img src="../../assets/images/white-manager.png"/>
+                            <img src="../../../assets/images/white-manager.png"/>
                         </div>
                         <!-- Info -->
                         <div class="contact-card-info">
@@ -36,7 +36,7 @@
                     <div class="contact-card-body">
                         <!-- Picture -->
                         <div class="contact-card-avatar">
-                            <img src="../../assets/images/white-manager.png"/>
+                            <img src="../../../assets/images/white-manager.png"/>
                         </div>
                         <!-- Info -->
                         <div class="contact-card-info">
@@ -50,7 +50,7 @@
             <div class="modal-footer">
                 <div class="buttons-block">
                     <button class="btn-warning" @click="sendInvitation()">invitar</button>
-                    <button class="btn-primary" @click="cancelAddTeammate()">cancel</button>
+                    <button class="btn-primary" @click="closeModal()">cancel</button>
                 </div>
             </div>
             
@@ -63,7 +63,7 @@
 <script>
 import axios from '@/lib/axios'
 export default {
-    name: 'AddTeammateModalComponent',
+    name: 'ModalAddFriendComponent',
     data(){
         return {
             'email': null,
@@ -72,8 +72,8 @@ export default {
         }
     },
     methods: {
-        cancelAddTeammate(){
-            this.$emit('cancel-add-teammate');
+        closeModal(){
+            this.$emit('close-modal');
         },
         searchContact() {
             let email = this.email;

@@ -17,7 +17,7 @@
                     <div class="contact-card-body">
                         <!-- Picture -->
                         <div class="contact-card-avatar">
-                            <img src="../../assets/images/white-team.png"/>
+                            <img src="../../../assets/images/white-team.png"/>
                         </div>
                         <!-- Info -->
                         <div class="contact-card-info">
@@ -43,8 +43,9 @@
 
 </template>
 <script>
+import axios from '@/lib/axios'
 export default {
-    name: 'NotificationsModalComponent',
+    name: 'ModalNotificationsComponent',
     props: {
         friendRequests: {
             type: Array,
@@ -55,8 +56,27 @@ export default {
         closeModal() {
             this.$emit("close-notification-modal");
         },
-        answerFriendRequest(answer, id, contact_id) {
-            this.$emit('friend-request-answered', answer, id, contact_id);
+        answerFriendRequest: async function (answer, id, contact_id) {
+            try{
+                let identity = localStorage.getItem('identity');
+                let credentials = JSON.parse(identity);
+                let user_id = credentials.sub;
+                let formData = new FormData();
+                const json = {
+                    "request_id":id,
+                    "status":answer,
+                    "user_id":user_id,
+                    "contact_id": contact_id
+                }
+                formData.append('json', JSON.stringify(json));
+                const response = await axios.post('api/friendrequest/answer', formData, {"withCredentials": true});
+                
+                if(response.data.status == "success"){
+                    this.$emit("friendrequest-answered");
+                }
+            }catch(error){
+                console.log(error);
+            }
         },
         
     }

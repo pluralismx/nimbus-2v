@@ -8,11 +8,14 @@
             :userId="identity.sub" 
             @toggle-tool="handleToggleTool"
             @user-logged-out="handleUserLoggedOut"
+            @load-dashboard-data="handleLoadDashboardData"
         />
 
         <!-- Aside -->
         <NotesParentComponent 
-            v-show="isVisibleNotes" 
+            v-show="isVisibleNotes"
+            :website="website_id"
+            :notes="notes"
         />
 
         <!-- Center -->
@@ -41,6 +44,7 @@
 </template>
 
 <script>
+import axios from '@/lib/axios'
 import NavbarParentComponent from '../NavbarModule/NavbarParentComponent.vue';
 import NotesParentComponent from '../NotesModule/NotesParentComponent.vue';
 import LeadsParentComponent from '../LeadsModule/LeadsParentComponent.vue';
@@ -73,11 +77,14 @@ export default {
             isVisibleNotes: false,
             isVisibleLeads: false,
             isVisibleEmail: false,
-            isVisibleTeam: false
+            isVisibleTeam: false,
+
+            notes: [],
+            website_id: ''
         }
     },
     methods: {
-        handleToggleTool(selection) {
+        handleToggleTool: function (selection) {
 
             switch (selection) {
                 case 'notes':
@@ -155,9 +162,26 @@ export default {
                     break;
             }
         },
-        handleUserLoggedOut(){
+        handleUserLoggedOut: function (){
             this.$emit('user-logged-out');
-        }
+        },
+        handleLoadDashboardData: function (website_id) {
+            this.website_id = website_id;
+            this.loadWebsiteNotes();
+            // this.loadWebsiteLeads(); 
+        },
+        loadWebsiteNotes: async function () {
+            const response = await axios.get('api/note/records/'+this.website_id, {"withCredentials":true});
+            if(response.data.status == 'success'){
+                this.notes = response.data.notes;
+                console.log(this.notes);
+            }else {
+                console.log("Could not retrieve notes");
+            }
+        },
+        // loadWebsiteLeads: function () {
+
+        // }
     }
 }
 
