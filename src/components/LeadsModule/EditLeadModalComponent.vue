@@ -15,19 +15,23 @@
 
                 <div class="input-block">
                     <label for="name">Nombre: </label>
-                    <input class="input-primary" type="text">
+                    <input class="input-primary" type="text" v-model="leadData.name">
                 </div>
                 <div class="input-block">
                     <label for="name">Telefono: </label>
-                    <input class="input-primary" type="text">
+                    <input class="input-primary" type="text" v-model="leadData.phone">
                 </div>
                 <div class="input-block">
                     <label for="name">Email: </label>
-                    <input class="input-primary" type="text">
+                    <input class="input-primary" type="text" v-model="leadData.email">
                 </div>
                 <div class="input-block">
-                    <select>
-                        <option selected disabled>Status...</option>
+                    <select v-model="leadData.status">
+                        <option value="nuevo" :selected="leadData.status === 'nuevo'">nuevo</option>
+                        <option value="presentacion" :selected="leadData.status === 'presentacion'">presentacion</option>
+                        <option value="cotizacion" :selected="leadData.status === 'cotizacion'">cotizacion</option>
+                        <option value="negociacion" :selected="leadData.status === 'negociacion'">negociacion</option>
+                        <option value="cierre" :selected="leadData.status === 'cierre'">cierre</option>
                     </select>
                 </div>
             </div>
@@ -35,8 +39,8 @@
             <!-- Buttons -->
             <div class="modal-footer">
                 <div class="buttons-block">
-                    <button class="btn-warning">aceptar</button>
-                    <button class="btn-primary" @click="cancelEditLead">cancel</button>
+                    <button class="btn-warning" @click="editLead()">aceptar</button>
+                    <button class="btn-primary" @click="cancelEditLead()">cancel</button>
                 </div>
             </div>
 
@@ -47,11 +51,49 @@
 </template>
 
 <script>
+import axios from '@/lib/axios'
 export default {
     name: 'EditLeadModalComponent',
+    props: {
+        lead: {
+            type: Object,
+            required: true
+        }
+    },
+    computed: {
+        leadComputed() {
+            return this.lead;
+        }
+    },
+    watch: {
+        leadComputed: {
+            handler(newVal){
+                this.leadData = newVal;
+            }
+        },
+        immediate: true,
+        deep: true
+    },
+    data() {
+        return {
+            leadData: {}
+        }
+    },
     methods: {
-        cancelEditLead() {
+        cancelEditLead: function () {
             this.$emit('cancel-edit-lead');
+        },
+        editLead: async function () {
+            let formData = new FormData();
+            formData.append('json', JSON.stringify(this.leadData));
+            console.log(this.leadData);
+            formData.append('_method', 'put');
+            const response = await axios.post('api/lead/update/'+this.leadData.id, formData, {"withCredentials":true});
+            if(response.data.staus=="success"){
+                console.log("lead edited");
+            }else {
+                console.log(response.data.status);
+            }
         }
     }
 }

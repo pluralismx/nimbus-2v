@@ -14,7 +14,10 @@
         />
 
         <!-- Desktop -->
-        <WizardDesktopComponent v-else/>
+        <WizardDesktopComponent 
+            v-else
+            @send-emails="handleSendEmails"
+        />
 
         <!-- Modals -->
         <EmailPreviewModalComponent 
@@ -27,6 +30,11 @@
             v-show="isVisibleImageUploadModal"
         />
 
+        <SendEmailsModalComponent 
+            v-show="isVisibleSendEmailsModal"
+            @close-modal="handleCloseSendEmailsModal"
+        />
+
     </section>
 </template>
 <script>
@@ -35,6 +43,7 @@
     import WizardDesktopComponent from './Wizard/WizardDesktopComponent.vue';
     import EmailPreviewModalComponent from './Modals/EmailPreviewModalComponent.vue';
     import ImageUploadModalComponent from './Modals/ImageUploadModalComponent.vue';
+    import SendEmailsModalComponent from './Modals/SendingEmailsModal.vue'
 
     export default {
         name: 'EmailParentComponent',
@@ -43,11 +52,17 @@
             WizardComponent,
             WizardDesktopComponent,
             EmailPreviewModalComponent,
-            ImageUploadModalComponent
+            ImageUploadModalComponent,
+            SendEmailsModalComponent
         },
         props: {
             smViewport: {
                 type: Boolean,
+                required: true
+            },
+            // here we are receving the addresses
+            leads: {
+                type: Array,
                 required: true
             }
         },
@@ -56,8 +71,10 @@
                 isVisibleEmailPreviewModal: false,
                 isVisibleImageUploadModal: false,
                 isVisibleRecipientsSettings: false,
+                isVisibleSendEmailsModal: false,
                 previewTemplate: null,
-                theme: null
+                theme: null,
+                recipients: []
             }
         },
         methods: {
@@ -81,6 +98,20 @@
                 }else{
                     this.isVisibleRecipientsSettings = false;
                 }
+            },
+            handleSendEmails: function (list) {
+                this.recipients = [];
+                this.leads.forEach((item) => {
+                    if (list.includes(item.status)) {
+                        this.recipients.push(item.email);
+                    }
+                });
+                this.isVisibleSendEmailsModal = true;
+                console.log(this.recipients);
+                
+            },
+            handleCloseSendEmailsModal: function () {
+                this.isVisibleSendEmailsModal = false;
             }
 
         },

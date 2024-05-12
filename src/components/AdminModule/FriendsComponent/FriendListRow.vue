@@ -23,7 +23,7 @@ export default {
     }
 }
 </script>
-<style>
+<style scoped>
 tbody tr td {
     text-align: left;
     padding: .5rem;

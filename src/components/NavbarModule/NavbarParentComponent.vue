@@ -6,7 +6,11 @@
         <!-- Top menu -->
         <div class="top-menu mobile">
             <label>Sitio: </label>
-            <select></select>
+            <select @change="loadDashboardData($event.target.value)">
+                <option v-for="website in websites" :key="website.id" :value="website.id">
+                    {{ website.name }}
+                </option> 
+            </select>
         </div>
 
         <!-- Bottom menu -->

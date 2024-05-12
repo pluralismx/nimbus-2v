@@ -6,12 +6,15 @@
             />
         </div>
 
-        <div class="notes-container" :class="{'showNewNote': isVisibleNewNote, 'hideNewNote': isVisibleNewNote == false }">
+        <div class="notes-container" :class="{'showNewNote': isVisibleNewNote == 'show' }">
             <NewNoteComponent 
                 :websiteId="website"
+                @note-created="handleNoteCreated"
             />
             <NoteComponent 
-                v-for="note in notes" :key="note.id" :note="note"
+                v-for="note in notesData" :key="note.id" :note="note"
+                @delete-note="handleDeleteNote"
+                @edit-note="handleEditNote"
             />
         </div>
 
@@ -21,6 +24,7 @@
     import NotesTitleBarComponent from './NotesTitleBarComponent.vue';
     import NewNoteComponent from './NewNoteComponent.vue';
     import NoteComponent from './NoteComponent.vue';
+import axios from '@/lib/axios';
 
     export default {
         name: 'NotesParentComponent',
@@ -39,19 +43,84 @@
                 required: true
             }
         },
+        computed: {
+            notesComputed(){
+                return this.notes;
+            }
+        },
+        watch: {
+            notesComputed: {
+                handler(newVal){
+                    this.notesData = newVal;
+                },
+                immediate: true,
+                deep: true
+            }
+        },
         data() {
             return {
-                isVisibleNewNote: null
+                isVisibleNewNote: '',
+                notesData: []
             }
         },
         methods: {
             handleNewNote(){
                 if (!this.isVisibleNewNote){
-                    this.isVisibleNewNote = true;
-                } else if(this.isVisibleNewNote == true){
-                    this.isVisibleNewNote = false;
+                    this.isVisibleNewNote = 'show';
+                } else if(this.isVisibleNewNote == 'show'){
+                    this.isVisibleNewNote = 'hide';
                 } else {
-                    this.isVisibleNewNote = true;
+                    this.isVisibleNewNote = 'show';
+                }
+            },
+            handleDeleteNote: async function (noteId) {
+                
+                const json = {
+                    'note_id': noteId
+                }
+
+                let formData = new FormData();
+                formData.append('json', JSON.stringify(json));
+
+                const response = await axios.post('api/note/delete', formData, {'withCredentials':true});
+
+                if(response.data.status==='success'){
+                    console.log('note deleted');
+                    
+                    
+                    this.notesData.forEach((item, index)=>{
+                        if(item.id == noteId){
+                            this.notesData.splice(index, 1);
+                        }
+                    });
+                }else {
+                    console.log('could not delete note');
+                }
+            },
+            handleNoteCreated: function () {
+                this.$emit('note-created');
+            },
+            handleEditNote: async function (note) {
+                const json = {
+                    'title': note.title,
+                    'content': note.content
+                }
+
+                let formData = new FormData();
+                formData.append('json', JSON.stringify(json));
+                formData.append("_method", "put");
+                const response = await axios.post('api/note/update/'+note.id, formData, {'withCredentials':true});
+
+                if(response.data.status=='success'){
+                    console.log('note updated');
+
+                    this.notesData.forEach((item, index)=>{
+                        if(item.id == note.id){
+                            this.notesData[index] = note;
+                        }
+                    });
+                }else {
+                    console.log(response.data);
                 }
             }
         }
@@ -84,34 +153,17 @@
         padding-bottom: 2rem;
         padding-right: 2rem;
         transform: translateY(calc(-45vh - 2rem));
-    }
-
-
-    @keyframes slideIn {
-        from {
-            transform: translateY(calc(-45vh - 2rem));
-        }
-        to {
-            transform: translateY(0%);
-        }
-    }
-    @keyframes slideOut {
-        from {
-            transform: translateY(0%);
-        }
-        to {
-            transform: translateY(calc(-45vh - 2rem));
-        }
+        transition: all 300ms;
     }
 
     .showNewNote {
-        animation: slideIn 300ms forwards;
+        transform: translateY(0%);
+        transition: all 300ms;
     }
 
     .hideNewNote {
-        animation: slideOut 300ms forwards;
+        animation: hideNewNote 300ms forwards;
     }
-
 
     /* Desktop */
 

@@ -178,7 +178,7 @@ export default {
     }
 }
 </script>
-<style>
+<style scoped>
 .website-teammates-container {
     min-height: 50%;
     flex-direction: column;

@@ -29,4 +29,8 @@
         width: 100%;
     }
 
+    span:hover {
+        cursor: pointer;
+    }
+
 </style>

@@ -8,8 +8,8 @@
         </div>
         <div class="note-footer">
             <button class="btn-warning" @click="deleteNote()">eliminar</button>
-            <button class="btn-primary">editar</button>
-            <button class="btn-primary">copiar</button>
+            <button class="btn-primary" @click="editNote()">editar</button>
+            <button class="btn-primary" @click="copyNote()">copiar</button>
         </div>
     </article>
 </template>
@@ -30,7 +30,27 @@
         },
         methods: {
             deleteNote: function () {
-                
+                this.$emit('delete-note', this.note.id);
+            },
+            editNote: function () {
+                const note = {
+                    'id': this.note.id,
+                    'title': this.title,
+                    'content': this.content
+                }
+                this.$emit('edit-note', note);
+            },
+            copyNote: function () {
+                let copiedText = this.content;
+                navigator.clipboard.writeText(copiedText)
+                    .then(() => {
+                        console.log('Text copied to clipboard:', copiedText);
+                        alert('Text copied to clipboard: ' + copiedText);
+                    })
+                    .catch(err => {
+                        console.error('Could not copy text to clipboard:', err);
+                        alert('Could not copy text to clipboard.');
+                    });
             }
         }
     }

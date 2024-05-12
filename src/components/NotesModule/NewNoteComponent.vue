@@ -47,9 +47,7 @@ import axios from '@/lib/axios';
 
                 const response = await axios.post('api/note/create', formData, {"withCredentials": true});
                 if(response.data.status=="success"){
-                    console.log("note created");
-                }else{
-                    console.log(response.data);
+                    this.$emit('note-created');
                 }
             }
         }

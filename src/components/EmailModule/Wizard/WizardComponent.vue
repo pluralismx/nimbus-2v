@@ -35,12 +35,18 @@
         <!-- Recipients -->
         <RecipientsSettingsComponent 
             v-show="recipients"
+            @send-emails="handleSendEmails"
         />
 
         <!-- Modals -->
         <ImageUploadModalComponent 
             v-show="isVisibleUploadImageModal"
             @close-image-modal="handleCloseImageModal"
+        />
+
+        <SendingEmailsModal 
+            v-show="isVisibleSendEmailsModal"
+            @close-modal="handleCloseSendEmailsModal"
         />
         
     </div>
@@ -51,7 +57,8 @@
     import PromotionalSettingsComponent from './PromotionalSettingsComponent.vue';
     import CustomEmailEditorComponent from './CustomEmailEditorComponent.vue';
     import ImageUploadModalComponent from '../Modals/ImageUploadModalComponent.vue';
-    import RecipientsSettingsComponent from '../Wizard/RecipientsSettingsComponent.vue'
+    import RecipientsSettingsComponent from '../Wizard/RecipientsSettingsComponent.vue';
+    import SendingEmailsModal from '../Modals/SendingEmailsModal.vue';
 
     export default {
         name: 'WizardComponent',
@@ -61,7 +68,8 @@
             PromotionalSettingsComponent,
             CustomEmailEditorComponent,
             ImageUploadModalComponent,
-            RecipientsSettingsComponent
+            RecipientsSettingsComponent,
+            SendingEmailsModal
         },
         props: {
             recipients: {
@@ -73,7 +81,8 @@
             return {
                 template: null,
                 theme: null,
-                isVisibleUploadImageModal: false
+                isVisibleUploadImageModal: false,
+                isVisibleSendEmailsModal: true
             }
         },
         methods: {
@@ -95,10 +104,16 @@
             },
             handleToggleTheme(theme) {
                 this.theme = theme;
+            },
+            handleSendEmails: function () {
+                this.isVisibleSendEmailsModal = true;
+            },
+            handleCloseSendEmailsModal: function () {
+                this.isVisibleSendEmailsModal = false;
             }
         }
     }
 </script>
-<style>
+<style scoped>
 
 </style>

@@ -1,23 +1,23 @@
 <template>
     <article>
         <div class="lead-header">
-            <h3>Gerardo Topete Perez</h3>
+            <h3>{{ lead.name }}</h3>
         </div>
         <div class="lead-body">
             <div class="lead-info">
                 <div>
                     <span class="data-label">Telefono: </span>
                     <br/>
-                    <span>526642522024</span>
+                    <span>{{ lead.phone }}</span>
                 </div>
                 <div>
                     <span class="data-label">Correo: </span>
                     <br/>
-                    <span>gerardotopete7@gmail.com</span>
+                    <span>{{ lead.email }}</span>
                 </div>
                 <div class="div-info">
                     <span class="data-label">Status: </span>
-                    <select name="status">
+                    <select name="status" @change="editLead()" v-model="new_status">
                         <option value="nuevo">nuevo</option>
                         <option value="presentacion">presentacion</option>
                         <option value="cotizacion">cotizacion</option>
@@ -30,20 +30,57 @@
                 <button class="btn-warning">Llamar</button>
                 <button class="btn-primary" @click="showNotesModal">Notas</button>
                 <button class="btn-primary" @click="showEditLeadModal">Editar</button>
-                <button class="btn-primary">Eliminar</button>
+                <button class="btn-primary" @click="deleteLead()">Eliminar</button>
             </div>
         </div>
     </article>
 </template>
 <script>
+import axios from '@/lib/axios';
+
     export default {
-        name: 'LeadComponent',
+        name: 'LeadCardComponent',
+        props: {
+            lead: {
+                type: Object,
+                required: true
+            }
+        },
+        data() {
+            return {
+                new_status: this.lead.status
+            }
+        },
         methods: {
             showEditLeadModal() {
-                this.$emit('show-edit-lead-modal');
+                console.log(this.lead);
+                this.$emit('show-edit-lead-modal', this.lead);
             },
             showNotesModal() {
                 this.$emit('show-notes-modal');
+            },
+            deleteLead: async function () {
+                const response = await axios.delete('api/lead/delete/'+this.lead.id, {'withCredentials':true});
+                if(response.data.status=='success'){
+                    this.$emit('lead-deleted', this.lead.id);
+                }else {
+                    console.log('error deleting lead');
+                }
+            },
+            editLead: async function () {
+                const json = {
+                    'status': this.new_status
+                }
+                let formData = new FormData();
+                formData.append('json', JSON.stringify(json));
+                
+                formData.append('_method', 'put');
+                const response = await axios.post('api/lead/update/'+this.lead.id, formData, {"withCredentials":true});
+                if(response.data.staus=="success"){
+                    console.log("lead edited");
+                }else {
+                    console.log(response.data.status);
+                }
             }
         }
     }

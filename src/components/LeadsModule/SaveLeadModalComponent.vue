@@ -15,31 +15,36 @@
 
                 <div class="input-block">
                     <label for="name">Nombre: </label>
-                    <input class="input-primary" type="text">
+                    <input v-model="name" class="input-primary" type="text">
                 </div>
                 <div class="input-block">
                     <label for="name">Telefono: </label>
-                    <input class="input-primary" type="text">
+                    <input v-model="phone" class="input-primary" type="text">
                 </div>
                 <div class="input-block">
                     <label for="name">Email: </label>
-                    <input class="input-primary" type="text">
+                    <input v-model="email" class="input-primary" type="text">
                 </div>
                 <div class="input-block">
-                    <select>
-                        <option selected disabled>Status...</option>
+                    <select v-model="status">
+                        <option value="nuevo">Nuevo</option>
+                        <option value="identificacion">Identificación</option>
+                        <option value="presentacion">Presentación</option>
+                        <option value="cotizacion">Cotización</option>
+                        <option value="negociacion">Negociación</option>
+                        <option value="cierre">Cierre</option>
                     </select>
                 </div>
                 <div class="input-block">
-                    <textarea cols="30" rows="10"></textarea>
+                    <textarea v-model="message" cols="30" rows="10"></textarea>
                 </div>
             </div>
 
             <!-- Buttons -->
             <div class="modal-footer">
                 <div class="buttons-block">
-                    <button class="btn-warning">guardar</button>
-                    <button class="btn-primary" @click="cancelSaveLead">cancel</button>
+                    <button class="btn-warning" @click="createlead()">guardar</button>
+                    <button class="btn-primary" @click="cancelSaveLead()">cancel</button>
                 </div>
             </div>
             
@@ -50,9 +55,45 @@
 </template>
 
 <script>
+import axios from '@/lib/axios';
+
 export default {
     name: 'SaveLeadModalComponent',
+    props: {
+        website_id: {
+            type: Number,
+            required: true
+        }
+    },
+    data(){
+        return {
+            name: 'Dillion',
+            phone: '3056232236',
+            email: 'dillion@pluralis.com.mx',
+            status: '',
+            message: 'Hi'
+        }
+    },
     methods: {
+        createlead: async function () {
+            const json = {
+                'name': this.name,
+                'phone': this.phone,
+                'email': this.email,
+                'status': this.status,
+                'message': this.message
+            }
+
+            let formData = new FormData();
+            formData.append('json', JSON.stringify(json));
+
+            const response = await axios.post('api/lead/create/'+this.website_id, formData, {"withCredentials": true});
+            if(response.data.status=="success"){
+                this.$emit('lead-created');
+            }else {
+                console.log(response.data);
+            }
+        },
         cancelSaveLead(){
             this.$emit('cancel-save-lead');
         }
@@ -66,6 +107,7 @@ export default {
         width: 75%;
         border-radius: .5rem;
         background-color: var(--basic);
+        box-shadow: 2px 2px 8px var(--shadows);
     }
 
     .modal-header {
@@ -123,6 +165,14 @@ export default {
 
     .buttons-block button {
         width: 100px;
+    }
+
+    @media only screen and (min-width: 1024px){
+        .modal-container {
+            width: 400px;
+            border-radius: .5rem;
+            background-color: var(--basic);
+        }
     }
 
 </style>

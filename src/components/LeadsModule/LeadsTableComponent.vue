@@ -4,53 +4,168 @@
             <tr class="table-tools">
                 <td class="table-search" colspan="2">
                     <label for="">Buscar:&nbsp;</label>
-                    <input type="text">&nbsp;
-                    <button class="btn-warning">Buscar</button>
+                    <input v-model="search_query" type="text">&nbsp;
+                    <button class="btn-warning" @click="search()">{{ search_btn_text }}</button>
                 </td>
                 <td class="table-pagination" colspan="4">
                     <label for="rows_per_page">filas por página: </label>
-                    <select class="select-rows">
+                    <select v-model="this.rp" class="select-rows">
                         <option value="5">5</option>
                         <option value="10">10</option>
                         <option value="25">25</option>
                         <option value="50">50</option>
                     </select>
-                    <button class="btn-warning">&lt;</button>
-                    <span>&nbsp;1</span><span>&nbsp;/&nbsp;</span><span>10&nbsp;</span>
-                    <button class="btn-warning">&gt;</button>
+                    <button class="btn-warning" @click="previousPage">&lt;</button>
+                    <span>&nbsp;{{ this.cp }}</span><span>&nbsp;/&nbsp;</span><span>{{ this.pages }}&nbsp;</span>
+                    <button class="btn-warning" @click="nextPage">&gt;</button>
                 </td>
             </tr>
             <tr>
-                <th width="18%"><span>Nombre</span></th>
-                <th width="18%"><span>Telefono</span></th>
-                <th width="18%"><span>Correo</span></th>
-                <th width="18%"><span>Status</span></th>
-                <th width="18%"><span>Fecha</span></th>
+                <th width="18%"><span @click="sortTable('name')">Nombre</span></th>
+                <th width="18%"><span @click="sortTable('phone')">Telefono</span></th>
+                <th width="18%"><span @click="sortTable('email')">Correo</span></th>
+                <th width="18%"><span @click="sortTable('status')">Status</span></th>
+                <th width="18%"><span @click="sortTable('date')">Fecha</span></th>
                 <th width="18%">Acciones</th>
             </tr>
         </thead>
-        <tbody>
-            <LeadRowComponent />
-            <LeadRowComponent />
-            <LeadRowComponent />
-            <LeadRowComponent />
-            <LeadRowComponent />
-            <LeadRowComponent />
-            <LeadRowComponent />
-            <LeadRowComponent />
-            <LeadRowComponent />
-            <LeadRowComponent />
+        <tbody v-if="!results">
+            <LeadRowComponent 
+                v-for="lead in displayedData" :key="lead" :lead="lead"
+                @lead-deleted="handleLeadDeleted"
+            />
+        </tbody>
+        <tbody v-if="results">
+            <LeadRowComponent 
+                v-for="lead in results_data" :key="lead" :lead="lead"
+                @lead-deleted="handleLeadDeleted"
+            />
         </tbody>
     </table>
 </template>
 <script>
-    import LeadRowComponent from './LeadRowComponent.vue';
-    export default {
-        name: 'LeadsTableComponent',
-        components: {
-            LeadRowComponent
+import LeadRowComponent from './LeadRowComponent.vue';
+export default {
+    name: 'leadsDataTableComponent',
+    components: {
+        LeadRowComponent
+    },
+    props: {
+        leads: {
+            type: Array,
+            required: true
+        }
+    },
+    data(){
+        return {
+            leadsData: null,
+            leads_per_page: null,
+            rp: 10,
+            cp: 1,
+            search_query: null,
+            results: false,
+            results_data: [],
+            search_btn_text: 'buscar'  
+        }
+    },
+    computed: {
+
+        leadsDataComputed() {
+            return this.leads;
+        },
+        pages() {
+            return Math.ceil((this.leadsData.length / this.rp));
+        },
+        limitStart() {
+            return (this.cp - 1) * this.rp;
+        },
+        limitEnd(){
+            return (this.rp * this.cp);
+        },
+        displayedData(){
+            return this.leadsData.slice(this.limitStart, this.limitEnd);
+        }
+    },
+    watch: {
+        leadsDataComputed: {
+            handler(newVal){
+                this.leadsData = newVal;
+            },
+            immediate: true,
+            deep: true
+        }
+    },
+
+    methods: {
+        handleLeadDeleted: function (lead_id) {
+            this.$emit('lead-deleted', lead_id);
+        },
+        nextPage (){
+                if(this.cp < this.pages){
+                    this.cp++;
+                }
+            },
+        previousPage (){
+            if(this.cp > 1){
+                this.cp--;
+            }
+        },
+        sortTable(index) {
+            let asc = true;
+            let desc = true;
+
+            for (let i = 1; i < this.leadsData.length; i++) {
+                if (this.leadsData[i][index] < this.leadsData[i - 1][index]) {
+                    asc = false;
+                }
+                if (this.leadsData[i][index] > this.leadsData[i - 1][index]) {
+                    desc = false;
+                }
+            }
+
+            if (desc) {
+                this.leadsData.sort((a, b) => {
+                    let columnA = a[index];
+                    let columnB = b[index];
+                    return columnA.localeCompare(columnB, 'es', { sensitivity: 'base' });
+                });
+            } else if (asc) {
+                this.leadsData.sort((a, b) => {
+                    let columnA = a[index];
+                    let columnB = b[index];
+                    return -columnA.localeCompare(columnB, 'es', { sensitivity: 'base' });
+                });
+            } else {
+                this.leadsData.sort((a, b) => {
+                    let columnA = a[index];
+                    let columnB = b[index];
+                    return columnA.localeCompare(columnB, 'es', { sensitivity: 'base' });
+                });
+            }
+        },
+        search (){
+            if(this.results == false){
+                this.search_btn_text = 'limpiar';
+                let query = this.search_query;
+                console.log(this.search_query);
+                this.leadsData.forEach(lead => {
+                    if (query === lead.name || query === lead.phone || query === lead.email) {
+                        let id = lead.id_lead;
+                        if (!this.results_data.some(match => match.id_lead === id)) {
+                            this.results_data.push(lead);
+                        }
+                    }
+                });
+                this.results = true;
+            }else{
+                this.results_data = [];
+                this.search_query = null;
+                this.results = false;
+                this.search_btn_text = 'buscar';
+            }
         }
     }
+}
 </script>
 <style scoped>
 

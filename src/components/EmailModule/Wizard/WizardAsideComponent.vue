@@ -33,6 +33,7 @@
         <!-- Recipients -->
         <RecipientsSettingsComponent 
             v-show="recipientsSettings == true"
+            @send-emails="handleSendEmails"
         />
 
         <!-- Modals -->
@@ -96,6 +97,9 @@
             handleUpdateHtmlTemplate(template) {
                 this.$emit('update-html-template', template);
             },
+            handleSendEmails: function (list) {
+                this.$emit('send-emails', list);
+            }
         }
     }
 </script>

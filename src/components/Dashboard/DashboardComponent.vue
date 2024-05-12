@@ -16,19 +16,25 @@
             v-show="isVisibleNotes"
             :website="website_id"
             :notes="notes"
+            @note-created="handleNoteCreated"
         />
 
         <!-- Center -->
         <LeadsParentComponent 
-            v-show="isVisibleLeads" 
+            v-show="isVisibleLeads"
+            :website="website_id"
+            :leads="leads"
             :class="{ 'wide' : !isVisibleNotes }" 
             :smViewport = smViewport
+            @lead-deleted="handleLeadDeleted"
+            @lead-created="handleLeadCreated"
         />
 
         <EmailParentComponent 
             v-show="isVisibleEmail"
             :class="{ 'wide' : !isVisibleNotes }"
             :smViewport = smViewport
+            :leads="leads"
         />
 
         <AdminParentComponent 
@@ -78,9 +84,11 @@ export default {
             isVisibleLeads: false,
             isVisibleEmail: false,
             isVisibleTeam: false,
-
+            
+            website_id: '',
             notes: [],
-            website_id: ''
+            leads: [],
+            
         }
     },
     methods: {
@@ -168,20 +176,40 @@ export default {
         handleLoadDashboardData: function (website_id) {
             this.website_id = website_id;
             this.loadWebsiteNotes();
-            // this.loadWebsiteLeads(); 
+            this.loadWebsiteLeads(); 
         },
         loadWebsiteNotes: async function () {
             const response = await axios.get('api/note/records/'+this.website_id, {"withCredentials":true});
             if(response.data.status == 'success'){
                 this.notes = response.data.notes;
-                console.log(this.notes);
             }else {
                 console.log("Could not retrieve notes");
             }
         },
-        // loadWebsiteLeads: function () {
-
-        // }
+        handleNoteCreated: function () {
+            this.loadWebsiteNotes();
+        },
+        loadWebsiteLeads: async function () {
+                const response = await axios.get('api/lead/records/'+this.website_id, {"withCredentials": true});
+                if(response.data.status=='success'){
+                    this.leads = response.data.leads;
+                    console.log(this.leads);
+                }else{
+                    console.log(response.data);
+                }
+        },
+        handleLeadDeleted: function (lead_id) {
+            
+            this.leads.forEach((item, index) => {
+                if(item.id == lead_id){
+                    this.leads.splice(index, 1);
+                }
+            });
+        },
+        handleLeadCreated: function () {
+            console.log('lead created from dashboard');
+            this.loadWebsiteLeads();
+        },
     }
 }
 

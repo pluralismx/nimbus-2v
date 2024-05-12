@@ -9,42 +9,42 @@
             <div class="settings-body">
                 <!-- Nuevos -->
                 <div class="checkbox-block">
-                    <input type="checkbox" />
+                    <input type="checkbox" v-model="selectedOptions" value="nuevo"/>
                     <label>Nuevos</label>
                 </div>
                 <!-- Identificacion -->
                 <div class="checkbox-block">
-                    <input type="checkbox" />
+                    <input type="checkbox" v-model="selectedOptions" value="identificacion"/>
                     <label>Identificación</label>
                 </div>
                 <!-- Presentacion -->
                 <div class="checkbox-block">
-                    <input type="checkbox" />
+                    <input type="checkbox" v-model="selectedOptions" value="presentacion"/>
                     <label>Presentación</label>
                 </div>
                 <!-- Cotizacion -->
                 <div class="checkbox-block">
-                    <input type="checkbox" />
+                    <input type="checkbox" v-model="selectedOptions" value="cotizacion"/>
                     <label>Cotización</label>
                 </div>
                 <!-- Negociacion -->
                 <div class="checkbox-block">
-                    <input type="checkbox" />
+                    <input type="checkbox" v-model="selectedOptions" value="negociacion"/>
                     <label>Negociación</label>
                 </div>
                 <!-- Cierre -->
                 <div class="checkbox-block">
-                    <input type="checkbox" />
+                    <input type="checkbox" v-model="selectedOptions" value="cierre"/>
                     <label>Cierre</label>
                 </div>
                 <!-- Todos -->
                 <div class="checkbox-block">
-                    <input type="checkbox" />
+                    <input type="checkbox" v-model="selectedOptions" value="todos"/>
                     <label>Todos</label>
                 </div>
                 <!-- Individual -->
                 <div class="checkbox-block">
-                    <input type="checkbox" />
+                    <input type="checkbox" v-model="selectedOptions" value="individual"/>
                     <label>Individual</label>
                 </div>
                 <div class="text-input-block">
@@ -54,14 +54,24 @@
                 </div>
             </div>
             <div class="settings-footer">
-                <button class="btn-warning">Enviar</button>
+                <button class="btn-warning" @click="sendEmails">Enviar</button>
             </div>
         </div>
     </section>
 </template>
 <script>
     export default {
-        name: 'RecipientsSettingsComponent'
+        name: 'RecipientsSettingsComponent',
+        data() {
+            return {
+                selectedOptions: [],
+            }
+        },
+        methods: {
+            sendEmails: function () {
+                this.$emit('send-emails', this.selectedOptions);
+            }
+        }
     }
 </script>
 <style scoped>

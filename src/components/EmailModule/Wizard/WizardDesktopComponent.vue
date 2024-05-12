@@ -14,6 +14,7 @@
             :recipientsSettings = this.recipientsSettings
             :templateSettings = this.templateSettings
             @update-html-template = "handleUpdateHtmlTemplate"
+            @send-emails="handleSendEmails"
         />
 
         <!-- Preview -->
@@ -72,6 +73,9 @@
             },
             handleUpdateHtmlTemplate(template) {
                 this.previewTemplate = template;
+            },
+            handleSendEmails: function (list) {
+                this.$emit('send-emails', list);
             }
         }
     }
