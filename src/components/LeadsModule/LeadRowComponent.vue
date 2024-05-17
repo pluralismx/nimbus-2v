@@ -1,9 +1,9 @@
 <template>
     <!-- Original lead -->
     <tr>
-        <td v-show="edit==false" width="18%">{{ name }}</td>
-        <td v-show="edit==false" width="18%">{{ phone }}</td>
-        <td v-show="edit==false" width="18%">{{ email }}</td>
+        <td v-show="edit==false" width="18%"><span class="span-clickable" @click="showDetails()">{{ name }}</span></td>
+        <td v-show="edit==false" width="18%"><span>{{ phone }}</span></td>
+        <td v-show="edit==false" width="18%"><span>{{ email }}</span></td>
         
         <td v-show="edit==false" width="18%">
             <select class="select-status" v-model="status" @change="editStatus()">
@@ -109,7 +109,11 @@
                 }else {
                     console.log(response.data.status);
                 }
-            }
+            },
+            showDetails: function () {
+                this.$emit('show-details', this.lead);
+            },
+
         }
     }
 </script>
@@ -134,4 +138,5 @@
         width: 85%;
         text-align: center;
     }
+    
 </style>

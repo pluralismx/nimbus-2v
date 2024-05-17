@@ -190,3 +190,7 @@ ul {
     padding: 0px 4px;
     border-radius: 2px;
 }
+
+.modal-close:hover {
+    cursor: pointer;
+}

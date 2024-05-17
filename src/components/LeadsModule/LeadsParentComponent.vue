@@ -19,6 +19,7 @@
                 :leads="leads"
                 @lead-deleted="handleLeadDeleted"
                 @sort-table="handleSortTable"
+                @show-details="handleShowDetails"
             />
         </div>
 
@@ -40,18 +41,20 @@
         <NotesLeadModalComponent 
             v-show="isVisibleNotesLeadModal"
             @close-notes-modal="handleCloseNotesModal"
+            :lead="leadDetails"
+            :leadNotes="leadNotes"
         />
 
     </section>
 </template>
 <script>
-
+    import axios from '@/lib/axios'
     import LeadsTitleBarComponent from './LeadsTitleBarComponent.vue';
     import LeadCardComponent from './LeadCard.vue';
     import LeadsTableComponent from './LeadsTableComponent.vue';
     import SaveLeadModalComponent from './SaveLeadModalComponent.vue';
     import EditLeadModalComponent from './EditLeadModalComponent.vue';
-    import NotesLeadModalComponent from './NotesLeadModalComponent'
+    import NotesLeadModalComponent from './NotesLeadModalComponent';
 
     export default {
         name: 'LeadsParentComponent',
@@ -83,7 +86,9 @@
                 isVisibleEditLeadModal: false,
                 isVisibleNotesLeadModal: false,
                 // Data
-                leadToEdit: {}
+                leadToEdit: {},
+                leadDetails: '',
+                leadNotes: []
             }
         },
         methods: {
@@ -113,6 +118,17 @@
             handleLeadDeleted: function (lead_id) {
                 this.$emit('lead-deleted', lead_id);
             },
+            handleShowDetails: function (lead) {
+                this.isVisibleNotesLeadModal = true;
+                this.leadDetails = lead;
+                this.loadLeadNotes();
+            },
+            loadLeadNotes: async function () {
+                const response = await axios.get('api/lead/getLeadNotes/'+this.leadDetails.id, {"withCredentials": true});
+                if(response.data.status=='success'){
+                    this.leadNotes = response.data.lead_notes;
+                }
+            }
         }
     }
 </script>

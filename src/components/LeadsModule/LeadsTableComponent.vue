@@ -3,12 +3,12 @@
         <thead>
             <tr class="table-tools">
                 <td class="table-search" colspan="2">
-                    <label for="">Buscar:&nbsp;</label>
+                    <label for="">Search:&nbsp;</label>
                     <input v-model="search_query" type="text">&nbsp;
                     <button class="btn-warning" @click="search()">{{ search_btn_text }}</button>
                 </td>
                 <td class="table-pagination" colspan="4">
-                    <label for="rows_per_page">filas por página: </label>
+                    <label for="rows_per_page">rows per page: </label>
                     <select v-model="this.rp" class="select-rows">
                         <option value="5">5</option>
                         <option value="10">10</option>
@@ -21,18 +21,19 @@
                 </td>
             </tr>
             <tr>
-                <th width="18%"><span @click="sortTable('name')">Nombre</span></th>
-                <th width="18%"><span @click="sortTable('phone')">Telefono</span></th>
-                <th width="18%"><span @click="sortTable('email')">Correo</span></th>
+                <th width="18%"><span @click="sortTable('name')">Company</span></th>
+                <th width="18%"><span @click="sortTable('phone')">Phone</span></th>
+                <th width="18%"><span @click="sortTable('email')">E-mail</span></th>
                 <th width="18%"><span @click="sortTable('status')">Status</span></th>
-                <th width="18%"><span @click="sortTable('date')">Fecha</span></th>
-                <th width="18%">Acciones</th>
+                <th width="18%"><span @click="sortTable('date')">Date</span></th>
+                <th width="18%">Actions</th>
             </tr>
         </thead>
         <tbody v-if="!results">
             <LeadRowComponent 
                 v-for="lead in displayedData" :key="lead" :lead="lead"
                 @lead-deleted="handleLeadDeleted"
+                @show-details="handleShowDetails"
             />
         </tbody>
         <tbody v-if="results">
@@ -163,6 +164,9 @@ export default {
                 this.results = false;
                 this.search_btn_text = 'buscar';
             }
+        },
+        handleShowDetails: function (lead) {
+            this.$emit('show-details', lead);
         }
     }
 }
@@ -215,13 +219,23 @@ export default {
         transition: all 300ms;
     }
 
-    thead tr th span:hover{
-        cursor: pointer;
-    }
-
     tbody tr:nth-child(odd) {
         background-color: var(--accent);
         color: var(--warning);
+    }
+    tbody tr:nth-child(odd) {
+        background-color: var(--accent);
+        color: var(--warning);
+    }
+    tbody tr:hover {
+        background-color: var(--shadows);
+        color: var(--accent);
+        cursor: pointer;
+    }
+    tbody tr:nth-child(odd):hover {
+        background-color: var(--shadows);
+        color: var(--accent);
+        cursor: pointer;
     }
 
     .table-tools {

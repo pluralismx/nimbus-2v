@@ -12,6 +12,7 @@
             v-show="template == 'newsletter' && recipients == false"
             :isSelected="template"
             :theme="theme"
+            :image="templateImageData"
             @open-image-modal="handleOpenImageModal"
             @update-html-template="handleUpdateHtmlTemplate"
         />
@@ -42,6 +43,9 @@
         <ImageUploadModalComponent 
             v-show="isVisibleUploadImageModal"
             @close-image-modal="handleCloseImageModal"
+            :website="website"
+            :images="images"
+            @image-selected="handleImageSelected"
         />
 
         <SendingEmailsModal 
@@ -75,12 +79,22 @@
             recipients: {
                 type: Boolean,
                 required: false
+            },
+            website: {
+                type: Number,
+                required: true
+            },
+            images: {
+                type: Array,
+                required: true
             }
         },
         data() {
             return {
                 template: null,
                 theme: null,
+                templateImageSection: '',
+                templateImageData: {},
                 isVisibleUploadImageModal: false,
                 isVisibleSendEmailsModal: true
             }
@@ -91,7 +105,8 @@
             handleToggleTemplate(template){
                 this.template = template;
             },
-            handleOpenImageModal(){
+            handleOpenImageModal(section){
+                this.templateImageSection = section;
                 this.isVisibleUploadImageModal = true;
             },
             handleCloseImageModal() {
@@ -110,6 +125,13 @@
             },
             handleCloseSendEmailsModal: function () {
                 this.isVisibleSendEmailsModal = false;
+            },
+            handleImageSelected: function (image_name) {
+                const json = {
+                    "image_name": image_name,
+                    "section": this.templateImageSection
+                }
+                this.templateImageData = json;
             }
         }
     }

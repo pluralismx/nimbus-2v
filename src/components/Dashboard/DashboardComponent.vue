@@ -35,6 +35,8 @@
             :class="{ 'wide' : !isVisibleNotes }"
             :smViewport = smViewport
             :leads="leads"
+            :website="website_id"
+            :images="images"
         />
 
         <AdminParentComponent 
@@ -88,7 +90,7 @@ export default {
             website_id: '',
             notes: [],
             leads: [],
-            
+            images: [],
         }
     },
     methods: {
@@ -176,7 +178,8 @@ export default {
         handleLoadDashboardData: function (website_id) {
             this.website_id = website_id;
             this.loadWebsiteNotes();
-            this.loadWebsiteLeads(); 
+            this.loadWebsiteLeads();
+            this.loadWebsiteImages();
         },
         loadWebsiteNotes: async function () {
             const response = await axios.get('api/note/records/'+this.website_id, {"withCredentials":true});
@@ -197,6 +200,12 @@ export default {
                 }else{
                     console.log(response.data);
                 }
+        },
+        loadWebsiteImages: async function () {
+            const response = await axios.get('api/image/websiteImages/'+this.website_id, {"withCredentials":true});
+            if(response.data.status == "success"){
+                this.images = response.data.images;
+            }
         },
         handleLeadDeleted: function (lead_id) {
             

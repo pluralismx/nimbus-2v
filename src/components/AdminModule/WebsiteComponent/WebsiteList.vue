@@ -179,23 +179,16 @@ export default {
 }
 </script>
 <style scoped>
-.website-teammates-container {
-    min-height: 50%;
-    flex-direction: column;
-    box-sizing: border-box;
-}
-
-/* Asigned users table */
-.actual-website-users-container {
-    box-sizing: border-box;
-    flex-grow: 1;
-    min-height: 0;
-    display: flex;
-    flex-direction: column;
-}
 
 span {
     margin: .5rem 0;
+}
+
+.website-list-container {
+    height: 50%;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
 }
 
 .table-container {
@@ -259,11 +252,6 @@ thead tr th:nth-last-child(1) {
     width: 30%;
 }
 
-.website-teammates-container {
-    height: 50%;
-    display: flex;
-    flex-direction: column;
-}
 
 
 

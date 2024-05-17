@@ -15,6 +15,8 @@
             :templateSettings = this.templateSettings
             @update-html-template = "handleUpdateHtmlTemplate"
             @send-emails="handleSendEmails"
+            :images="images"
+            :website="website"
         />
 
         <!-- Preview -->
@@ -36,6 +38,16 @@
             WizardToolbarComponent,
             WizardAsideComponent,
             WizardPreviewComponent
+        },
+        props: {
+            images: {
+                type: Array,
+                required: true
+            },
+            website: {
+                type: Number,
+                required: true
+            }
         },
         data(){
             return {

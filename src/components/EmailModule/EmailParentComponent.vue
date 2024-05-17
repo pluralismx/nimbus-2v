@@ -11,12 +11,16 @@
             v-if="smViewport"
             @update-html-template="handleUpdateHtmlTemplate"
             :recipients="isVisibleRecipientsSettings"
+            :website="website"
+            :images="images"
         />
 
         <!-- Desktop -->
         <WizardDesktopComponent 
             v-else
             @send-emails="handleSendEmails"
+            :website="website"
+            :images="images"
         />
 
         <!-- Modals -->
@@ -24,10 +28,6 @@
             v-show="isVisibleEmailPreviewModal"
             :previewTemplate="previewTemplate"
             @close-email-preview="handleCloseEmailPreview"
-        />
-
-        <ImageUploadModalComponent 
-            v-show="isVisibleImageUploadModal"
         />
 
         <SendEmailsModalComponent 
@@ -42,7 +42,6 @@
     import WizardComponent from './Wizard/WizardComponent.vue';
     import WizardDesktopComponent from './Wizard/WizardDesktopComponent.vue';
     import EmailPreviewModalComponent from './Modals/EmailPreviewModalComponent.vue';
-    import ImageUploadModalComponent from './Modals/ImageUploadModalComponent.vue';
     import SendEmailsModalComponent from './Modals/SendingEmailsModal.vue'
 
     export default {
@@ -52,7 +51,6 @@
             WizardComponent,
             WizardDesktopComponent,
             EmailPreviewModalComponent,
-            ImageUploadModalComponent,
             SendEmailsModalComponent
         },
         props: {
@@ -64,12 +62,19 @@
             leads: {
                 type: Array,
                 required: true
+            },
+            website: {
+                type: Number,
+                required: true
+            },
+            images: {
+                type: Array,
+                required: true
             }
         },
         data() {
             return {
                 isVisibleEmailPreviewModal: false,
-                isVisibleImageUploadModal: false,
                 isVisibleRecipientsSettings: false,
                 isVisibleSendEmailsModal: false,
                 previewTemplate: null,
@@ -83,6 +88,8 @@
             },
             handleUploadImage(){
                 this.isVisibleImageUploadModal = true;
+                // console.log(this.website);
+                console.log('test');
             },
             handleCloseEmailPreview() {
                 this.isVisibleEmailPreviewModal = false;

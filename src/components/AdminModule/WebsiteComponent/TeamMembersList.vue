@@ -95,6 +95,7 @@ export default {
 <style scoped>
 
 .website-teammates-container {
+    display: flex;
     min-height: 50%;
     flex-direction: column;
     box-sizing: border-box;
@@ -175,7 +176,7 @@ thead tr th:nth-last-child(1) {
 
 .table-container-footer select {
     margin-right: 1rem;
-    width: 30%;
+    width: 50%;
 }
 
 .website-teammates-container {
@@ -184,7 +185,12 @@ thead tr th:nth-last-child(1) {
     flex-direction: column;
 }
 
-
+@media only screen and (min-height: 1024px) {
+    .table-container-footer select {
+        margin-right: 1rem;
+        width: 30%;
+    }
+}
 
 
 </style>

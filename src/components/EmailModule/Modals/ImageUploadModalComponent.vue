@@ -9,9 +9,11 @@
                 <span class="modal-close" @click="closeModal">&times;</span>
             </div>
             <div class="modal-body">
-                <div class="img-thumbnail">
-                    <img src="../../../assets/images/logo.jpg">
-                </div>
+                <!-- Image thumbnailComponent -->
+                <ImageThumbnailComponent 
+                    v-for="image in images" :key="image.id" :image="image"
+                    @image-selected="handleImageSelected"
+                />
             </div>
 
             <!-- Footer -->
@@ -26,8 +28,8 @@
                 </div>
 
                 <div class="modal-image-footer-row">            
-                    <input type="text">
-                    <button class="btn-warning"><img src="../../../assets/images/white-checkmark.png" width="20"/></button>
+                    <input type="text" v-model="imageSelected">
+                    <button class="btn-warning" @click="confirmSelection()"><img src="../../../assets/images/white-checkmark.png" width="20"/></button>
                 </div>
            </div>
 
@@ -40,33 +42,57 @@
 <script>
 
 import axios from '@/lib/axios.js';
-
+import ImageThumbnailComponent from './ImageThumbnailComponent.vue'
 export default {
     name: 'ImageUploadModalComponent',
+    components: {
+        ImageThumbnailComponent
+    },
+    props: {
+        website: {
+            type: Number,
+            required: true            
+        },
+        images: {
+            type: Array,
+            required: true
+        }
+    },
     data() {
         return {
             imageToUpload: null,
-            images: []
+            imageSelected: 'select an image'
         }
     },
     methods: {
         closeModal(){
-            this.$emit('close-image-modal');
-        },
+            this.$emit('close-image-modal');        },
         selectImageToUpload(event) {
             this.imageToUpload = event.target.files[0];
         },
         uploadImage() {
             let formData = new FormData();
-            formData.append("image", this.imageToUpload);
+            formData.append("file0", this.imageToUpload);
+            
+            axios.post('api/image/uploadImage/'+this.website, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                },
+                "withCredentials":true
 
-            axios.post('image/uploadImage', formData)
-                .then(response => {
-                    console.log('Image uploaded successfully:', response.data);
-                })
-                .catch(error => {
-                    console.error('Error uploading image:', error);
-                });
+            })
+            .then(response => {
+                console.log('status:', response.data);
+            })
+            .catch(error => {
+                console.error('Error uploading image:', error);
+            });
+        },
+        handleImageSelected: function (image_name) {
+            this.imageSelected = image_name;
+        },
+        confirmSelection: function () {
+            this.$emit('image-selected', this.imageSelected);
         }
     }
 }
@@ -75,14 +101,6 @@ export default {
 <style scoped>
 
     /* Elements */
-    .img-thumbnail img {
-        width: 100%;
-    }
-
-    .img-thumbnail:hover {
-        background-color: rgba(80, 80, 80, .5);
-    }
-
     input[type="file"] {
         display: none;
     }
@@ -155,19 +173,6 @@ export default {
         border-radius: 4px;
     }
 
-    .img-thumbnail {
-        flex: 0 0 calc(33% - 6px);
-        margin: 3px;
-        box-sizing: border-box;
-        align-self: flex-start;
-        justify-self: flex-start;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 4px;
-        padding: 4px;
-    }
-
     .modal-image-footer {
         display: grid;
         background-color: var(--shadows);
@@ -192,7 +197,7 @@ export default {
     @media only screen and (min-width: 1024px) {
         .modal-container {
             background-color: var(--accent);
-            width: 25%;
+            width: 500px;
             padding: .5rem;
             box-shadow: 4px 4px 16px var(--shadows);
         }

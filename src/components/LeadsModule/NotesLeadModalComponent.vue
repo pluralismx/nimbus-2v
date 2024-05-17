@@ -13,71 +13,29 @@
                 <!-- Customer message -->
                 <div class="lead-message-container">
                     <p>
-                        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Soluta quos sunt architecto tempora
-                        ipsum, ducimus quae molestiae beatae laudantium recusandae non explicabo laboriosam quasi ullam
-                        accusamus vero assumenda voluptatem quibusdam.
-                        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Soluta quos sunt architecto tempora
-                        ipsum, ducimus quae molestiae beatae laudantium recusandae non explicabo laboriosam quasi ullam
-                        accusamus vero assumenda voluptatem quibusdam.
-                        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Soluta quos sunt architecto tempora
-                        ipsum, ducimus quae molestiae beatae laudantium recusandae non explicabo laboriosam quasi ullam
-                        accusamus vero assumenda voluptatem quibusdam.
-                        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Soluta quos sunt architecto tempora
-                        ipsum, ducimus quae molestiae beatae laudantium recusandae non explicabo laboriosam quasi ullam
-                        accusamus vero assumenda voluptatem quibusdam.
+                        {{ lead.message }}
                     </p>
                 </div>
 
                 <!-- Team bulletin board -->
                 <div class="bulletin-board">
                     <!-- Comment component -->
-                    <div class="comment-container">
-                        Comment
-                    </div>
-                    <div class="comment-container">
-                        Kommentar
-                    </div>
-
-                    <div class="comment-container">
-                        Comentario
-                    </div>
-                    <div class="comment-container">
-                        Comment
-                    </div>
-                    <div class="comment-container">
-                        Kommentar
-                    </div>
-
-                    <div class="comment-container">
-                        Comentario
-                    </div>
-                    <div class="comment-container">
-                        Comment
-                    </div>
-                    <div class="comment-container">
-                        Kommentar
-                    </div>
-
-                    <div class="comment-container">
-                        Comentario
-                    </div>
-                    <div class="comment-container">
-                        Comment
-                    </div>
-                    <div class="comment-container">
-                        Kommentar
-                    </div>
-
-                    <div class="comment-container">
-                        Comentario
+                    <div v-for="leadNote in leadNotes" :key="leadNote.id" class="comment-container">
+                        <div class="comment-signature">
+                            <span>Created by: Gerardo Topete&nbsp;</span>
+                            <span>at 23/05/1991</span>
+                            <p>
+                                {{leadNote.content}}
+                            </p>
+                        </div>
                     </div>
                 </div>
 
                 <!-- Comment box -->
                 <div class="comment-box-container">
                     <div class="input-comment-block">
-                        <input class="input-primary" type="text">
-                        <button class="btn-warning">aceptar</button>
+                        <input class="input-primary" type="text" v-model="new_comment">
+                        <button class="btn-warning" @click="saveLeadNote()">aceptar</button>
                     </div>
                 </div>
 
@@ -91,11 +49,43 @@
 </template>
 
 <script>
+import axios from '@/lib/axios';
+
 export default {
     name: 'NotesLeadModalComponent',
+    props: {
+        lead: {
+            type: Object,
+            required: true
+        },
+        leadNotes: {
+            type: Array,
+            required: true
+        }
+    },
+    data() {
+        return {
+            new_comment: '',
+        }
+    },
     methods: {
         closeNotesModal() {
             this.$emit('close-notes-modal');
+        },
+        saveLeadNote: async function () {
+
+            const json = {
+                "content":this.new_comment, 
+                "lead_id": this.lead.id
+            };
+
+            let formData = new FormData();
+            formData.append('json', JSON.stringify(json));
+
+            const response = await axios.post('api/lead/addNote', formData, {'withCredentials': true});
+            if(response.data.status=="success"){
+                console.log('nota creada');
+            }
         }
     }
 }
@@ -121,8 +111,8 @@ export default {
 }
 
 .modal-body {
-    padding: .5rem;
-    background-color: var(--basic);
+    padding: 1rem;
+    background-color: var(--accent);
     display: flex;
     flex-direction: column;
     box-sizing: border-box;
@@ -138,12 +128,14 @@ export default {
     border-radius: 4px;
     height: 20vh;
     box-sizing: border-box;
-    /* background-color: var(--shadows);
-    color: var(--accent); */
+    background-color: var(--shadows);
+    color: var(--accent);
+    line-height: 1.5;
 }
 
 .bulletin-board {
     padding: .5rem;
+    background-color: var(--shadows);
     border: 1px solid var(--primary);
     overflow-y: auto;
     margin-bottom: 1rem;
@@ -154,28 +146,29 @@ export default {
 
 .comment-container {
     background-color: var(--primary);
+    color: var(--basic);
     width: 100%;
     border-radius: 4px;
     margin-bottom: .5rem;
     padding: .5rem;
     box-sizing: border-box;
+    font-size: 14px;
 }
 
 .comment-box-container {
-    padding: 0 .5rem;
     overflow-y: auto;
 }
 
 .input-comment-block {
     display: flex;
-    flex-direction: column;
-    align-items: center
+    flex-direction: row;
+    align-items: center;
 }
 
 .input-comment-block input[type="text"] {
-    margin-bottom: .5rem;
     width: 100%;
     box-sizing: border-box;
+    margin-right: 1rem;
 }
 
 .input-comment-block button {

@@ -103,70 +103,14 @@ export default {
 }
 </script>
 <style scoped>
-/* Website list */
-.table-container {
-    background-color: #999;
-    border-top-left-radius: .5rem;
-    border-top-right-radius: .5rem;
-    padding: .5rem;
-    box-sizing: border-box;
-    flex-grow: 1;
-    min-height: 0;
-    overflow-y: scroll;
-}
 
-/* Hide scrollbar for Chrome, Safari and Opera */
-.table-container::-webkit-scrollbar {
-    display: none;
-}
-
-/* Hide scrollbar for IE, Edge and Firefox */
-.table-container {
-    -ms-overflow-style: none; /* IE and Edge */
-    scrollbar-width: none; /* Firefox */
-}
-
-span {
-    margin: .5rem 0;
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-    table-layout: fixed;
-}
-
-thead {
-    color: white;
-    border-bottom: 1px solid var(--shadows);
-}
-
-thead tr th {
-    text-align: left;
-    padding: .5rem;
-    width: 50%;
-    font-size: 14px;
-}
-
-thead tr th:nth-last-child(1) {
-    text-align: center;
-}
-
-
-.table-container-footer {
-    background-color: var(--primary);
-    padding: .5rem;
-    border-bottom-left-radius: .5rem;
-    border-bottom-right-radius: .5rem;
-    display: flex;
-    justify-content: flex-end;
-}
 
 /* Asign teammates */
 .settings-body {
     display: flex;
     flex-direction: column;
     padding: 0 1rem;
+    padding-bottom: 1rem;
     flex-grow: 1;
     min-height: 0;
 }
@@ -177,11 +121,6 @@ thead tr th:nth-last-child(1) {
         flex-direction: column;
         padding: 0 1rem;
         padding-bottom: 1rem;
-    }
-    .website-list-container {
-        height: 50%;
-        display: flex;
-        flex-direction: column;
     }
 }
 

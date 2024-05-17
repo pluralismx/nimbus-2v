@@ -117,6 +117,7 @@ export default {
     display: flex;
     flex-direction: column;
     padding: 0 1rem;
+    padding-bottom: 1rem;
     flex-grow: 1;
     min-height: 0;
 }

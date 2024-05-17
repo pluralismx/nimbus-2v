@@ -13,16 +13,16 @@
                 <div class="image-input-block">
                     <label>Logotipo</label>
                     <div>
-                        <input class="input-primary" type="text">
-                        <button class="btn-primary" @click="openImageModal">imagen...</button>
+                        <input class="input-primary" type="text" v-model="templateData.logo">
+                        <button class="btn-primary" @click="openImageModal('headerImage')">imagen...</button>
                     </div>
                 </div>
                 <!-- Banner -->
                 <div class="image-input-block">
                     <label>Pancarta</label>
                     <div>
-                        <input class="input-primary" type="text">
-                        <button class="btn-primary" @click="openImageModal">imagen...</button>
+                        <input class="input-primary" type="text" v-model="templateData.banner">
+                        <button class="btn-primary" @click="openImageModal('bannerImage')">imagen...</button>
                     </div>
                 </div>
             </div>
@@ -67,8 +67,8 @@
                 <div class="image-input-block">
                     <label>Imagen 1</label>
                     <div>
-                        <input class="input-primary" type="text">
-                        <button class="btn-primary" @click="openImageModal">imagen...</button>
+                        <input class="input-primary" type="text" v-model="templateData.picture_a">
+                        <button class="btn-primary" @click="openImageModal('picture_a')">imagen...</button>
                     </div>
                 </div>
 
@@ -84,8 +84,8 @@
                 <div class="image-input-block">
                     <label>Imagen 2</label>
                     <div>
-                        <input class="input-primary" type="text">
-                        <button class="btn-primary" @click="openImageModal">imagen...</button>
+                        <input class="input-primary" type="text" v-model="templateData.picture_b">
+                        <button class="btn-primary" @click="openImageModal('picture_b')">imagen...</button>
                     </div>
                 </div>
 
@@ -144,8 +144,8 @@
                 <div class="image-input-block">
                     <label>Logotipo</label>
                     <div>
-                        <input class="input-primary" type="text">
-                        <button class="btn-primary" @click="openImageModal">imagen...</button>
+                        <input class="input-primary" type="text" v-model="templateData.footer">
+                        <button class="btn-primary" @click="openImageModal('footerImage')">imagen...</button>
                     </div>
                 </div>
                 <!-- Slogan -->
@@ -193,6 +193,10 @@
             theme: {
                 type: String,
                 required: true
+            },
+            image: {
+                type: Object,
+                required: true
             }
         },
         computed: {
@@ -225,6 +229,27 @@
                 },
                 immediate: true,
                 deep: true
+            },
+            image: {
+                handler() {
+                    switch(this.image.section){
+                        case 'headerImage' :
+                            this.templateData.logo = "http://localhost/api-nimbus/storage/app/websites/"+this.image.image_name;
+                            break;
+                        case 'bannerImage' :
+                            this.templateData.banner = "http://localhost/api-nimbus/storage/app/websites/"+this.image.image_name;
+                            break;
+                        case 'picture_a' :
+                            this.templateData.picture_a = "http://localhost/api-nimbus/storage/app/websites/"+this.image.image_name;
+                            break;
+                        case 'picture_b' :
+                            this.templateData.picture_b = "http://localhost/api-nimbus/storage/app/websites/"+this.image.image_name;
+                            break;
+                        case 'footerImage' :
+                            this.templateData.footer = "http://localhost/api-nimbus/storage/app/websites/"+this.image.image_name;
+                            break;
+                    }       
+                },
             }
         },
         data() {
@@ -251,8 +276,8 @@
             }
         },
         methods: {
-            openImageModal(){
-                this.$emit('open-image-modal');
+            openImageModal(section){
+                this.$emit('open-image-modal', section);
             },
             html(){
                 let html = render(this.templateData);

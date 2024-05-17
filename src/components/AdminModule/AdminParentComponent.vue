@@ -113,6 +113,7 @@ export default {
         border-radius: .5rem;
         display: flex;
         flex-direction: column;
+        height: 50vh;
     }
 
     .settings-header {

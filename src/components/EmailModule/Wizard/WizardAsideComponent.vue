@@ -12,6 +12,7 @@
             @update-html-template="handleUpdateHtmlTemplate"
             :isSelected="template"
             :theme="theme"
+            :images="images"
         />
 
         <!-- Promotional -->
@@ -40,6 +41,9 @@
         <ImageUploadModalComponent 
             v-show="isVisibleUploadImageModal"
             @close-image-modal="handleCloseImageModal"
+            :images="images"
+            :website="website"
+            @image-selected="handleImageSelected"
         />
 
 
@@ -72,13 +76,23 @@
             templateSettings: {
                 type: Boolean,
                 required: true
+            },
+            images: {
+                type: Array,
+                required: true
+            },
+            website: {
+                type: Number,
+                required: true
             }
         },
         data() {
             return {
                 template: null,
                 theme: "#037e99",
-                isVisibleUploadImageModal: false
+                isVisibleUploadImageModal: false,
+                templateImageData: {}
+
             }
         },
         methods: {
@@ -99,6 +113,13 @@
             },
             handleSendEmails: function (list) {
                 this.$emit('send-emails', list);
+            },
+            handleImageSelected: function (image_name) {
+                const json = {
+                    "image_name": image_name,
+                    "section": this.templateImageSection
+                }
+                this.templateImageData = json;
             }
         }
     }

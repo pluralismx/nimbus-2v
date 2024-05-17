@@ -43,7 +43,7 @@
             <!-- Buttons -->
             <div class="modal-footer">
                 <div class="buttons-block">
-                    <button class="btn-warning" @click="createlead()">guardar</button>
+                    <button class="btn-warning" @click="createLead()">guardar</button>
                     <button class="btn-primary" @click="cancelSaveLead()">cancel</button>
                 </div>
             </div>
@@ -75,15 +75,14 @@ export default {
         }
     },
     methods: {
-        createlead: async function () {
+        createLead: async function () {
             const json = {
-                'name': this.name,
-                'phone': this.phone,
-                'email': this.email,
-                'status': this.status,
-                'message': this.message
+                "name": this.name,
+                "phone": this.phone,
+                "email": this.email,
+                "status": this.status,
+                "message": this.message
             }
-
             let formData = new FormData();
             formData.append('json', JSON.stringify(json));
 
