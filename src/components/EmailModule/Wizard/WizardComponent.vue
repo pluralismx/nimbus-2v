@@ -22,6 +22,7 @@
             v-show="template == 'promotional' && recipients == false"
             :isSelected="template"
             :theme="theme"
+            :image="templateImageData"
             @open-image-modal="handleOpenImageModal"
             @update-html-template="handleUpdateHtmlTemplate"
         />
@@ -29,27 +30,30 @@
         <!-- Custom -->
         <CustomEmailEditorComponent 
             v-show="template == 'custom' && recipients == false"
-            @update-html-template="handleUpdateHtmlTemplate"
             :isSelected="template"
+            @update-html-template="handleUpdateHtmlTemplate"
         />
 
         <!-- Recipients -->
         <RecipientsSettingsComponent 
             v-show="recipients"
             @send-emails="handleSendEmails"
+
         />
 
         <!-- Modals -->
         <ImageUploadModalComponent 
             v-show="isVisibleUploadImageModal"
-            @close-image-modal="handleCloseImageModal"
             :website="website"
             :images="images"
+            @close-image-modal="handleCloseImageModal"
             @image-selected="handleImageSelected"
+            @image-uploaded="handleImageUploaded"
         />
 
         <SendingEmailsModal 
             v-show="isVisibleSendEmailsModal"
+            :emailContent="emailContent"
             @close-modal="handleCloseSendEmailsModal"
         />
         
@@ -96,7 +100,8 @@
                 templateImageSection: '',
                 templateImageData: {},
                 isVisibleUploadImageModal: false,
-                isVisibleSendEmailsModal: true
+                isVisibleSendEmailsModal: true,
+                emailContent: ''
             }
         },
         methods: {
@@ -115,6 +120,7 @@
 
             // Email
             handleUpdateHtmlTemplate(template) {
+                this.emailContent = template
                 this.$emit('update-html-template', template);
             },
             handleToggleTheme(theme) {
@@ -132,6 +138,9 @@
                     "section": this.templateImageSection
                 }
                 this.templateImageData = json;
+            },
+            handleImageUploaded: function () {
+                this.$emit('image-uploaded');
             }
         }
     }

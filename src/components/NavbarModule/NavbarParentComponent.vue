@@ -79,6 +79,7 @@
                     if (response.data.status === 'success') {
                         // Resolve the promise with the contacts data
                         this.websites = response.data.websites;
+                        this.loadDashboardData(this.websites[0].id);
                     } else {
                         // If the response status is not success, handle the error
                         throw new Error('Failed to fetch friends. Response status: ' + response.data.status);
@@ -93,7 +94,6 @@
                 this.$emit('user-logged-out');
             },
             loadDashboardData: async function (website_id) {
-                console.log(website_id);
                 this.$emit('load-dashboard-data', website_id);
             }
             

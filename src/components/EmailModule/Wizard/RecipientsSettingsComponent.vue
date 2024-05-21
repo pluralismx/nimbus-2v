@@ -9,47 +9,47 @@
             <div class="settings-body">
                 <!-- Nuevos -->
                 <div class="checkbox-block">
-                    <input type="checkbox" v-model="selectedOptions" value="nuevo"/>
+                    <input type="checkbox" @change="updateSelection('nuevo')" :checked="isAllSelected" :disabled="isAllSelected"/>
                     <label>Nuevos</label>
                 </div>
                 <!-- Identificacion -->
                 <div class="checkbox-block">
-                    <input type="checkbox" v-model="selectedOptions" value="identificacion"/>
+                    <input type="checkbox" @change="updateSelection('identificacion')" :checked="isAllSelected" :disabled="isAllSelected"/>
                     <label>Identificación</label>
                 </div>
                 <!-- Presentacion -->
                 <div class="checkbox-block">
-                    <input type="checkbox" v-model="selectedOptions" value="presentacion"/>
+                    <input type="checkbox" @change="updateSelection('presentacion')" :checked="isAllSelected" :disabled="isAllSelected"/>
                     <label>Presentación</label>
                 </div>
                 <!-- Cotizacion -->
                 <div class="checkbox-block">
-                    <input type="checkbox" v-model="selectedOptions" value="cotizacion"/>
+                    <input type="checkbox" @change="updateSelection('cotizacion')" :checked="isAllSelected" :disabled="isAllSelected"/>
                     <label>Cotización</label>
                 </div>
                 <!-- Negociacion -->
                 <div class="checkbox-block">
-                    <input type="checkbox" v-model="selectedOptions" value="negociacion"/>
+                    <input type="checkbox" @change="updateSelection('negociacion')" :checked="isAllSelected" :disabled="isAllSelected"/>
                     <label>Negociación</label>
                 </div>
                 <!-- Cierre -->
                 <div class="checkbox-block">
-                    <input type="checkbox" v-model="selectedOptions" value="cierre"/>
+                    <input type="checkbox" @change="updateSelection('cierre')" :checked="isAllSelected" :disabled="isAllSelected"/>
                     <label>Cierre</label>
                 </div>
                 <!-- Todos -->
                 <div class="checkbox-block">
-                    <input type="checkbox" v-model="selectedOptions" value="todos"/>
+                    <input type="checkbox" @change="updateSelection('todos')" />
                     <label>Todos</label>
                 </div>
                 <!-- Individual -->
                 <div class="checkbox-block">
-                    <input type="checkbox" v-model="selectedOptions" value="individual"/>
+                    <input type="checkbox" @change="updateSelection('individual')"/>
                     <label>Individual</label>
                 </div>
                 <div class="text-input-block">
                     <div>
-                        <input class="input-primary" type="text">
+                        <input :disabled="!isIndividualSelected" class="input-primary" type="text">
                     </div>
                 </div>
             </div>
@@ -65,12 +65,41 @@
         data() {
             return {
                 selectedOptions: [],
+                isAllSelected: false,
+                isIndividualSelected: false,
             }
         },
         methods: {
+            updateSelection: function (option) {
+                if(option != 'todos'){
+                    if (!this.selectedOptions.includes(option)) {
+                        this.selectedOptions.push(option);
+                    }else {
+                        const index = this.selectedOptions.indexOf(option);
+                        if (index > -1) {
+                            this.selectedOptions.splice(index, 1);
+                        }
+                    }
+                console.log(this.selectedOptions);
+                }else {
+                    if(this.isAllSelected == false){
+                        this.isAllSelected = true;
+                        this.selectedOptions = [];
+                        this.selectedOptions.push(option);
+                        console.log(this.selectedOptions);
+                    }else{
+                        this.isAllSelected = false;
+                        this.selectedOptions = [];
+                        console.log(this.selectedOptions);
+                    }
+
+                }
+                
+            },
             sendEmails: function () {
                 this.$emit('send-emails', this.selectedOptions);
-            }
+            },
+            
         }
     }
 </script>

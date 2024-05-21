@@ -37,6 +37,7 @@
             :leads="leads"
             :website="website_id"
             :images="images"
+            @image-uploaded="handleImageUploaded"
         />
 
         <AdminParentComponent 
@@ -82,7 +83,7 @@ export default {
     },
     data() {
         return {
-            isVisibleNotes: false,
+            isVisibleNotes: true,
             isVisibleLeads: false,
             isVisibleEmail: false,
             isVisibleTeam: false,
@@ -219,6 +220,9 @@ export default {
             console.log('lead created from dashboard');
             this.loadWebsiteLeads();
         },
+        handleImageUploaded: function () {
+            this.loadWebsiteImages();
+        }
     }
 }
 

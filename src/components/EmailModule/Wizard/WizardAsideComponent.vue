@@ -12,7 +12,7 @@
             @update-html-template="handleUpdateHtmlTemplate"
             :isSelected="template"
             :theme="theme"
-            :images="images"
+            :image="templateImageData"
         />
 
         <!-- Promotional -->
@@ -22,6 +22,7 @@
             @update-html-template="handleUpdateHtmlTemplate"
             :isSelected="template"
             :theme="theme"
+            :image="templateImageData"
         />
 
         <!-- Custom -->
@@ -44,9 +45,8 @@
             :images="images"
             :website="website"
             @image-selected="handleImageSelected"
+            @image-uploaded="handleImageUploaded"
         />
-
-
 
     </aside>
 </template>
@@ -91,8 +91,8 @@
                 template: null,
                 theme: "#037e99",
                 isVisibleUploadImageModal: false,
-                templateImageData: {}
-
+                templateImageData: {},
+                templateImageSection: ''
             }
         },
         methods: {
@@ -102,8 +102,9 @@
             handleToggleTheme(theme) {
                 this.theme = theme;
             },
-            handleOpenImageModal(){
+            handleOpenImageModal(section){
                 this.isVisibleUploadImageModal = true;
+                this.templateImageSection = section;
             },
             handleCloseImageModal() {
                 this.isVisibleUploadImageModal = false;
@@ -119,7 +120,11 @@
                     "image_name": image_name,
                     "section": this.templateImageSection
                 }
+                console.log(this.templateImageData);
                 this.templateImageData = json;
+            },
+            handleImageUploaded: function () {
+                this.$('image-uploaded');
             }
         }
     }

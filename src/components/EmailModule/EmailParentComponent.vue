@@ -13,6 +13,7 @@
             :recipients="isVisibleRecipientsSettings"
             :website="website"
             :images="images"
+            @image-uploaded="handleImageUploaded"
         />
 
         <!-- Desktop -->
@@ -21,6 +22,7 @@
             @send-emails="handleSendEmails"
             :website="website"
             :images="images"
+            @image-uploaded="handleImageUploaded"
         />
 
         <!-- Modals -->
@@ -119,6 +121,9 @@
             },
             handleCloseSendEmailsModal: function () {
                 this.isVisibleSendEmailsModal = false;
+            },
+            handleImageUploaded: function () {
+                this.$emit('image-uploaded');
             }
 
         },

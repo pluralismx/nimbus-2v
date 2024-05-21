@@ -47,10 +47,15 @@ export default {
         recipients: {
             type: Array,
             required: true
+        },
+        emailContent: {
+            type: String,
+            required: true // BASE64
         }
     },
     methods: {
         closeModal: function () {
+            console.log(this.emailContent);
             this.$emit('close-modal');
         }
     }

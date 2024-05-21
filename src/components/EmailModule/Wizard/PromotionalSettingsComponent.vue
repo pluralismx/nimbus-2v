@@ -13,16 +13,16 @@
                 <div class="image-input-block">
                     <label>Logotipo</label>
                     <div>
-                        <input class="input-primary" type="text">
-                        <button class="btn-primary" @click="openImageModal">imagen...</button>
+                        <input v-model="templateData.logo" class="input-primary" type="text">
+                        <button class="btn-primary" @click="openImageModal('promotionalHeaderLogo')">imagen...</button>
                     </div>
                 </div>
                 <!-- Banner -->
                 <div class="image-input-block">
                     <label>Pancarta</label>
                     <div>
-                        <input class="input-primary" type="text">
-                        <button class="btn-primary" @click="openImageModal">imagen...</button>
+                        <input v-model="templateData.banner" class="input-primary" type="text">
+                        <button class="btn-primary" @click="openImageModal('promotionalHeaderBanner')">imagen...</button>
                     </div>
                 </div>
             </div>
@@ -40,8 +40,8 @@
                 <div class="image-input-block">
                     <label>Imagen</label>
                     <div>
-                        <input class="input-primary" type="text">
-                        <button class="btn-primary" @click="openImageModal">imagen...</button>
+                        <input v-model="templateData.features" class="input-primary" type="text">
+                        <button class="btn-primary" @click="openImageModal('promotionalFeaturesImage')">imagen...</button>
                     </div>
                 </div>
                 <!-- Feature 1 -->
@@ -80,8 +80,8 @@
                 <div class="image-input-block">
                     <label>Imagen</label>
                     <div>
-                        <input class="input-primary" type="text">
-                        <button class="btn-primary" @click="openImageModal">imagen...</button>
+                        <input v-model="templateData.benefits" class="input-primary" type="text">
+                        <button class="btn-primary" @click="openImageModal('promotionalBenefitsImage')">imagen...</button>
                     </div>
                 </div>
                 <!-- Beneficio 1 -->
@@ -152,8 +152,8 @@
                 <div class="image-input-block">
                     <label>Logotipo</label>
                     <div>
-                        <input class="input-primary" type="text">
-                        <button class="btn-primary" @click="openImageModal">imagen...</button>
+                        <input v-model="templateData.footer" class="input-primary" type="text">
+                        <button class="btn-primary" @click="openImageModal('promotionalFooterImage')">imagen...</button>
                     </div>
                 </div>
                 <!-- Slogan -->
@@ -201,6 +201,10 @@
             theme: {
                 type: String,
                 required: true
+            },
+            image: {
+                type: Object,
+                required: true
             }
         },
         computed: {
@@ -233,6 +237,27 @@
                 },
                 immediate: true,
                 deep: true
+            },
+            image: {
+                handler() {
+                    switch(this.image.section){
+                        case 'promotionalHeaderLogo' :
+                            this.templateData.logo = "http://localhost/api-nimbus/storage/app/websites/"+this.image.image_name;
+                            break;
+                        case 'promotionalHeaderBanner' :
+                            this.templateData.banner = "http://localhost/api-nimbus/storage/app/websites/"+this.image.image_name;
+                            break;
+                        case 'promotionalFeaturesImage' :
+                            this.templateData.features = "http://localhost/api-nimbus/storage/app/websites/"+this.image.image_name;
+                            break;
+                        case 'promotionalBenefitsImage' :
+                            this.templateData.benefits = "http://localhost/api-nimbus/storage/app/websites/"+this.image.image_name;
+                            break;
+                        case 'promotionalFooterImage' :
+                            this.templateData.footer = "http://localhost/api-nimbus/storage/app/websites/"+this.image.image_name;
+                            break;
+                    }       
+                },
             }
         },
         data() {
@@ -261,8 +286,8 @@
             }
         },
         methods: {
-            openImageModal(){
-                this.$emit('open-image-modal');
+            openImageModal(section){
+                this.$emit('open-image-modal', section);
             },
             html(){
                 let html = render(this.templateData);

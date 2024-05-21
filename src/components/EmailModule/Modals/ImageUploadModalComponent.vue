@@ -66,7 +66,8 @@ export default {
     },
     methods: {
         closeModal(){
-            this.$emit('close-image-modal');        },
+            this.$emit('close-image-modal');        
+        },
         selectImageToUpload(event) {
             this.imageToUpload = event.target.files[0];
         },
@@ -79,10 +80,11 @@ export default {
                     'Content-Type': 'multipart/form-data'
                 },
                 "withCredentials":true
-
             })
             .then(response => {
-                console.log('status:', response.data);
+                if(response.data.status) {
+                    this.$emit('image-uploaded');
+                }
             })
             .catch(error => {
                 console.error('Error uploading image:', error);
@@ -93,6 +95,7 @@ export default {
         },
         confirmSelection: function () {
             this.$emit('image-selected', this.imageSelected);
+            this.$emit('close-image-modal');
         }
     }
 }
