@@ -88,9 +88,9 @@ export default {
 
             const response = await axios.post('api/lead/create/'+this.website_id, formData, {"withCredentials": true});
             if(response.data.status=="success"){
-                this.$emit('lead-created');
+                this.$emit('lead-created', {"text":"Prospecto creado", "status":"success"});
             }else {
-                console.log(response.data);
+                this.$emit('lead-created', {"text":"No se pudo crear prospecto", "status":"error"});
             }
         },
         cancelSaveLead(){

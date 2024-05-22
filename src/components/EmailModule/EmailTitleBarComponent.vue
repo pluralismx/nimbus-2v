@@ -3,8 +3,9 @@
         <h1>Email</h1>
         <div class="controls" v-if="smViewport">
             <span @click="emailPreview">previsualizar | </span>
-            <span v-show="recipientsSpan" @click="recipientsSettings">destinatarios</span>
-            <span v-show="!recipientsSpan" @click="recipientsSettings">configuración</span>
+            <span v-show="recipientsSpan" @click="recipientsSettings">destinatarios | </span>
+            <span v-show="!recipientsSpan" @click="recipientsSettings">personalizar | </span>
+            <span @click="showClientSettings()">configurar</span>
         </div>
     </div>
 </template>
@@ -23,10 +24,10 @@
             }
         },
         methods: {
-            emailPreview(){
+            emailPreview: function (){
                 this.$emit('email-preview');
             },
-            recipientsSettings() {
+            recipientsSettings: function () {
                 if(this.recipientsSpan){
                     this.recipientsSpan = false;
                     this.$emit('show-recipient-settings');
@@ -34,7 +35,9 @@
                     this.recipientsSpan = true;
                     this.$emit('show-recipient-settings');
                 }
-                
+            },
+            showClientSettings: function () {
+                console.log('client settings...');
             }
         }
     }

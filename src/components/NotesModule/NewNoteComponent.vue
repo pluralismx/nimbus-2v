@@ -47,7 +47,11 @@ import axios from '@/lib/axios';
 
                 const response = await axios.post('api/note/create', formData, {"withCredentials": true});
                 if(response.data.status=="success"){
-                    this.$emit('note-created');
+                    this.$emit('note-created', {"text":"Nota guardada", "status":"success"});
+                    this.title = '',
+                    this.content = ''
+                }else {
+                    this.$emit('note-created', {"text":"No se pudo crear la nota", "status":"error"});
                     this.title = '',
                     this.content = ''
                 }

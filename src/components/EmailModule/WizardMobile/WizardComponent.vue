@@ -1,144 +1,150 @@
 <template>
-    <aside class="wizard-aside">
+    <div class="wizard-container">
+
+        <!-- Template Selection -->
         <TemplateSelectionComponent 
             @toggle-template="handleToggleTemplate"
             @toggle-theme="handleToggleTheme"
         />
 
-        <!-- Newsletter -->
+        <!-- News letter -->
         <NewsLetterSettingsComponent 
-            v-show="template == 'newsletter' && templateSettings == true"
-            @open-image-modal="handleOpenImageModal"
-            @update-html-template="handleUpdateHtmlTemplate"
+            v-show="template == 'newsletter' && recipients == false"
             :isSelected="template"
             :theme="theme"
             :image="templateImageData"
+            @open-image-modal="handleOpenImageModal"
+            @update-html-template="handleUpdateHtmlTemplate"
         />
 
         <!-- Promotional -->
         <PromotionalSettingsComponent 
-            v-show="template == 'promotional' && templateSettings == true"
-            @open-image-modal="handleOpenImageModal"
-            @update-html-template="handleUpdateHtmlTemplate"
+            v-show="template == 'promotional' && recipients == false"
             :isSelected="template"
             :theme="theme"
             :image="templateImageData"
+            @open-image-modal="handleOpenImageModal"
+            @update-html-template="handleUpdateHtmlTemplate"
         />
 
         <!-- Custom -->
         <CustomEmailEditorComponent 
-            v-show="template == 'custom' && templateSettings == true"
-            @update-html-template="handleUpdateHtmlTemplate"
+            v-show="template == 'custom' && recipients == false"
             :isSelected="template"
+            @update-html-template="handleUpdateHtmlTemplate"
         />
 
         <!-- Recipients -->
         <RecipientsSettingsComponent 
-            v-show="recipientsSettings == true"
+            v-show="recipients"
             @send-emails="handleSendEmails"
+
         />
 
         <!-- Modals -->
         <ImageUploadModalComponent 
             v-show="isVisibleUploadImageModal"
-            @close-image-modal="handleCloseImageModal"
-            :images="images"
             :website="website"
+            :images="images"
+            @close-image-modal="handleCloseImageModal"
             @image-selected="handleImageSelected"
             @image-uploaded="handleImageUploaded"
         />
 
-    </aside>
+        <SendingEmailsModal 
+            v-show="isVisibleSendEmailsModal"
+            :emailContent="emailContent"
+            @close-modal="handleCloseSendEmailsModal"
+        />
+        
+    </div>
 </template>
 <script>
-    import TemplateSelectionComponent from './TemplateSelectionComponent.vue';
-    import NewsLetterSettingsComponent from './NewsLetterSettingsComponent.vue';
-    import PromotionalSettingsComponent from './PromotionalSettingsComponent.vue';
-    import CustomEmailEditorComponent from './CustomEmailEditorComponent.vue'
+    import TemplateSelectionComponent from '../TemplateSettings/TemplateSelectionComponent'
+    import NewsLetterSettingsComponent from '../TemplateSettings/NewsLetterSettingsComponent'
+    import PromotionalSettingsComponent from '../TemplateSettings/PromotionalSettingsComponent.vue';
+    import CustomEmailEditorComponent from '../TemplateSettings/CustomEmailEditorComponent.vue';
     import ImageUploadModalComponent from '../Modals/ImageUploadModalComponent.vue';
-    import RecipientsSettingsComponent from './RecipientsSettingsComponent.vue';
+    import RecipientsSettingsComponent from '../TemplateSettings/RecipientsSettingsComponent.vue';
+    import SendingEmailsModal from '../Modals/SendingEmailsModal.vue';
 
     export default {
-        name: 'WizardAsideComponent',
+        name: 'WizardComponent',
         components: {
             TemplateSelectionComponent,
             NewsLetterSettingsComponent,
             PromotionalSettingsComponent,
             CustomEmailEditorComponent,
             ImageUploadModalComponent,
-            RecipientsSettingsComponent
+            RecipientsSettingsComponent,
+            SendingEmailsModal
         },
         props: {
-            recipientsSettings: {
+            recipients: {
                 type: Boolean,
-                required: true
+                required: false
             },
-            templateSettings: {
-                type: Boolean,
+            website: {
+                type: Number,
                 required: true
             },
             images: {
                 type: Array,
-                required: true
-            },
-            website: {
-                type: Number,
                 required: true
             }
         },
         data() {
             return {
                 template: null,
-                theme: "#037e99",
-                isVisibleUploadImageModal: false,
+                theme: null,
+                templateImageSection: '',
                 templateImageData: {},
-                templateImageSection: ''
+                isVisibleUploadImageModal: false,
+                isVisibleSendEmailsModal: true,
+                emailContent: ''
             }
         },
         methods: {
+
+            // Layout
             handleToggleTemplate(template){
                 this.template = template;
             },
-            handleToggleTheme(theme) {
-                this.theme = theme;
-            },
             handleOpenImageModal(section){
-                this.isVisibleUploadImageModal = true;
                 this.templateImageSection = section;
+                this.isVisibleUploadImageModal = true;
             },
             handleCloseImageModal() {
                 this.isVisibleUploadImageModal = false;
             },
+
+            // Email
             handleUpdateHtmlTemplate(template) {
+                this.emailContent = template
                 this.$emit('update-html-template', template);
             },
-            handleSendEmails: function (list) {
-                this.$emit('send-emails', list);
+            handleToggleTheme(theme) {
+                this.theme = theme;
+            },
+            handleSendEmails: function () {
+                this.isVisibleSendEmailsModal = true;
+            },
+            handleCloseSendEmailsModal: function () {
+                this.isVisibleSendEmailsModal = false;
             },
             handleImageSelected: function (image_name) {
                 const json = {
                     "image_name": image_name,
                     "section": this.templateImageSection
                 }
-                console.log(this.templateImageData);
                 this.templateImageData = json;
             },
             handleImageUploaded: function () {
-                this.$('image-uploaded');
+                this.$emit('image-uploaded');
             }
         }
     }
 </script>
 <style scoped>
 
-    .wizard-aside {
-        grid-column: 1/2;
-        grid-row: 2/3;
-        background-color: var(--basic);
-        border-right: 1px solid var(--primary);
-        border-bottom-left-radius: .5rem;
-        padding: 2rem;
-        overflow-y: auto;
-    }
-    
 </style>

@@ -15,6 +15,7 @@
                 v-for="note in notesData" :key="note.id" :note="note"
                 @delete-note="handleDeleteNote"
                 @edit-note="handleEditNote"
+                @note-copied="handleNoteCopied"
             />
         </div>
 
@@ -85,20 +86,18 @@ import axios from '@/lib/axios';
                 const response = await axios.post('api/note/delete', formData, {'withCredentials':true});
 
                 if(response.data.status==='success'){
-                    console.log('note deleted');
-                    
-                    
                     this.notesData.forEach((item, index)=>{
                         if(item.id == noteId){
                             this.notesData.splice(index, 1);
                         }
                     });
+                    this.$emit('note-deleted', {"text":"Nota eliminada", "status":"success"});
                 }else {
-                    console.log('could not delete note');
+                    this.$emit('note-deleted', {"text":"No se pudo eliminar la nota", "status":"error"});
                 }
             },
-            handleNoteCreated: function () {
-                this.$emit('note-created');
+            handleNoteCreated: function (notification) {
+                this.$emit('note-created', notification);
             },
             handleEditNote: async function (note) {
                 const json = {
@@ -112,16 +111,18 @@ import axios from '@/lib/axios';
                 const response = await axios.post('api/note/update/'+note.id, formData, {'withCredentials':true});
 
                 if(response.data.status=='success'){
-                    console.log('note updated');
-
                     this.notesData.forEach((item, index)=>{
                         if(item.id == note.id){
                             this.notesData[index] = note;
                         }
                     });
+                    this.$emit('note-updated', {"text":"Nota actualizada", "status":"success"});
                 }else {
-                    console.log(response.data);
+                    this.$emit('note-updated', {"text":"No se pudo actualizar la nota", "status":"error"});
                 }
+            },
+            handleNoteCopied: function (notification) {
+                this.$emit('note-copied', notification);
             }
         }
     }

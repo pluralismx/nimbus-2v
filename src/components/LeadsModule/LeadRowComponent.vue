@@ -78,9 +78,9 @@
                 formData.append('_method', 'put');
                 const response = await axios.post('api/lead/update/'+this.lead.id, formData, {"withCredentials":true});
                 if(response.data.staus=="success"){
-                    console.log("lead edited");
+                    this.$emit('lead-status-updated', {"text":"Estatus actualizado", "status":"success"});
                 }else {
-                    console.log(response.data.status);
+                    this.$emit('lead-status-updated', {"text":"No su pudo actualizar el estado", "status":"error"});
                 }
             },
             deleteLead: async function () {
@@ -104,10 +104,10 @@
                 formData.append('_method', 'put');
                 const response = await axios.post('api/lead/update/'+this.lead.id, formData, {"withCredentials":true});
                 if(response.data.status=="success"){
-                    console.log('lead updated');
+                    this.$emit('lead-updated', {"text":"Prospecto actualizado", "status":"success"});
                     this.toggleEditWebsiteRow();
                 }else {
-                    console.log(response.data.status);
+                    this.$emit('lead-updated', {"text":"No se pudo actualizar el prospecto", "status":"error"});
                 }
             },
             showDetails: function () {

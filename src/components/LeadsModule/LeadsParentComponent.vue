@@ -20,6 +20,8 @@
                 @lead-deleted="handleLeadDeleted"
                 @sort-table="handleSortTable"
                 @show-details="handleShowDetails"
+                @lead-updated="handleLeadUpdated"
+                @lead-status-updated="handleLeadStatusUpdated"
             />
         </div>
 
@@ -105,18 +107,21 @@
             handleCancelEditLead: function () {
                 this.isVisibleEditLeadModal = false;
             },
-            handleShowNotesModa: function () {
+            handleShowNotesModal: function () {
                 this.isVisibleNotesLeadModal = true;
             },
             handleCloseNotesModal: function () {
                 this.isVisibleNotesLeadModal = false;
             },
-            handleLeadCreated: function () {
+            handleLeadCreated: function (notification) {
                 this.isVisibleSaveLeadModal = false;
-                this.$emit('lead-created');
+                this.$emit('lead-created', notification);
             },
             handleLeadDeleted: function (lead_id) {
-                this.$emit('lead-deleted', lead_id);
+                this.$emit('lead-deleted', lead_id, {"text":"Lead eliminado", "status":"success"});
+            },
+            handleLeadUpdated: function (notification) {
+                this.$emit('lead-updated', notification);
             },
             handleShowDetails: function (lead) {
                 this.isVisibleNotesLeadModal = true;
@@ -128,6 +133,9 @@
                 if(response.data.status=='success'){
                     this.leadNotes = response.data.lead_notes;
                 }
+            },
+            handleLeadStatusUpdated: function (notification) {
+                this.$emit('lead-status-updated', notification);
             }
         }
     }

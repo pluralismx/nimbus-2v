@@ -44,12 +44,10 @@
                 let copiedText = this.content;
                 navigator.clipboard.writeText(copiedText)
                     .then(() => {
-                        console.log('Text copied to clipboard:', copiedText);
-                        alert('Text copied to clipboard: ' + copiedText);
+                        this.$emit('note-copied', {"text":"Texto copiado", "status":"success"});
                     })
-                    .catch(err => {
-                        console.error('Could not copy text to clipboard:', err);
-                        alert('Could not copy text to clipboard.');
+                    .catch(() => {
+                        this.$emit('note-copied', {"text":"Error al copiar la nota", "status":"error"});
                     });
             }
         }

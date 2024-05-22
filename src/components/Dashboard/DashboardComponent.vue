@@ -17,6 +17,9 @@
             :website="website_id"
             :notes="notes"
             @note-created="handleNoteCreated"
+            @note-deleted="handleStatusBarNotification"
+            @note-updated="handleStatusBarNotification"
+            @note-copied="handleStatusBarNotification"
         />
 
         <!-- Center -->
@@ -28,6 +31,8 @@
             :smViewport = smViewport
             @lead-deleted="handleLeadDeleted"
             @lead-created="handleLeadCreated"
+            @lead-updated="handleStatusBarNotification"
+            @lead-status-updated="handleStatusBarNotification"
         />
 
         <EmailParentComponent 
@@ -46,7 +51,9 @@
         />
 
         <!-- Status bar -->
-        <StatusbarParentComponent />
+        <StatusbarParentComponent 
+            :message="statusBarMessage"
+        />
 
     </div>
 
@@ -83,15 +90,21 @@ export default {
     },
     data() {
         return {
+
+            // Layout 
             isVisibleNotes: true,
             isVisibleLeads: false,
             isVisibleEmail: false,
             isVisibleTeam: false,
             
+            // Dashboard data
             website_id: '',
             notes: [],
             leads: [],
             images: [],
+
+            // Status bar notification data
+            statusBarMessage: {}
         }
     },
     methods: {
@@ -190,8 +203,9 @@ export default {
                 console.log("Could not retrieve notes");
             }
         },
-        handleNoteCreated: function () {
+        handleNoteCreated: function (notification) {
             this.loadWebsiteNotes();
+            this.handleStatusBarNotification(notification);
         },
         loadWebsiteLeads: async function () {
                 const response = await axios.get('api/lead/records/'+this.website_id, {"withCredentials": true});
@@ -208,21 +222,24 @@ export default {
                 this.images = response.data.images;
             }
         },
-        handleLeadDeleted: function (lead_id) {
-            
+        handleLeadDeleted: function (lead_id, notification) {  
             this.leads.forEach((item, index) => {
                 if(item.id == lead_id){
                     this.leads.splice(index, 1);
                 }
             });
+            this.handleStatusBarNotification(notification);
         },
-        handleLeadCreated: function () {
-            console.log('lead created from dashboard');
+        handleLeadCreated: function (notification) {
             this.loadWebsiteLeads();
+            this.handleStatusBarNotification(notification);
         },
         handleImageUploaded: function () {
             this.loadWebsiteImages();
-        }
+        },
+        handleStatusBarNotification: function (notification){
+            this.statusBarMessage=notification;
+        },
     }
 }
 

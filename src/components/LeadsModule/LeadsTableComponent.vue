@@ -34,12 +34,17 @@
                 v-for="lead in displayedData" :key="lead" :lead="lead"
                 @lead-deleted="handleLeadDeleted"
                 @show-details="handleShowDetails"
+                @lead-updated="handleLeadUpdated"
+                @lead-status-updated="handleLeadStatusUpdated"
             />
         </tbody>
         <tbody v-if="results">
             <LeadRowComponent 
                 v-for="lead in results_data" :key="lead" :lead="lead"
                 @lead-deleted="handleLeadDeleted"
+                @show-details="handleShowDetails"
+                @lead-updated="handleLeadUpdated"
+                @lead-status-updated="handleLeadStatusUpdated"
             />
         </tbody>
     </table>
@@ -167,6 +172,12 @@ export default {
         },
         handleShowDetails: function (lead) {
             this.$emit('show-details', lead);
+        },
+        handleLeadUpdated: function (notification) {
+            this.$emit('lead-updated', notification);
+        },
+        handleLeadStatusUpdated: function (notification) {
+            this.$emit('lead-status-updated', notification)
         }
     }
 }

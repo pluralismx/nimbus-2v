@@ -41,8 +41,8 @@
 </template>
 <script>
     import EmailTitleBarComponent from './EmailTitleBarComponent.vue';
-    import WizardComponent from './Wizard/WizardComponent.vue';
-    import WizardDesktopComponent from './Wizard/WizardDesktopComponent.vue';
+    import WizardComponent from './WizardMobile/WizardComponent.vue';
+    import WizardDesktopComponent from './WizardDesktop/WizardDesktopComponent.vue';
     import EmailPreviewModalComponent from './Modals/EmailPreviewModalComponent.vue';
     import SendEmailsModalComponent from './Modals/SendingEmailsModal.vue'
 
