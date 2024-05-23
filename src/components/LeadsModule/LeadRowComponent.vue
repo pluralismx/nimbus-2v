@@ -2,7 +2,7 @@
     <!-- Original lead -->
     <tr>
         <td v-show="edit==false" width="18%"><span class="span-clickable" @click="showDetails()">{{ name }}</span></td>
-        <td v-show="edit==false" width="18%"><span>{{ phone }}</span></td>
+        <td v-show="edit==false" width="18%"><a :href="'tel:'+phone"><span class="span-call-icon">&#128222;&nbsp;&nbsp;</span></a><a :href="'https://wa.me/'+phone" target="_blank"><span>{{ phone }}</span></a></td>
         <td v-show="edit==false" width="18%"><span>{{ email }}</span></td>
         
         <td v-show="edit==false" width="18%">
@@ -21,7 +21,7 @@
         </td>
 
         <!-- Edit lead -->
-        <td v-show="edit==true" width="18%"><input type="text" v-model="name"></td>
+        <td v-show="edit==true" width="18%"><input type="text" v-model="name" required></td>
         <td v-show="edit==true" width="18%"><input type="text" v-model="phone"></td>
         <td v-show="edit==true" width="18%"><input type="text" v-model="email"></td>
         <td v-show="edit==true" width="18%">
@@ -72,42 +72,42 @@
                 const json = {
                     'status': this.status
                 }
-                let formData = new FormData();
-                formData.append('json', JSON.stringify(json));
                 
-                formData.append('_method', 'put');
-                const response = await axios.post('api/lead/update/'+this.lead.id, formData, {"withCredentials":true});
-                if(response.data.staus=="success"){
-                    this.$emit('lead-status-updated', {"text":"Estatus actualizado", "status":"success"});
-                }else {
-                    this.$emit('lead-status-updated', {"text":"No su pudo actualizar el estado", "status":"error"});
-                }
-            },
-            deleteLead: async function () {
-                const response = await axios.delete('api/lead/delete/'+this.lead.id, {'withCredentials':true});
-                if(response.data.status=='success'){
-                    this.$emit('lead-deleted', this.lead.id);
-                }else {
-                    console.log('error deleting lead');
-                }
-            },
-            updateLead: async function () {
-                const json = {
-                    'name': this.name,
-                    'phone': this.phone,
-                    'email': this.email,
-                    'status': this.status,
-                }
                 let formData = new FormData();
                 formData.append('json', JSON.stringify(json));
                 
                 formData.append('_method', 'put');
                 const response = await axios.post('api/lead/update/'+this.lead.id, formData, {"withCredentials":true});
                 if(response.data.status=="success"){
-                    this.$emit('lead-updated', {"text":"Prospecto actualizado", "status":"success"});
-                    this.toggleEditWebsiteRow();
+                    this.$emit('lead-status-updated', {"text":"Estado actualizado", "status":"success"});
                 }else {
-                    this.$emit('lead-updated', {"text":"No se pudo actualizar el prospecto", "status":"error"});
+                    this.$emit('lead-status-updated', {"text":"No su pudo actualizar el estado", "status":"error"});
+                }
+            },
+            deleteLead: async function () {
+                this.$emit('delete-lead', this.lead.id);
+            },
+            updateLead: async function () {
+                if(this.name != ''){
+                    const json = {
+                        'name': this.name,
+                        'phone': this.phone,
+                        'email': this.email,
+                        'status': this.status,
+                    }
+                    let formData = new FormData();
+                    formData.append('json', JSON.stringify(json));
+                    
+                    formData.append('_method', 'put');
+                    const response = await axios.post('api/lead/update/'+this.lead.id, formData, {"withCredentials":true});
+                    if(response.data.status=="success"){
+                        this.$emit('lead-updated', {"text":"Prospecto actualizado", "status":"success"});
+                        this.toggleEditWebsiteRow();
+                    }else {
+                        this.$emit('lead-updated', {"text":"No se pudo actualizar el prospecto", "status":"error"});
+                    }
+                }else{
+                    this.$emit('lead-updated', {"text":"No se puedes omitir el nombre", "status":"error"});
                 }
             },
             showDetails: function () {
@@ -118,25 +118,39 @@
     }
 </script>
 <style scoped>
-    td {
-        padding: 6px;
-        text-align: center;
-        height: 2rem;
-    }
 
-    .select-status {
-        color: var(--shadows);
-        width: 75%;
-    }
+.span-call-icon{
+    display: inline-block;
+    transition: all 300ms;
+}
 
-    button {
-        width: 40%;
+.span-call-icon:hover{
+    transform: translateY(-.5rem);
+}
 
-    }
+a:hover {
+    text-decoration: underline;
+}
 
-    input {
-        width: 85%;
-        text-align: center;
-    }
+td {
+    padding: 6px;
+    text-align: center;
+    height: 2rem;
+}
+
+.select-status {
+    color: var(--shadows);
+    width: 75%;
+}
+
+button {
+    width: 40%;
+
+}
+
+input {
+    width: 85%;
+    text-align: center;
+}
     
 </style>

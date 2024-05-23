@@ -179,7 +179,7 @@ export default {
 
 @media only screen and (min-width: 1024px) {
     .modal-container {
-        width: 15%;
+        width: 350px;
     }
 }
 </style>

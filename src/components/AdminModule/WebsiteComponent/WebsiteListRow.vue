@@ -2,9 +2,13 @@
     <tr @click="websiteSelected()" v-show="!editWebsite">
         <td>{{ website.name }}</td>
         <td>{{ website.url }}</td>
-        <td>
+        <td class="td-actions-desktop">
             <button class="btn-primary compact" @click="deleteWebsite()">eliminar</button>
             <button class="btn-primary compact" @click="toggleEditWebsiteRow">editar</button>
+        </td>
+        <td class="td-actions-mobile">
+            <button class="btn-primary compact" @click="deleteWebsite()">&#10006;</button>
+            <button class="btn-primary compact" @click="toggleEditWebsiteRow">&#9999;</button>
         </td>
     </tr>
 
@@ -88,16 +92,30 @@ tbody tr td {
     font-size: 14px;
 }
 
-tbody tr td:nth-last-child(1) {
-    text-align: center;
-}
 
 tbody tr td button {
-    width: 30%;
     margin-left: .5rem;
+    width: 40%;
 }
 
 tbody tr:nth-last-child(2){
     border-bottom: none;
+}
+
+.td-actions-desktop {
+    display: none;
+}
+
+@media only screen and (min-width: 1024px) {
+    tbody tr td button {
+        margin-left: .5rem;
+    }
+    .td-actions-desktop {
+        display: block;
+        text-align: center;
+    }
+    .td-actions-mobile {
+        display: none;
+    }
 }
 </style>

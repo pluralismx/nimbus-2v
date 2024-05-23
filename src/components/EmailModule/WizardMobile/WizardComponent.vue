@@ -2,14 +2,15 @@
     <div class="wizard-container">
 
         <!-- Template Selection -->
-        <TemplateSelectionComponent 
+        <TemplateSelectionComponent
+            v-show = "clientSettings == false"
             @toggle-template="handleToggleTemplate"
             @toggle-theme="handleToggleTheme"
         />
 
         <!-- News letter -->
         <NewsLetterSettingsComponent 
-            v-show="template == 'newsletter' && recipients == false"
+            v-show="template == 'newsletter' && recipients == false && clientSettings == false"
             :isSelected="template"
             :theme="theme"
             :image="templateImageData"
@@ -19,7 +20,7 @@
 
         <!-- Promotional -->
         <PromotionalSettingsComponent 
-            v-show="template == 'promotional' && recipients == false"
+            v-show="template == 'promotional' && recipients == false && clientSettings == false"
             :isSelected="template"
             :theme="theme"
             :image="templateImageData"
@@ -29,16 +30,20 @@
 
         <!-- Custom -->
         <CustomEmailEditorComponent 
-            v-show="template == 'custom' && recipients == false"
+            v-show="template == 'custom' && recipients == false && clientSettings == false"
             :isSelected="template"
             @update-html-template="handleUpdateHtmlTemplate"
         />
 
         <!-- Recipients -->
         <RecipientsSettingsComponent 
-            v-show="recipients"
+            v-show="recipients && clientSettings == false"
             @send-emails="handleSendEmails"
+        />
 
+        <!-- Client settings -->
+        <MailerSettingsComponent 
+            v-show="clientSettings==true"
         />
 
         <!-- Modals -->
@@ -62,11 +67,12 @@
 <script>
     import TemplateSelectionComponent from '../TemplateSettings/TemplateSelectionComponent'
     import NewsLetterSettingsComponent from '../TemplateSettings/NewsLetterSettingsComponent'
-    import PromotionalSettingsComponent from '../TemplateSettings/PromotionalSettingsComponent.vue';
-    import CustomEmailEditorComponent from '../TemplateSettings/CustomEmailEditorComponent.vue';
-    import ImageUploadModalComponent from '../Modals/ImageUploadModalComponent.vue';
-    import RecipientsSettingsComponent from '../TemplateSettings/RecipientsSettingsComponent.vue';
-    import SendingEmailsModal from '../Modals/SendingEmailsModal.vue';
+    import PromotionalSettingsComponent from '../TemplateSettings/PromotionalSettingsComponent.vue'
+    import CustomEmailEditorComponent from '../TemplateSettings/CustomEmailEditorComponent.vue'
+    import ImageUploadModalComponent from '../Modals/ImageUploadModalComponent.vue'
+    import RecipientsSettingsComponent from '../TemplateSettings/RecipientsSettingsComponent.vue'
+    import SendingEmailsModal from '../Modals/SendingEmailsModal.vue'
+    import MailerSettingsComponent from '../MailerSettings/MailerSettings.vue'
 
     export default {
         name: 'WizardComponent',
@@ -77,12 +83,13 @@
             CustomEmailEditorComponent,
             ImageUploadModalComponent,
             RecipientsSettingsComponent,
-            SendingEmailsModal
+            SendingEmailsModal,
+            MailerSettingsComponent
         },
         props: {
             recipients: {
                 type: Boolean,
-                required: false
+                required: true
             },
             website: {
                 type: Number,
@@ -90,6 +97,10 @@
             },
             images: {
                 type: Array,
+                required: true
+            },
+            clientSettings: {
+                type: Boolean,
                 required: true
             }
         },
@@ -101,6 +112,7 @@
                 templateImageData: {},
                 isVisibleUploadImageModal: false,
                 isVisibleSendEmailsModal: true,
+                // isVisibleClientSettings: false,
                 emailContent: ''
             }
         },

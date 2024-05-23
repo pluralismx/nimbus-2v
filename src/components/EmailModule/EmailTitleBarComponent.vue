@@ -37,7 +37,7 @@
                 }
             },
             showClientSettings: function () {
-                console.log('client settings...');
+                this.$emit('show-client-settings');
             }
         }
     }

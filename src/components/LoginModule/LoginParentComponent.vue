@@ -7,9 +7,8 @@
             </div>
             <!-- Body -->
             <div class="login-container-body">
-
+                <span v-show="error" class="error-message">Credenciales invalidas</span>
                 <div class="login-form">
-
                     <!-- Email -->
                     <div class="input-block">
                         <input v-model="email" type="text" placeholder="email">
@@ -38,7 +37,8 @@
         data() {
             return {
                 email: 'dillion@pluralis.com.mx',
-                password: 'dick'
+                password: 'dick',
+                error: false
             }
         },
         methods: {
@@ -47,18 +47,20 @@
                     'email': this.email,
                     'password': this.password
                 }
+                
                 const json = JSON.stringify(data);
                 let formData = new FormData();
                 formData.append('json', json);
                 try {
-                    const login = await axios.post('api/login', formData, {"withCredentials": true})
-                    if(login) {
-                        const identity = await this.getIdentity();
-                        if(identity){
+                    const response = await axios.post('api/login', formData, {"withCredentials": true})
+                    if(response.data.status=='success') {
+                        let login = this.getIdentity();
+                        if(login){
                             this.$emit('user-logged-in');
+                            this.error = false;
                         }
-                    }else {
-                        console.log("No se pudo ejecutar el metodo getIdentity()");
+                    }else if(response.data.status=="error"){
+                        this.error = true;
                     }
                 } catch (error) {
                     console.log(error); 
@@ -79,6 +81,8 @@
                         let identity = JSON.stringify(login.data.identity);
                         localStorage.setItem('identity', identity);
                         return true;
+                    }else{
+                        return false;
                     }
                 } catch (error) {
                     console.error('Error:', error);
@@ -113,6 +117,7 @@
 
     .login-container-body {
         padding: 1rem;
+        position: relative;
     }
 
     .input-block {
@@ -129,6 +134,12 @@
 
     span {
         color: var(--warn);
+    }
+
+    .error-message {
+        font-size: 12px;
+        position: absolute;
+        transform: translateY(-1rem);
     }
 
     @keyframes aurora {

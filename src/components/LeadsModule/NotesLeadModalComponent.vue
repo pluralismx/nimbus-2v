@@ -84,7 +84,8 @@ export default {
 
             const response = await axios.post('api/lead/addNote', formData, {'withCredentials': true});
             if(response.data.status=="success"){
-                console.log('nota creada');
+                this.$emit('lead-note-added', this.lead.id);
+                this.new_comment = '';
             }
         }
     }

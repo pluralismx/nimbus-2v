@@ -1,12 +1,19 @@
 <template>
     <div>
         <h1>Panel administrativo</h1>
-        <span @click="showNotificationModal()">&#128235;</span>
+        <span v-show="!hasNotifications" @click="showNotificationModal()">&#128235;</span>
+        <span v-show="hasNotifications" @click="showNotificationModal()">&#128236;</span>
     </div>
 </template>
 <script>
     export default {
         name: 'AdminPanelTitleBarComponent',
+        props: {
+            hasNotifications: {
+                type: Boolean,
+                required: true
+            }
+        },
         methods: {
             showNotificationModal() {
                 this.$emit('show-notification-modal');
@@ -31,6 +38,10 @@
 
     span {
         font-size: 1.5rem;
+    }
+
+    span:hover {
+        cursor:pointer;
     }
 
 </style>

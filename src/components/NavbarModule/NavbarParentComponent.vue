@@ -41,8 +41,10 @@
 
         <!-- User menu -->
         <ul class="user-menu desktop">
-            <li><span @click="logout()">Cerrar sesión |&nbsp;</span></li>
-            <li><span @click="toggleTool('team-desktop')">Admin</span></li>
+            <li><span @click="toggleTool('team-desktop')">Administración&nbsp;</span></li>
+            <li><span>|&nbsp;</span></li>
+            <li><span @click="logout()">Cerrar sesión</span></li>
+
         </ul>
     </nav>
 </template>

@@ -32,7 +32,7 @@
                 </div>
 
                 <!-- Default -->
-                <div v-if="!result" class="contact-card">
+                <div v-if="!result" class="contact-card-default">
                     <div class="contact-card-body">
                         <!-- Picture -->
                         <div class="contact-card-avatar">
@@ -72,10 +72,10 @@ export default {
         }
     },
     methods: {
-        closeModal(){
+        closeModal: function (){
             this.$emit('close-modal');
         },
-        searchContact() {
+        searchContact: function () {
             let email = this.email;
             let formData = new FormData();
             const data = {
@@ -95,14 +95,14 @@ export default {
                     console.log(error);
                 });
         },
-        selectContact() {
+        selectContact: function () {
             if(this.selection == ''){
                 this.selection = this.result.id;
             }else {
                 this.selection = ''
             }
         },
-        sendInvitation() {
+        sendInvitation: function () {
 
             let string = localStorage.getItem('identity');
             let object = JSON.parse(string);
@@ -112,13 +112,16 @@ export default {
                 'receiver': this.selection
             }
             let json = JSON.stringify(data);
-            console.log(json);
             let formData = new FormData();
             formData.append('json', json);
             
             axios.post('api/friendrequest/send', formData, {"withCredentials":true})
                 .then(res=>{
-                    console.log(res.data);
+                    if(res.data.status == 'success'){
+                        this.closeModal();
+                    }else{
+                        console.log(res.data);
+                    }
                 })
                 .catch(error=>{
                     console.log(error);
@@ -136,6 +139,7 @@ export default {
         width: 75%;
         border-radius: .5rem;
         background-color: var(--basic);
+        box-shadow: 2px 2px 16px var(--shadows);
     }
 
     .modal-header {
@@ -176,6 +180,14 @@ export default {
     }
 
     /* Contact card */
+
+    .contact-card-default {
+        background-color: var(--primary);
+        border-radius: .5rem;
+        box-shadow: 2px 2px 5px var(--shadows);
+        margin-bottom: 1rem;
+    }
+
     .contact-card {
         background-color: var(--primary);
         border-radius: .5rem;
@@ -231,15 +243,19 @@ export default {
     }
 
     @media only screen and (min-width: 1024px) {
+        .contact-card:hover {
+            cursor: pointer;
+            background-color: var(--warn);
+        }
         .modal-container {
-            width: 18%;
+            width: 350px;
             border-radius: .5rem;
             background-color: var(--basic);
         }
 
         .input-block button img{
-        width: 14px;
-    }
+            width: 14px;
+        }
 
         .contact-card-avatar img {
             width: 50px;

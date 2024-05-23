@@ -27,7 +27,7 @@
                 </div>
             </div>
             <div class="lead-actions">
-                <button class="btn-warning">Llamar</button>
+                <a :href="'tel:'+lead.phone"><button class="btn-warning">Llamar</button></a>
                 <button class="btn-primary" @click="showNotesModal">Notas</button>
                 <button class="btn-primary" @click="showEditLeadModal">Editar</button>
                 <button class="btn-primary" @click="deleteLead()">Eliminar</button>
@@ -52,20 +52,14 @@ import axios from '@/lib/axios';
             }
         },
         methods: {
-            showEditLeadModal() {
-                console.log(this.lead);
+            showEditLeadModal: function () {
                 this.$emit('show-edit-lead-modal', this.lead);
             },
-            showNotesModal() {
-                this.$emit('show-notes-modal');
+            showNotesModal: function () {
+                this.$emit('show-notes-modal', this.lead);
             },
             deleteLead: async function () {
-                const response = await axios.delete('api/lead/delete/'+this.lead.id, {'withCredentials':true});
-                if(response.data.status=='success'){
-                    this.$emit('lead-deleted', this.lead.id);
-                }else {
-                    console.log('error deleting lead');
-                }
+                this.$emit('delete-lead', this.lead.id);
             },
             editLead: async function () {
                 const json = {
@@ -76,18 +70,27 @@ import axios from '@/lib/axios';
                 
                 formData.append('_method', 'put');
                 const response = await axios.post('api/lead/update/'+this.lead.id, formData, {"withCredentials":true});
-                if(response.data.staus=="success"){
-                    console.log("lead edited");
+                if(response.data.status=="success"){
+                    this.$emit('lead-status-updated', {"text":"Estado actualizado", "status":"success"});
                 }else {
-                    console.log(response.data.status);
+                    this.$emit('lead-status-updated', {"text":"No su pudo actualizar el estado", "status":"error"});
                 }
-            }
+            },
         }
     }
 </script>
 <style scoped>
 
     /* Mobile first */
+
+    a {
+        width: 100%;
+        display: block;
+    }
+
+    button {
+        width: 100%;
+    }
 
     article {
         background-color: var(--accent);

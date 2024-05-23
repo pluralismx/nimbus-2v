@@ -5,11 +5,12 @@
         />
         <!-- Mobile devices -->
         <div class="leads-container" v-if="smViewport">
-            <LeadCardComponent 
-                @show-edit-lead-modal="handleShowEditLeadModal"
-                @show-notes-modal="handleShowNotesModal"
-                @lead-deleted="handleLeadDeleted"
+            <LeadCardComponent
                 v-for="lead in leads" :key="lead.id" :lead="lead"
+                @show-edit-lead-modal="handleShowEditLeadModal"
+                @show-notes-modal="handleShowDetails"
+                @lead-status-updated="handleLeadStatusUpdated"
+                @delete-lead="handleDeleteLead"
             />
         </div>
 
@@ -18,7 +19,6 @@
             <LeadsTableComponent 
                 :leads="leads"
                 @lead-deleted="handleLeadDeleted"
-                @sort-table="handleSortTable"
                 @show-details="handleShowDetails"
                 @lead-updated="handleLeadUpdated"
                 @lead-status-updated="handleLeadStatusUpdated"
@@ -43,8 +43,15 @@
         <NotesLeadModalComponent 
             v-show="isVisibleNotesLeadModal"
             @close-notes-modal="handleCloseNotesModal"
+            @lead-note-added="handleLeadNoteAdded"
             :lead="leadDetails"
             :leadNotes="leadNotes"
+        />
+
+        <ModalConfirmationComponent 
+            v-show="isVisibleConfirmationModal"
+            @answer="handleConfirmationAnswer"
+            @close-modal="handleConfirmationAnswer"
         />
 
     </section>
@@ -57,6 +64,7 @@
     import SaveLeadModalComponent from './SaveLeadModalComponent.vue';
     import EditLeadModalComponent from './EditLeadModalComponent.vue';
     import NotesLeadModalComponent from './NotesLeadModalComponent';
+    import ModalConfirmationComponent from './ModalConfirmationComponent.vue';
 
     export default {
         name: 'LeadsParentComponent',
@@ -66,7 +74,8 @@
             LeadsTableComponent,
             SaveLeadModalComponent,
             EditLeadModalComponent,
-            NotesLeadModalComponent
+            NotesLeadModalComponent,
+            ModalConfirmationComponent
         },
         props: {
             smViewport: {
@@ -87,45 +96,31 @@
                 isVisibleSaveLeadModal: false,
                 isVisibleEditLeadModal: false,
                 isVisibleNotesLeadModal: false,
+                isVisibleConfirmationModal: false,
                 // Data
                 leadToEdit: {},
                 leadDetails: '',
-                leadNotes: []
+                leadNotes: [],
+                leadToDelete: ''
             }
         },
         methods: {
-            handleSaveLead: function () {
-                this.isVisibleSaveLeadModal = true;
+
+            // Lead update
+            handleLeadUpdated: function (notification) {
+                this.$emit('lead-updated', notification);
             },
-            handleCancelSaveLead: function () {
-                this.isVisibleSaveLeadModal = false;
+            handleLeadStatusUpdated: function (notification) {
+                this.$emit('lead-status-updated', notification);
             },
             handleShowEditLeadModal: function (lead) {
                 this.leadToEdit = lead;
                 this.isVisibleEditLeadModal = true;
             },
-            handleCancelEditLead: function () {
-                this.isVisibleEditLeadModal = false;
-            },
-            handleShowNotesModal: function () {
-                this.isVisibleNotesLeadModal = true;
-            },
-            handleCloseNotesModal: function () {
-                this.isVisibleNotesLeadModal = false;
-            },
-            handleLeadCreated: function (notification) {
-                this.isVisibleSaveLeadModal = false;
-                this.$emit('lead-created', notification);
-            },
-            handleLeadDeleted: function (lead_id) {
-                this.$emit('lead-deleted', lead_id, {"text":"Lead eliminado", "status":"success"});
-            },
-            handleLeadUpdated: function (notification) {
-                this.$emit('lead-updated', notification);
-            },
-            handleShowDetails: function (lead) {
-                this.isVisibleNotesLeadModal = true;
-                this.leadDetails = lead;
+
+            // Lead notes
+            handleLeadNoteAdded: function (id) {
+                this.leadDetails.id = id;
                 this.loadLeadNotes();
             },
             loadLeadNotes: async function () {
@@ -134,9 +129,52 @@
                     this.leadNotes = response.data.lead_notes;
                 }
             },
-            handleLeadStatusUpdated: function (notification) {
-                this.$emit('lead-status-updated', notification);
-            }
+            handleShowDetails: function (lead) {
+                this.isVisibleNotesLeadModal = true;
+                this.leadDetails = lead;
+                this.loadLeadNotes();
+            },
+            handleCloseNotesModal: function () {
+                this.isVisibleNotesLeadModal = false;
+            },
+
+            // Create lead
+            handleSaveLead: function () {
+                this.isVisibleSaveLeadModal = true;
+            },
+            handleCancelSaveLead: function () {
+                this.isVisibleSaveLeadModal = false;
+            },
+            handleLeadCreated: function (notification) {
+                this.isVisibleSaveLeadModal = false;
+                this.$emit('lead-created', notification);
+            },
+
+            // Delete lead
+            handleDeleteLead: function (id) {
+                this.leadToDelete = id;
+                this.isVisibleConfirmationModal=true;
+            },
+            handleConfirmationAnswer: async function (answer) {
+                if(answer){
+                    const response = await axios.delete('api/lead/delete/'+this.leadToDelete, {'withCredentials':true});
+                    if(response.data.status=='success'){
+                        this.$emit('lead-deleted', this.leadToDelete, {"text":"Prospecto eliminado", "status":"success"});
+                        this.isVisibleConfirmationModal=false;
+                    }else {
+                        this.$emit('lead-deleted', this.leadToDelete, {"text":"No se pudo eliminar el prospecto", "status":"error"});
+                        this.isVisibleConfirmationModal=false;
+                    }
+                }else{
+                    this.isVisibleConfirmationModal=false;
+                }
+            },
+            handleLeadDeleted: function (lead_id, notification) {
+                this.$emit('lead-deleted', lead_id, notification);
+            },
+            handleCancelEditLead: function () {
+                this.isVisibleEditLeadModal = false;
+            },
         }
     }
 </script>

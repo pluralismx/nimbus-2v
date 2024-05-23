@@ -1,11 +1,11 @@
 <template>
     <div class="wizard-toolbar">
         <ul>
-            <li @click="showSettings">Plantilla</li>
-            <li @click="showRecipients">Destinatarios</li>
+            <li @click="showTemplateSettings">Plantilla</li>
+            <li @click="showRecipientSettings">Destinatarios</li>
             <li @click="activateDesktopPreview">PC</li>
             <li @click="activateMobilePreview">Móvil</li>
-            <li>Configuración</li>
+            <li @click="showClientSettings">Configuración</li>
         </ul>
     </div>
 </template>
@@ -13,17 +13,20 @@
     export default {
         name: 'WizardToolbarComponent',
         methods: {
-            showSettings() {
+            showTemplateSettings: function () {
                 this.$emit('show-template-settings');
             },
-            showRecipients() {
+            showRecipientSettings: function () {
                 this.$emit('show-recipients-settings');
             },
-            activateDesktopPreview() {
+            activateDesktopPreview: function () {
                 this.$emit('activate-desktop-preview');
             },
-            activateMobilePreview() {
+            activateMobilePreview: function () {
                 this.$emit('activate-mobile-preview');
+            },
+            showClientSettings: function () {
+                this.$emit('show-client-settings');
             }
         }
     }

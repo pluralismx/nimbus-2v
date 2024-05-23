@@ -5,26 +5,29 @@
         <WizardToolbarComponent 
             @show-template-settings="handleShowTemplateSettings"
             @show-recipients-settings="handleRecipientsSettings"
+            @show-client-settings="handleShowClientSettings"
             @activate-desktop-preview="handleDesktopPreview"
             @activate-mobile-preview="handleMobilePreview"
         />
 
         <!-- Aside -->
-        <WizardAsideComponent 
-            :recipientsSettings = this.recipientsSettings
-            :templateSettings = this.templateSettings
+        <WizardAsideComponent
             @update-html-template = "handleUpdateHtmlTemplate"
             @send-emails="handleSendEmails"
+            :recipientsSettings = "recipientsSettings"
+            :templateSettings = "templateSettings"
+            :clientSettings="isVisibleClientSettings"
             :images="images"
             :website="website"
         />
 
         <!-- Preview -->
         <WizardPreviewComponent
-            :desktopPreview = this.desktopPreview
-            :mobilePreview = this.mobilePreview
-            :previewTemplate = this.previewTemplate
+            :desktopPreview = desktopPreview
+            :mobilePreview = mobilePreview
+            :previewTemplate = previewTemplate
         />
+
     </div>
 </template>
 <script>
@@ -53,42 +56,54 @@
             return {
                 templateSettings: true,
                 recipientsSettings: false,
+                isVisibleClientSettings: false,
                 desktopPreview: true,
                 mobilePreview: false,
-                previewTemplate: ''
+                previewTemplate: '',
+                
             }
         },
         methods: {
-            handleShowTemplateSettings() {
+            // Layout
+            handleShowTemplateSettings: function () {
                 if(this.templateSettings == false){
                     this.templateSettings = true;
                     this.recipientsSettings = false;
+                    this.isVisibleClientSettings = false;
                 }
             },
-            handleRecipientsSettings() {
+            handleRecipientsSettings: function () {
                 if(this.recipientsSettings == false){
                     this.recipientsSettings = true;
+                    this.isVisibleClientSettings = false;
                     this.templateSettings = false;
                 }
             },
-            handleDesktopPreview() {
+            handleShowClientSettings: function () {
+                if(this.isVisibleClientSettings == false){
+                    this.isVisibleClientSettings = true;
+                    this.recipientsSettings = false;
+                    this.templateSettings = false;
+                }
+            },
+            handleDesktopPreview: function () {
                 if(this.desktopPreview == false){
                     this.desktopPreview = true;
                     this.mobilePreview = false;
                 }
             },
-            handleMobilePreview() {
+            handleMobilePreview: function () {
                 if(this.mobilePreview == false){
                     this.mobilePreview = true;
                     this.desktopPreview = false;
                 }
             },
-            handleUpdateHtmlTemplate(template) {
+            handleUpdateHtmlTemplate: function (template) {
                 this.previewTemplate = template;
             },
             handleSendEmails: function (list) {
                 this.$emit('send-emails', list);
-            }
+            },
         }
     }
 </script>

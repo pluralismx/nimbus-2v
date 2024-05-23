@@ -70,7 +70,7 @@ export default {
             name: 'Dillion',
             phone: '3056232236',
             email: 'dillion@pluralis.com.mx',
-            status: '',
+            status: 'nuevo',
             message: 'Hi'
         }
     },

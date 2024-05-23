@@ -56,33 +56,36 @@
     }
 </script>
 <style>
-    .preview-wrapper {
-        box-sizing: border-box;
-        width: 100%;
-        height: 100%;
-        padding: 1rem;
-        display: flex;
-        justify-content: center;
-        background-color: #333;
-    }
-    .preview-container {
-        box-sizing: border-box;
-        background-color: #aaa;
-        width: 100%;
-        height: 100%;
-        border-radius: .5rem;
-        transition: all 300ms;
-        overflow: auto; /* or overflow-y: auto; or overflow-x: auto; depending on your needs */
-        scrollbar-width: none; /* Hide the scrollbar for Firefox */
-        -ms-overflow-style: none; /* Hide the scrollbar for IE and Edge */
-        container-type: size;
-    }
+.preview-wrapper {
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    padding: 1rem;
+    display: flex;
+    justify-content: center;
+    background-color: #333;
+    border-bottom-right-radius: .5rem;
+}
 
-    .preview-container::-webkit-scrollbar {
+.preview-container {
+    box-sizing: border-box;
+    background-color: #aaa;
+    width: 100%;
+    height: 100%;
+    border-radius: .5rem;
+    transition: all 300ms;
+    overflow: auto; /* or overflow-y: auto; or overflow-x: auto; depending on your needs */
+    scrollbar-width: none; /* Hide the scrollbar for Firefox */
+    -ms-overflow-style: none; /* Hide the scrollbar for IE and Edge */
+    container-type: size;
+    
+}
+
+.preview-container::-webkit-scrollbar {
     display: none; /* Hide the scrollbar for WebKit browsers (Chrome, Safari) */
 }
 
-    .mobile-preview {
-        width: 300px;
-    }
+.mobile-preview {
+    width: 300px;
+}
 </style>

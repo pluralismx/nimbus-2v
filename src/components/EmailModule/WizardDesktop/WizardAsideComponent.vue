@@ -1,6 +1,7 @@
 <template>
     <aside class="wizard-aside">
-        <TemplateSelectionComponent 
+        <TemplateSelectionComponent
+            v-show="clientSettings==false"
             @toggle-template="handleToggleTemplate"
             @toggle-theme="handleToggleTheme"
         />
@@ -38,14 +39,19 @@
             @send-emails="handleSendEmails"
         />
 
+        <!-- Client config -->
+        <MailerSettingsComponent 
+            v-show="clientSettings"
+        />
+
         <!-- Modals -->
         <ImageUploadModalComponent 
             v-show="isVisibleUploadImageModal"
             @close-image-modal="handleCloseImageModal"
-            :images="images"
-            :website="website"
             @image-selected="handleImageSelected"
             @image-uploaded="handleImageUploaded"
+            :images="images"
+            :website="website"
         />
 
     </aside>
@@ -57,6 +63,7 @@
     import CustomEmailEditorComponent from '../TemplateSettings/CustomEmailEditorComponent.vue'
     import ImageUploadModalComponent from '../Modals/ImageUploadModalComponent.vue'
     import RecipientsSettingsComponent from '../TemplateSettings/RecipientsSettingsComponent.vue'
+    import MailerSettingsComponent from '../MailerSettings/MailerSettings.vue'
 
     export default {
         name: 'WizardAsideComponent',
@@ -66,7 +73,8 @@
             PromotionalSettingsComponent,
             CustomEmailEditorComponent,
             ImageUploadModalComponent,
-            RecipientsSettingsComponent
+            RecipientsSettingsComponent,
+            MailerSettingsComponent
         },
         props: {
             recipientsSettings: {
@@ -74,6 +82,10 @@
                 required: true
             },
             templateSettings: {
+                type: Boolean,
+                required: true
+            },
+            clientSettings: {
                 type: Boolean,
                 required: true
             },
@@ -96,20 +108,20 @@
             }
         },
         methods: {
-            handleToggleTemplate(template){
+            handleToggleTemplate: function (template){
                 this.template = template;
             },
-            handleToggleTheme(theme) {
+            handleToggleTheme: function (theme) {
                 this.theme = theme;
             },
-            handleOpenImageModal(section){
+            handleOpenImageModal: function (section){
                 this.isVisibleUploadImageModal = true;
                 this.templateImageSection = section;
             },
-            handleCloseImageModal() {
+            handleCloseImageModal: function () {
                 this.isVisibleUploadImageModal = false;
             },
-            handleUpdateHtmlTemplate(template) {
+            handleUpdateHtmlTemplate: function (template) {
                 this.$emit('update-html-template', template);
             },
             handleSendEmails: function (list) {

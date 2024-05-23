@@ -3,6 +3,7 @@
         <!-- Title bar-->
         <AdminPanelTitleBarComponent 
             @show-notification-modal="toggleNotificationsModal"
+            :hasNotifications="hasNotifications"
         />
 
         <div class="panel-container">
@@ -60,7 +61,8 @@ export default {
             isVisibleNotificationsModal: false,
             friendRequests: [],
             friendRequestAnswer: null,
-            friends: ''
+            friends: '',
+            hasNotifications: false
         }
     },
     created() {
@@ -85,6 +87,11 @@ export default {
             const response = await axios.get('api/friendrequest/get/'+user_id, {"withCredentials": true});
             if(response.data.status == 'success'){
                 this.friendRequests = response.data.friendRequests;
+                if(this.friendRequests.length > 0){
+                    this.hasNotifications = true;
+                }else {
+                    this.hasNotifications = false;
+                }
             }
         },
         handleFriendRequestAnswered: function () {

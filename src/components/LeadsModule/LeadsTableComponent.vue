@@ -36,6 +36,7 @@
                 @show-details="handleShowDetails"
                 @lead-updated="handleLeadUpdated"
                 @lead-status-updated="handleLeadStatusUpdated"
+                @delete-lead="handleDeleteLead"
             />
         </tbody>
         <tbody v-if="results">
@@ -48,13 +49,20 @@
             />
         </tbody>
     </table>
+    <ModalConfirmationComponent 
+        v-show="isVisibleConfirmationModal"
+        @answer="handleModalAnswered"
+    />
 </template>
 <script>
+import axios from '@/lib/axios';
 import LeadRowComponent from './LeadRowComponent.vue';
+import ModalConfirmationComponent from './ModalConfirmationComponent.vue'
 export default {
     name: 'leadsDataTableComponent',
     components: {
-        LeadRowComponent
+        LeadRowComponent,
+        ModalConfirmationComponent
     },
     props: {
         leads: {
@@ -71,7 +79,9 @@ export default {
             search_query: null,
             results: false,
             results_data: [],
-            search_btn_text: 'buscar'  
+            search_btn_text: 'buscar',
+            isVisibleConfirmationModal: false,
+            leadToDelete: ''
         }
     },
     computed: {
@@ -110,7 +120,7 @@ export default {
                 if(this.cp < this.pages){
                     this.cp++;
                 }
-            },
+        },
         previousPage (){
             if(this.cp > 1){
                 this.cp--;
@@ -178,6 +188,25 @@ export default {
         },
         handleLeadStatusUpdated: function (notification) {
             this.$emit('lead-status-updated', notification)
+        },
+        handleDeleteLead: function (id) {
+            this.isVisibleConfirmationModal=true;
+            this.leadToDelete = id;
+        },
+        handleModalAnswered: async function (answer) {
+            if(answer){
+                const response = await axios.delete('api/lead/delete/'+this.leadToDelete, {"withCredentials":true});
+                if(response.data.status=="success"){
+                    this.handleLeadDeleted(this.leadToDelete);
+                    this.isVisibleConfirmationModal=false;
+                    this.$emit('lead-deleted', this.leadToDelete, {"text":"Prospecto eliminado", "status":"success"});
+                }else{
+                    this.isVisibleConfirmationModal=false;
+                    this.$emit('lead-deleted', this.leadToDelete, {"text":"No se pudo eliminar el prospecto", "status":"error"});
+                }
+            }else{
+                this.isVisibleConfirmationModal=false;
+            }
         }
     }
 }
