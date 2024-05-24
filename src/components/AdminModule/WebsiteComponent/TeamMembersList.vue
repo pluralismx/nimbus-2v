@@ -16,6 +16,7 @@
                     <TeamMembersListRowComponent 
                         v-for="member in websiteTeamData.team" :key="member.id" :member="member"
                         @teammate-deleted="handleTeammateDeleted"
+                        @teammate-role-updated="handleTeammateRoleUpdated"
                     />
                 </tbody>
             </table>
@@ -76,18 +77,21 @@ export default {
             formData.append('json', JSON.stringify(json));
             const response = await axios.post('api/team/asignTeammate', formData, {"withCredentials":true})
             if(response.data.status == 'success'){
-                this.$emit('teammate-added');
+                this.$emit('teammate-added', {"text":"Se añadió el miembro al equipo", "status":"success"});
             }else{
-                console.log(response.data);
+                this.$emit('teammate-added', {"text":"No se pudo agregar el miembro al equipo", "status":"error"});
             }
-
         },
-        handleTeammateDeleted: function (id) {
+        handleTeammateDeleted: function (id, notification) {
             this.websiteTeamData.team.forEach((teammate, index)=>{
                 if(teammate.website_user_id == id){
                     this.websiteTeamData.team.splice(index, 1);
                 }
             });
+            this.$emit('teammate-deleted', notification);
+        },
+        handleTeammateRoleUpdated: function (notification) {
+            this.$emit('teammate-role-updated', notification);
         }
     }
 }

@@ -85,27 +85,31 @@ export default {
                 this.toggleConfirmationModal();
             }
         },
-        deleteFriend:  async function () {
-            
+        deleteFriend:  async function () { 
             try {
                 let identity = localStorage.getItem('identity');
                 let credentials = JSON.parse(identity);
                 let user_id = credentials.sub;
+                let selectedFriendId = this.selectedFriendId;
                 
                 const json = {
                     'user_id': user_id,
-                    'friend_id': this.selectedFriendId,
+                    'friend_id': selectedFriendId,
                 }
+                
                 let formData = new FormData();
-
                 formData.append('json', JSON.stringify(json));
                 
-                const response = await axios.post('api/friends/deleteFriend', formData, {"withCredentials": true});
+                const friendIndex = this.friends.findIndex(friend => friend.id === selectedFriendId);
                 
-                if(response.data.status == "success"){
-                    console.log('user deleted successfully');
-                }else{
-                    console.log('error deleting user');
+                if (friendIndex !== -1) {
+                    const response = await axios.post('api/friends/deleteFriend', formData, {"withCredentials": true});
+                    if (response.data.status == "success") {
+                        this.friends.splice(friendIndex, 1);
+                        this.$emit('friend-deleted', {"text":"Amigo eliminado", "status":"success"});
+                    } else {
+                        this.$emit('friend-deleted', {"text":"No se pudo eliminar de la lista de amigos", "status":"error"});
+                    }
                 }
             }catch(error){
                 console.log(error);

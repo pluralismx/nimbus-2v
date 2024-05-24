@@ -43,11 +43,16 @@
             :website="website_id"
             :images="images"
             @image-uploaded="handleImageUploaded"
+            @email-added="handleStatusBarNotification"
         />
 
         <AdminParentComponent 
             v-show="isVisibleTeam"
             :class="{ 'wide' : !isVisibleNotes }"
+            @teammate-role-updated="handleStatusBarNotification"
+            @teammate-added="handleStatusBarNotification"
+            @teammate-deleted="handleStatusBarNotification"
+            @friend-deleted="handleStatusBarNotification"
         />
 
         <!-- Status bar -->

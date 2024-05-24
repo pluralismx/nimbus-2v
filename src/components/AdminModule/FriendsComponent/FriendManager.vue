@@ -3,6 +3,7 @@
         <FriendListComponent 
             :adminFriends="adminFriends"
             @invite-friend="toggleAddFriendModal"
+            @friend-deleted="handleFriendDeleted"
         />
     </div>
     <ModalAddFriendComponent 
@@ -108,6 +109,9 @@ export default {
                 .catch(error => {
                     console.log(error);
                 })  
+        },
+        handleFriendDeleted: function (notification) {
+            this.$emit('friend-deleted', notification);
         }
     }
 }

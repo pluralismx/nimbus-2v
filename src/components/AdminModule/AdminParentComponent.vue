@@ -17,6 +17,9 @@
                 <!-- Body -->
                 <WebsiteManagerComponent
                     :friends="friends"
+                    @teammate-role-updated="handleTeammateRoleUpdated"
+                    @teammate-deleted="handleTeammateDeleted"
+                    @teammate-added="handleTeammateAdded"
                 />
             </div>
 
@@ -29,6 +32,7 @@
                 <!-- Body -->
                 <FriendManagerComponent
                     @friends-loaded="handleFriendsLoaded"
+                    @friend-deleted="handleFriendDeleted"
                 />
             </div>
             <ModalNotificationsComponent 
@@ -97,7 +101,19 @@ export default {
         handleFriendRequestAnswered: function () {
             this.toggleNotificationsModal();
             this.loadNotifications();
-        }
+        },
+        handleTeammateRoleUpdated: function (notification) {
+            this.$emit('teammate-role-updated', notification);
+        },
+        handleTeammateDeleted: function (notification) {
+            this.$emit('teammate-deleted', notification);
+        },
+        handleTeammateAdded: function (notification) {
+            this.$emit('teammate-added', notification);
+        },
+        handleFriendDeleted: function (notification) {
+            this.$emit('friend-deleted', notification);
+        } 
     },
 
 }

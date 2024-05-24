@@ -8,47 +8,94 @@
                 <div class="text-input-block">
                     <label>Email</label>
                     <div>
-                        <input class="input-primary" type="text"/>
+                        <input v-model="email" class="input-primary" type="text"/>
                     </div>
                 </div>
 
                 <div class="text-input-block">
                     <label>Contraseña</label>
                     <div>
-                        <input class="input-primary" type="text"/>
+                        <input v-model="password" class="input-primary" type="text"/>
                     </div>
                 </div>
 
                 <div class="text-input-block">
                     <label>Confirmar contraseña</label>
                     <div>
-                        <input class="input-primary" type="text"/>
+                        <input v-model="verified" class="input-primary" type="text"/>
                     </div>
                 </div>
 
                 <div class="text-input-block">
                     <label>Servidor SMTP</label>
                     <div>
-                        <input class="input-primary" type="text"/>
+                        <input v-model="smtpServer" class="input-primary" type="text"/>
                     </div>
                 </div>
 
                 <div class="text-input-block">
                     <label>Puerto</label>
                     <div>
-                        <input class="input-primary" type="text"/>
+                        <input v-model="smtpPort" class="input-primary" type="text"/>
                     </div>
                 </div>
             </div>
             <div class="settings-footer">
-                <button class="btn-warning">guardar</button>
+                <button class="btn-warning" @click="addEmail()">guardar</button>
             </div>
         </div>
     </section>
 </template>
 <script>
+import axios from '@/lib/axios'
 export default {
-    name: 'MailerSettingsComponent'
+    name: 'MailerSettingsComponent',
+    props: {
+        website: {
+            type: Number,
+            required: true
+        }
+    },
+    data() {
+        return {
+            email: '',
+            password: '',
+            smtpServer: '',
+            smtpPort: 425
+        }
+    },
+    methods: {
+        addEmail: async function () {
+
+            let password;
+            if(this.verified === this.password){
+                password = this.verified;
+            }
+
+            let formData = new FormData();
+            const json = {
+                "id_website": this.website,
+                "email": this.email,
+                "password": password, 
+                "smtp_port": this.smtpPort,
+                "smtp_server": this.smtpServer
+            }
+            formData.append('json', JSON.stringify(json));
+
+            const response = await axios.post('api/website/addEmailAccount', formData, {"withCredentials": true});
+            if(response.data.status == "success"){
+                this.$emit('email-added', {
+                    "text":"Se agrego la cuenta de correo",
+                    "status":"success"
+                });
+            }else{
+                this.$emit('email-added', {
+                    "text":"No se pudo agregar la cuenta",
+                    "status":"error"
+                });
+            }
+        }
+    }
 }
 </script>
 <style scoped>

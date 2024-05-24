@@ -14,6 +14,7 @@
         <WizardAsideComponent
             @update-html-template = "handleUpdateHtmlTemplate"
             @send-emails="handleSendEmails"
+            @email-added="handleEmailAdded"
             :recipientsSettings = "recipientsSettings"
             :templateSettings = "templateSettings"
             :clientSettings="isVisibleClientSettings"
@@ -104,6 +105,9 @@
             handleSendEmails: function (list) {
                 this.$emit('send-emails', list);
             },
+            handleEmailAdded: function (notification) {
+                this.$emit('email-added', notification);
+            }
         }
     }
 </script>

@@ -16,6 +16,7 @@
             :website="website"
             :images="images"
             @image-uploaded="handleImageUploaded"
+            @email-added="handleEmailAdded"
         />
 
         <!-- Desktop -->
@@ -25,6 +26,7 @@
             :website="website"
             :images="images"
             @image-uploaded="handleImageUploaded"
+            @email-added="handleEmailAdded"
         />
 
         <!-- Modals -->
@@ -136,6 +138,9 @@
                 }else{
                     this.isVisibleClientSettings = false;
                 }
+            },
+            handleEmailAdded: function (notification) {
+                this.$emit('email-added', notification);
             }
 
         },

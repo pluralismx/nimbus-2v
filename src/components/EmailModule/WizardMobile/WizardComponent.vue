@@ -44,6 +44,8 @@
         <!-- Client settings -->
         <MailerSettingsComponent 
             v-show="clientSettings==true"
+            :website="website"
+            @email-added="handleEmailAdded"
         />
 
         <!-- Modals -->
@@ -153,6 +155,9 @@
             },
             handleImageUploaded: function () {
                 this.$emit('image-uploaded');
+            },
+            handleEmailAdded: function (notification) {
+                this.$emit('email-added', notification);
             }
         }
     }

@@ -7,7 +7,6 @@
             @website-selected="handleWebsiteSelected"
             @website-deleted="handleWebsiteDeleted"
             @website-updated="handleWebsiteUpdated"
-            
         />
 
         <!-- Website Team Members -->
@@ -15,6 +14,8 @@
             :websiteTeam="websiteTeam"
             :friends="friends"
             @teammate-added="handleTeammateAdded"
+            @teammate-deleted="handleTeammateDeleted"
+            @teammate-role-updated="handleTeammateRoleUpdated"
         />
       
     </div>
@@ -90,14 +91,21 @@ export default {
                 console.log(error);
             }
         },
-        handleTeammateAdded: function () {
+        handleTeammateAdded: function (notification) {
             this.loadWebsiteTeammates();
+            this.$emit('teammate-added', notification);
         },
         handleWebsiteDeleted: function () {
             this.websiteTeam = {};
         },
         handleWebsiteUpdated: function (website_name) {
             this.websiteTeam.website_name = website_name;
+        },
+        handleTeammateRoleUpdated: function (notification) {
+            this.$emit('teammate-role-updated', notification);
+        },
+        handleTeammateDeleted: function (notification) {
+            this.$emit('teammate-deleted', notification);
         }
     }
 }

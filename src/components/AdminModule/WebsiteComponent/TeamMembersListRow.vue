@@ -2,7 +2,7 @@
     <tr>
         <td>{{ member.name}} {{ member.surname }}</td>
         <td>
-            <select class="compact">
+            <select class="compact" @change="updateRole($event.target.value)">
                 <option>ADMIN</option>
                 <option>USER</option>
             </select>
@@ -19,7 +19,7 @@ export default {
     name: 'TeamMembersListRowComponent',
     props: {
         member: {
-            type: Array,
+            type: Object,
             required: true
         }
     },
@@ -33,12 +33,26 @@ export default {
             formData.append('json', JSON.stringify(json));
             const response = await axios.post('api/team/deleteTeammate', formData, {"withCredentials": true});
             if(response.data.status == "success"){
-                console.log(this.member.website_user_id);
-                this.$emit('teammate-deleted', this.member.website_user_id);
+                this.$emit('teammate-deleted', this.member.website_user_id, {"text":"Miembro eliminado", "status":"success"});
             }else{
-                console.log('couldnt delete user');
+                this.$emit('teammate-deleted', this.member.website_user_id, {"text":"No se pudo eliminar al miembro", "status":"error"});
             }
+        },
+        updateRole: async function (role) {
+            let formData = new FormData();
+            const json = {
+                "role":role,
+                "id_teammate": this.member.website_user_id
+            }
+            formData.append('_method', 'put');
+            formData.append('json', JSON.stringify(json));
 
+            const response = await axios.post('api/team/updateTeammate', formData, {"withCredentials": true});
+            if(response.data.status == "success"){
+                this.$emit('teammate-role-updated', {"text":"Rol actualizado", "status":"success"});
+            }else {
+                this.$emit('teammate-role-updated', {"text":"No se pudo cambiar el rol", "status":"error"});
+            }
         }
     }
 }

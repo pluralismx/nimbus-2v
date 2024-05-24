@@ -9,47 +9,81 @@
             <div class="settings-body">
                 <!-- Nuevos -->
                 <div class="checkbox-block">
-                    <input type="checkbox" @change="updateSelection('nuevo')" :checked="isAllSelected" :disabled="isAllSelected"/>
+                    <input type="checkbox" 
+                        @change="updateSelection('nuevo')" 
+                        :disabled="isAllSelected || isIndividualSelected"
+                        v-model="checkboxOptions.nuevo"
+                    />
                     <label>Nuevos</label>
                 </div>
                 <!-- Identificacion -->
                 <div class="checkbox-block">
-                    <input type="checkbox" @change="updateSelection('identificacion')" :checked="isAllSelected" :disabled="isAllSelected"/>
+                    <input type="checkbox" 
+                        @change="updateSelection('identificacion')" 
+                        :disabled="isAllSelected || isIndividualSelected"
+                        v-model="checkboxOptions.identificacion"
+                    />
                     <label>Identificación</label>
                 </div>
                 <!-- Presentacion -->
                 <div class="checkbox-block">
-                    <input type="checkbox" @change="updateSelection('presentacion')" :checked="isAllSelected" :disabled="isAllSelected"/>
+                    <input type="checkbox" 
+                        @change="updateSelection('presentacion')" 
+                        :disabled="isAllSelected || isIndividualSelected"
+                        v-model="checkboxOptions.presentacion"
+                    />
                     <label>Presentación</label>
                 </div>
                 <!-- Cotizacion -->
                 <div class="checkbox-block">
-                    <input type="checkbox" @change="updateSelection('cotizacion')" :checked="isAllSelected" :disabled="isAllSelected"/>
+                    <input type="checkbox" 
+                        @change="updateSelection('cotizacion')" 
+                        :disabled="isAllSelected || isIndividualSelected"
+                        v-model="checkboxOptions.cotizacion"
+                    />
                     <label>Cotización</label>
                 </div>
                 <!-- Negociacion -->
                 <div class="checkbox-block">
-                    <input type="checkbox" @change="updateSelection('negociacion')" :checked="isAllSelected" :disabled="isAllSelected"/>
+                    <input type="checkbox" 
+                        @change="updateSelection('negociacion')" 
+                        :disabled="isAllSelected || isIndividualSelected"
+                        v-model="checkboxOptions.negociacion"
+                    />
                     <label>Negociación</label>
                 </div>
                 <!-- Cierre -->
                 <div class="checkbox-block">
-                    <input type="checkbox" @change="updateSelection('cierre')" :checked="isAllSelected" :disabled="isAllSelected"/>
+                    <input type="checkbox" 
+                        @change="updateSelection('cierre')" 
+                        :disabled="isAllSelected || isIndividualSelected"
+                        v-model="checkboxOptions.cierre"
+                    />
                     <label>Cierre</label>
                 </div>
                 <!-- Todos -->
                 <div class="checkbox-block">
-                    <input type="checkbox" @change="updateSelection('todos')" />
+                    <input type="checkbox" 
+                        @change="updateSelection('todos')" 
+                        :disabled="isIndividualSelected"
+                    />
                     <label>Todos</label>
                 </div>
                 <!-- Individual -->
                 <div class="checkbox-block">
-                    <input type="checkbox" @change="updateSelection('individual')"/>
+                    <input type="checkbox" 
+                        @change="updateSelection('individual')" 
+                        :disabled="isAllSelected"
+                    />
                     <label>Individual</label>
                 </div>
                 <div class="text-input-block">
                     <div>
-                        <input :disabled="!isIndividualSelected" class="input-primary" type="text">
+                        <input 
+                            :disabled="!isIndividualSelected" 
+                            class="input-primary" type="text"
+                            v-model="singleEmail"
+                        />
                     </div>
                 </div>
             </div>
@@ -67,32 +101,67 @@
                 selectedOptions: [],
                 isAllSelected: false,
                 isIndividualSelected: false,
+                checkboxOptions: {
+                    nuevo: false,
+                    identificacion: false,
+                    presentacion: false,
+                    cotizacion: false,
+                    negociacion: false,
+                    cierre: false,
+                },
+                singleEmail: ''
             }
         },
         methods: {
             updateSelection: function (option) {
-                if(option != 'todos'){
-                    if (!this.selectedOptions.includes(option)) {
-                        this.selectedOptions.push(option);
-                    }else {
-                        const index = this.selectedOptions.indexOf(option);
-                        if (index > -1) {
-                            this.selectedOptions.splice(index, 1);
-                        }
-                    }
-                console.log(this.selectedOptions);
-                }else {
-                    if(this.isAllSelected == false){
-                        this.isAllSelected = true;
-                        this.selectedOptions = [];
-                        this.selectedOptions.push(option);
-                        console.log(this.selectedOptions);
-                    }else{
-                        this.isAllSelected = false;
-                        this.selectedOptions = [];
-                        console.log(this.selectedOptions);
-                    }
 
+                switch (option) {
+                    case 'individual': 
+                        this.isIndividualSelected = true;
+                        for (let key in this.checkboxOptions) {
+                            this.checkboxOptions[key] = false;
+                        }
+                        if(!this.selectedOptions.includes(option)){
+                            this.selectedOptions = [];
+                            this.selectedOptions.push(option);
+                        }else {
+                            const index = this.selectedOptions.indexOf(option);
+                            if(index > -1) {
+                                this.selectedOptions.splice(index, 1);
+                            }
+                            this.isIndividualSelected = false;
+                        }
+                        console.log(this.selectedOptions);
+                        break;
+                    case 'todos':
+                        this.isAllSelected = true;
+                        for (let key in this.checkboxOptions) {
+                        this.checkboxOptions[key] = false;
+                    }
+                        if(!this.selectedOptions.includes(option)){
+                            this.selectedOptions = [];
+                            this.selectedOptions.push(option);
+                        }else {
+                            const index = this.selectedOptions.indexOf(option);
+                            if (index > -1) {
+                                this.selectedOptions.splice(index, 1);
+                            }
+                            this.isAllSelected = false;
+                        }
+                        console.log(this.selectedOptions);
+                        break;
+                    default:
+                        if (!this.selectedOptions.includes(option)) {
+                            this.selectedOptions.push(option);
+                        }else {
+                            const index = this.selectedOptions.indexOf(option);
+                            if (index > -1) {
+                                this.selectedOptions.splice(index, 1);
+                            }
+                            this.isAllSelected = false;
+                        }
+                        console.log(this.selectedOptions);
+                        break;
                 }
                 
             },

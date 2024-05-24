@@ -92,7 +92,6 @@ tbody tr td {
     font-size: 14px;
 }
 
-
 tbody tr td button {
     margin-left: .5rem;
     width: 40%;
