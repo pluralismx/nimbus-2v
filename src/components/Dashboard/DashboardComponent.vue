@@ -113,8 +113,9 @@ export default {
         }
     },
     methods: {
-        handleToggleTool: function (selection) {
 
+        // Layout
+        handleToggleTool: function (selection) {
             switch (selection) {
                 case 'notes':
                     if (this.isVisibleNotes == false) {
@@ -200,32 +201,38 @@ export default {
             this.loadWebsiteLeads();
             this.loadWebsiteImages();
         },
+
+
+        // Dashboard data
+        loadWebsiteLeads: async function () {
+            try {
+                const response = await axios.get('api/lead/records/'+this.website_id, {"withCredentials": true});
+                if(response.data.status=="success"){
+                    this.leads = response.data.leads;
+                    this.getLeadEmails();
+                }
+            } catch (error) {
+                console.error('Error loading website leads:', error);
+            }
+                
+        },
         loadWebsiteNotes: async function () {
             const response = await axios.get('api/note/records/'+this.website_id, {"withCredentials":true});
-            if(response.data.status == 'success'){
+            if(response.data.status=="success"){
                 this.notes = response.data.notes;
-            }else {
-                console.log("Could not retrieve notes");
             }
-        },
-        handleNoteCreated: function (notification) {
-            this.loadWebsiteNotes();
-            this.handleStatusBarNotification(notification);
-        },
-        loadWebsiteLeads: async function () {
-                const response = await axios.get('api/lead/records/'+this.website_id, {"withCredentials": true});
-                if(response.data.status=='success'){
-                    this.leads = response.data.leads;
-                    console.log(this.leads);
-                }else{
-                    console.log(response.data);
-                }
         },
         loadWebsiteImages: async function () {
             const response = await axios.get('api/image/websiteImages/'+this.website_id, {"withCredentials":true});
-            if(response.data.status == "success"){
+            if(response.data.status=="success"){
                 this.images = response.data.images;
             }
+        },
+
+        // Update dashboard dadta
+        handleNoteCreated: function (notification) {
+            this.loadWebsiteNotes();
+            this.handleStatusBarNotification(notification);
         },
         handleLeadDeleted: function (lead_id, notification) {  
             this.leads.forEach((item, index) => {

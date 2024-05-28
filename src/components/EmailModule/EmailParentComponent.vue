@@ -11,34 +11,41 @@
         <WizardComponent 
             v-if="smViewport"
             @update-html-template="handleUpdateHtmlTemplate"
+            @send-emails="handleSendEmails"
+            @image-uploaded="handleImageUploaded"
+            @email-added="handleEmailAdded"
             :recipients="isVisibleRecipientsSettings"
             :clientSettings="isVisibleClientSettings"
             :website="website"
             :images="images"
-            @image-uploaded="handleImageUploaded"
-            @email-added="handleEmailAdded"
+
         />
 
         <!-- Desktop -->
         <WizardDesktopComponent 
             v-else
             @send-emails="handleSendEmails"
-            :website="website"
-            :images="images"
             @image-uploaded="handleImageUploaded"
             @email-added="handleEmailAdded"
+            @update-html-template="handleUpdateHtmlTemplate"
+            :website="website"
+            :images="images"
+            
         />
 
         <!-- Modals -->
         <EmailPreviewModalComponent 
             v-show="isVisibleEmailPreviewModal"
-            :previewTemplate="previewTemplate"
             @close-email-preview="handleCloseEmailPreview"
+            :previewTemplate="previewTemplate"
+            
         />
 
         <SendEmailsModalComponent 
             v-show="isVisibleSendEmailsModal"
             @close-modal="handleCloseSendEmailsModal"
+            :recipients="recipients"
+            :emailContent="this.previewTemplate"
         />
 
     </section>
@@ -95,8 +102,6 @@
             },
             handleUploadImage(){
                 this.isVisibleImageUploadModal = true;
-                // console.log(this.website);
-                console.log('test');
             },
             handleCloseEmailPreview() {
                 this.isVisibleEmailPreviewModal = false;
@@ -117,14 +122,34 @@
             },
             handleSendEmails: function (list) {
                 this.recipients = [];
-                this.leads.forEach((item) => {
-                    if (list.includes(item.status)) {
-                        this.recipients.push(item.email);
+                if (typeof list === "string") {
+                    const addedEmails = [];
+
+                    // Iteramos sobre los leads para agregar correos electrónicos con nombre
+                    this.leads.forEach((lead) => {
+                        if (lead.email === list && !addedEmails.includes(lead.email)) {
+                            if (lead.name) {
+                                this.recipients.push({ address: list, sentStatus: '', name: lead.name });
+                                addedEmails.push(lead.email);  // Actualizamos el array de correos añadidos
+                            }
+                        }
+                    });
+
+                    // Verificamos fuera del bucle si aún no se ha añadido el correo electrónico
+                    if (!addedEmails.includes(list)) {
+                        this.recipients.push({ address: list, sentStatus: '', name: 'Hola' });
+                        addedEmails.push(list);  // Actualizamos el array de correos añadidos
                     }
-                });
+
+                } else if (Array.isArray(list)) { 
+                    const includeTodos = list.includes("todos");
+                    this.leads.forEach((item) => {
+                        if (includeTodos || list.includes(item.status)) {
+                            this.recipients.push({ address: item.email, sentStatus: '', name: item.name });
+                        }
+                    });
+                }
                 this.isVisibleSendEmailsModal = true;
-                console.log(this.recipients);
-                
             },
             handleCloseSendEmailsModal: function () {
                 this.isVisibleSendEmailsModal = false;

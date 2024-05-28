@@ -36,8 +36,8 @@
         name: 'LoginParentComponent',
         data() {
             return {
-                email: 'dillion@pluralis.com.mx',
-                password: 'dick',
+                email: 'gerardo@pluralis.com.mx',
+                password: '1234',
                 error: false
             }
         },

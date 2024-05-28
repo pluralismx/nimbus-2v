@@ -118,9 +118,11 @@
                 switch (option) {
                     case 'individual': 
                         this.isIndividualSelected = true;
+                        
                         for (let key in this.checkboxOptions) {
                             this.checkboxOptions[key] = false;
                         }
+                        
                         if(!this.selectedOptions.includes(option)){
                             this.selectedOptions = [];
                             this.selectedOptions.push(option);
@@ -131,7 +133,6 @@
                             }
                             this.isIndividualSelected = false;
                         }
-                        console.log(this.selectedOptions);
                         break;
                     case 'todos':
                         this.isAllSelected = true;
@@ -148,7 +149,6 @@
                             }
                             this.isAllSelected = false;
                         }
-                        console.log(this.selectedOptions);
                         break;
                     default:
                         if (!this.selectedOptions.includes(option)) {
@@ -160,13 +160,16 @@
                             }
                             this.isAllSelected = false;
                         }
-                        console.log(this.selectedOptions);
                         break;
                 }
                 
             },
             sendEmails: function () {
-                this.$emit('send-emails', this.selectedOptions);
+                if(this.singleEmail !== ''){
+                    this.$emit('send-emails', this.singleEmail);
+                }else {
+                    this.$emit('send-emails', this.selectedOptions);
+                }
             },
             
         }

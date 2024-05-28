@@ -62,6 +62,7 @@
             v-show="isVisibleSendEmailsModal"
             :emailContent="emailContent"
             @close-modal="handleCloseSendEmailsModal"
+            :recipients="emailAddresses"
         />
         
     </div>
@@ -140,8 +141,8 @@
             handleToggleTheme(theme) {
                 this.theme = theme;
             },
-            handleSendEmails: function () {
-                this.isVisibleSendEmailsModal = true;
+            handleSendEmails: function (list) {
+                this.$emit('send-emails', list);
             },
             handleCloseSendEmailsModal: function () {
                 this.isVisibleSendEmailsModal = false;

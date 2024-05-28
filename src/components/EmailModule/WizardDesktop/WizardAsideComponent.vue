@@ -106,7 +106,7 @@
                 theme: "#037e99",
                 isVisibleUploadImageModal: false,
                 templateImageData: {},
-                templateImageSection: ''
+                templateImageSection: '',
             }
         },
         methods: {

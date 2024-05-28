@@ -41,7 +41,7 @@
         components: {
             WizardToolbarComponent,
             WizardAsideComponent,
-            WizardPreviewComponent
+            WizardPreviewComponent,
         },
         props: {
             images: {
@@ -61,7 +61,7 @@
                 desktopPreview: true,
                 mobilePreview: false,
                 previewTemplate: '',
-                
+                isVisibleSendEmailsModal: true
             }
         },
         methods: {
@@ -101,12 +101,16 @@
             },
             handleUpdateHtmlTemplate: function (template) {
                 this.previewTemplate = template;
+                this.$emit('update-html-template', template);
             },
             handleSendEmails: function (list) {
                 this.$emit('send-emails', list);
             },
             handleEmailAdded: function (notification) {
                 this.$emit('email-added', notification);
+            },
+            handleCloseSendEmailsModal: function () {
+                this.isVisibleSendEmailsModal = false;
             }
         }
     }
