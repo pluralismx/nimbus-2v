@@ -5,7 +5,7 @@
                 <td class="table-search" colspan="2">
                     <label for="">Search:&nbsp;</label>
                     <input v-model="search_query" type="text">&nbsp;
-                    <button class="btn-warning" @click="search()">{{ search_btn_text }}</button>
+                    <button class="btn-warning compact" @click="search()">{{ search_btn_text }}</button>
                 </td>
                 <td class="table-pagination" colspan="4">
                     <label for="rows_per_page">rows per page: </label>
@@ -15,9 +15,9 @@
                         <option value="25">25</option>
                         <option value="50">50</option>
                     </select>
-                    <button class="btn-warning" @click="previousPage">&lt;</button>
+                    <button class="btn-warning compact" @click="previousPage">&lt;</button>
                     <span>&nbsp;{{ this.cp }}</span><span>&nbsp;/&nbsp;</span><span>{{ this.pages }}&nbsp;</span>
-                    <button class="btn-warning" @click="nextPage">&gt;</button>
+                    <button class="btn-warning compact" @click="nextPage">&gt;</button>
                 </td>
             </tr>
             <tr>

@@ -98,7 +98,6 @@ export default {
         },
         handleWebsiteCreated: function () {
             this.loadAdminWebsites();
-            this.toggleCreateWebsiteModal();
         },
         handleAuthorizationNeeded: function (action, website) {
             this.action = action;

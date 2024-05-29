@@ -6,13 +6,13 @@
 
             <!-- Title -->
             <div class="modal-header">
-                <span>Eliminar sitio</span>
+                <span>Eliminar amigo</span>
                 <span class="close-cross" @click="closeModal">&times;</span>
             </div>
 
             <!-- Form -->
             <div class="modal-body">
-                <p>Esta seguro que desea continuar</p>
+                <p>¿Está seguro que desea continuar?</p>
             </div>
 
             <!-- Buttons -->

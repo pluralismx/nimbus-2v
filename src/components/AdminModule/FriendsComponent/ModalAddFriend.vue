@@ -12,6 +12,7 @@
 
             <!-- Body -->
             <div class="modal-body">
+                <span v-show="errorMessage" class="span-error-message">{{ errorMessage }}</span>
                 <div class="input-block">
                     <input v-model="email" class="input-primary" type="text" placeholder="juan@ejemplo.com">
                     <button @click="searchContact()" class="btn-primary"><img src="../../../assets/images/white-magnifier.png"/></button>
@@ -66,9 +67,10 @@ export default {
     name: 'ModalAddFriendComponent',
     data(){
         return {
-            'email': null,
-            'result': '',
-            'selection': ''
+            email: null,
+            result: '',
+            selection: '',
+            errorMessage: ''
         }
     },
     methods: {
@@ -118,9 +120,10 @@ export default {
             axios.post('api/friendrequest/send', formData, {"withCredentials":true})
                 .then(res=>{
                     if(res.data.status == 'success'){
+                        this.errorMessage = ''
                         this.closeModal();
-                    }else{
-                        console.log(res.data);
+                    }else if(res.data.message == 'You can not friend yourself'){
+                        this.errorMessage = 'No puedes agregarte a ti mismo'
                     }
                 })
                 .catch(error=>{
@@ -156,6 +159,7 @@ export default {
     .modal-body {
         padding: .5rem;
         background-color: var(--basic);
+        position: relative;
     }
 
     .input-block {
@@ -177,6 +181,13 @@ export default {
 
     .input-block button img{
         width: 40%;
+    }
+
+    .span-error-message {
+        font-size: 12px;
+        color: var(--warn);
+        position: absolute;
+        transform: translateY(-4px);
     }
 
     /* Contact card */

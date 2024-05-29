@@ -22,7 +22,7 @@
                     <input v-model="url"  class="input-primary" type="text">
                 </div>
                 <div class="input-block">
-                    <textarea cols="30" rows="10" placeholder="Una vez que hayas creado el sitio, se te mostrará la clave para la API en este recuadro. Esta clave no estará disponible una vez que cierres esta ventana. Te recomendamos copiarla y guardarla en un lugar seguro tanto para ti como para tu equipo de trabajo."></textarea>
+                    <textarea v-model="apiKey" cols="30" rows="10" placeholder="Una vez que hayas creado el sitio, se te mostrará la clave para la API en este recuadro. Esta clave no estará disponible una vez que cierres esta ventana. Te recomendamos copiarla y guardarla en un lugar seguro tanto para ti como para tu equipo de trabajo."></textarea>
                 </div>
             </div>
 
@@ -30,7 +30,7 @@
             <div class="modal-footer">
                 <div class="buttons-block">
                     <button class="btn-warning" @click="createWebsite()">crear</button>
-                    <button class="btn-primary" @click="closeModal()">cancel</button>
+                    <button class="btn-primary" @click="closeModal()">{{ button }}</button>
                 </div>
             </div>
             
@@ -46,11 +46,15 @@ export default {
     data() {
         return {
             name: 'Pluralis',
-            url: 'http://www.pluralis.com.mx'
+            url: 'http://www.pluralis.com.mx',
+            apiKey: '',
+            button: 'cancelar'
         }
     },
     methods: {
         closeModal: function (){
+            this.apiKey = ''
+            this.button = 'cancelar'
             this.$emit('close-modal');
         },
         createWebsite: async function () {
@@ -67,12 +71,13 @@ export default {
             }
             formData.append('json', JSON.stringify(data));
             const response = await axios.post('api/website/create', formData, { "withCredentials":  true});
-            if(response.data.status == 'success') {
+            if (response.data.status == 'success') {
+                this.apiKey = response.data.api_key;
+                this.button = 'aceptar'
                 this.$emit('website-created');
-            }else{
+            }else {
                 console.log('error');
             }
-
         }
     }
 }

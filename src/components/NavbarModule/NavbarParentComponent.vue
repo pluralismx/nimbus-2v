@@ -77,19 +77,17 @@
                     formData.append('json', JSON.stringify(json));
                     const response = await axios.post('api/website/websites', formData, { withCredentials: true });
 
-                    // Check if the response status is success
-                    if (response.data.status === 'success') {
-                        // Resolve the promise with the contacts data
+                    if (response.data.status == 'success') {
                         this.websites = response.data.websites;
-                        this.loadDashboardData(this.websites[0].id);
+                        if(this.websites.length > 0){
+                            this.loadDashboardData(this.websites[0].id);
+                        }
                     } else {
-                        // If the response status is not success, handle the error
-                        throw new Error('Failed to fetch friends. Response status: ' + response.data.status);
+                        throw new Error('Failed to fetch websites. Response status: ' + response.data.status);
                     }
                 } catch (error) {
-                    // Catch any errors that occurred during the Axios request
                     console.error('Error fetching friends:', error);
-                    throw error; // Rethrow the error to propagate it further
+                    throw error;
                 }
             },
             logout(){

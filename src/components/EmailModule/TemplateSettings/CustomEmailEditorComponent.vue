@@ -37,45 +37,46 @@
         },
         methods: {
             html(){
-                this.$emit('update-html-template', this.custom_template);
+                let b64 = btoa(this.custom_template)
+                this.$emit('update-html-template', b64);
             }
         }
     }
 </script>
 <style scoped>
 
-    .settings-container {
-        margin-top: 2rem;
-        box-shadow: 2px 2px 6px var(--shadows);
-        border-radius: .5rem;
-    }
+.settings-container {
+    margin-top: 2rem;
+    box-shadow: 2px 2px 6px var(--shadows);
+    border-radius: .5rem;
+}
 
-    .settings-header {
-        background-color: var(--primary);
-        color: var(--basic);
-        padding: .5rem;
-        border-top-left-radius: .5rem;
-        border-top-right-radius: .5rem;
-    }
-    .settings-body {
-        display: flex;
-        flex-direction: column;
-        padding: 0 1rem;
-    }
+.settings-header {
+    background-color: var(--primary);
+    color: var(--basic);
+    padding: .5rem;
+    border-top-left-radius: .5rem;
+    border-top-right-radius: .5rem;
+}
+.settings-body {
+    display: flex;
+    flex-direction: column;
+    padding: 0 1rem;
+}
 
-    textarea {
-        margin: 1rem 0;
-        height: 17.5rem;
-        border: 1px solid var(--primary);
-        resize: none;
-        color: var(--primary);
-        border-radius: .5rem;
-        padding: .5rem;
-        box-sizing: border-box;
-    }
+textarea {
+    margin: 1rem 0;
+    height: 17.5rem;
+    border: 1px solid var(--primary);
+    resize: none;
+    color: var(--primary);
+    border-radius: .5rem;
+    padding: .5rem;
+    box-sizing: border-box;
+}
 
-    textarea:focus {
-        outline:none;
-    }
+textarea:focus {
+    outline:none;
+}
 
 </style>

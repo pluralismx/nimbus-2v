@@ -14,7 +14,7 @@
                 <option value="cierre">cierre</option>
             </select>
         </td>
-        <td v-show="edit==false">26/03/24</td>
+        <td v-show="edit==false">{{ date }}</td>
         <td v-show="edit==false" width="18%">
             <button class="btn-primary" @click="toggleEditWebsiteRow()">editar</button>&nbsp;&nbsp;
             <button class="btn-warning" @click="deleteLead()">eliminar</button>
@@ -57,7 +57,8 @@
                 name: this.lead.name,
                 phone: this.lead.phone,
                 email: this.lead.email,
-                status: this.lead.status
+                status: this.lead.status,
+                date: this.lead.date
             }
         },
         methods: {

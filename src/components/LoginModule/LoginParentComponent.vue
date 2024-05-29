@@ -1,6 +1,6 @@
 <template>
     <div class="login-main-container">
-        <div class="login-container">
+        <div class="login-container" v-show="isVisibleLogIn">
             <!-- Header -->
             <div class="login-container-header">
                 <h1>Nimbus CRM 2.0</h1>
@@ -17,28 +17,43 @@
                     <!-- Password -->
                     <div class="input-block">
                         <input v-model="password" type="password" placeholder="password">
+                        <span class="input-message">¿Olvidó su contraseña?</span>
                     </div>
 
                     <!-- Login -->
                     <div class="login-block">
                         <button @click="logIn()" class="btn-primary">continuar</button>
                         <br>
-                        <span>¿Olvidó su contraseña?</span>
+                        <span @click="showCreateAccount">crear una cuenta</span>
                     </div>
                 </div>
             </div>
         </div>
+
+        <!-- Create account -->
+        <CreateAccountComponent 
+            v-show="isVisibleCreateAccount"
+            @cancel="showCreateAccount"
+        />
     </div>
 </template>
 <script>
+    import CreateAccountComponent from './CreateAccountComponent.vue'
     import axios from '@/lib/axios'
     export default {
         name: 'LoginParentComponent',
+        components: {
+            CreateAccountComponent
+        },
         data() {
             return {
                 email: 'gerardo@pluralis.com.mx',
                 password: '1234',
-                error: false
+                error: false,
+
+                // Layout
+                isVisibleLogIn: true,
+                isVisibleCreateAccount: false
             }
         },
         methods: {
@@ -88,6 +103,17 @@
                     console.error('Error:', error);
                     return false;
                 }
+            },
+            showCreateAccount: function () {
+
+                if(this.isVisibleCreateAccount == false) {
+                    this.isVisibleLogIn = false;
+                    this.isVisibleCreateAccount = true;
+                }else {
+                    this.isVisibleLogIn = true;
+                    this.isVisibleCreateAccount = false;
+                }
+
             }
         }
     }
@@ -132,8 +158,22 @@
         align-items: center;
     }
 
+    button {
+        width: 80%;
+    }
+
     span {
         color: var(--warn);
+    }
+
+    span:hover {
+        color: var(--accent);
+        cursor: pointer;
+    }
+
+    .input-message {
+        margin-top: 1rem;
+        text-align: center;
     }
 
     .error-message {
