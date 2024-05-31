@@ -70,10 +70,25 @@ export default {
                 }
                 let formData = new FormData();
                 formData.append('json', JSON.stringify(json));
+                // Request to the backend
+                this.$emit('user-registered', {
+                    "title":"Creando cuenta", 
+                    "content":"Un momento por favor..."
+                });
                 const response = await axios.post('api/register', formData);
+                // Request status success
                 if (response.data.status == "success"){
-                    this.$emit('user-registered');
-                    console.log("user registered");
+                    this.$emit('cancel');
+                    this.$emit('user-registered', {
+                        "title":"Cuenta creada exitosamente", 
+                        "content":"Revise su bandeja de entrada para activar su cuenta"
+                    });
+                }else{
+                    // Request failed
+                    this.$emit('user-registered', {
+                        "title":"Error al crear cuenta", 
+                        "content": "El correo ya ha sido utilizado o hubo un error al intentar crear su cuenta"
+                    });
                 }
             }
 

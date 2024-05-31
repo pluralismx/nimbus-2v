@@ -120,21 +120,21 @@
                 <div class="text-input-block">
                     <label>Facebook URL</label>
                     <div>
-                        <input class="input-primary" type="text">
+                        <input v-model="templateData.facebook_link" class="input-primary" type="text">
                     </div>
                 </div>
                 <!-- Instagram -->
                 <div class="text-input-block">
                     <label>Instagram URL</label>
                     <div>
-                        <input class="input-primary" type="text">
+                        <input v-model="templateData.instagram_link" class="input-primary" type="text">
                     </div>
                 </div>
                 <!-- Youtube -->
                 <div class="text-input-block">
                     <label>Youtube URL</label>
                     <div>
-                        <input class="input-primary" type="text">
+                        <input v-model="templateData.youtube_link" class="input-primary" type="text">
                     </div>
                 </div>
             </div>

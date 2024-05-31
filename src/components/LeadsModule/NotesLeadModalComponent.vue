@@ -22,8 +22,8 @@
                     <!-- Comment component -->
                     <div v-for="leadNote in leadNotes" :key="leadNote.id" class="comment-container">
                         <div class="comment-signature">
-                            <span>Created by: Gerardo Topete&nbsp;</span>
-                            <span>at 23/05/1991</span>
+                            <span>Created by {{ leadNote.name }}&nbsp;{{ leadNote.surname }}&nbsp;</span>
+                            <span>at {{ leadNote.date }}</span>
                             <p>
                                 {{leadNote.content}}
                             </p>
@@ -61,7 +61,7 @@ export default {
         leadNotes: {
             type: Array,
             required: true
-        }
+        },
     },
     data() {
         return {

@@ -9,6 +9,7 @@
         <div class="notes-container" :class="{'showNewNote': isVisibleNewNote == 'show' }">
             <NewNoteComponent 
                 :websiteId="website"
+                :identity="identity"
                 @note-created="handleNoteCreated"
             />
             <NoteComponent 
@@ -42,6 +43,10 @@ import axios from '@/lib/axios';
             website: {
                 type: Number,
                 required: true
+            },
+            identity: {
+                type: Object,
+                required: true
             }
         },
         computed: {
@@ -74,8 +79,7 @@ import axios from '@/lib/axios';
                     this.isVisibleNewNote = 'show';
                 }
             },
-            handleDeleteNote: async function (noteId) {
-                
+            handleDeleteNote: async function (noteId) { 
                 const json = {
                     'note_id': noteId
                 }

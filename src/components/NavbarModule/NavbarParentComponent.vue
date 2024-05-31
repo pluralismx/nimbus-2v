@@ -52,9 +52,37 @@
     import axios from '@/lib/axios';
     export default {
         name: 'NavbarParentComponent',
+        props: {
+            identity: {
+                type: Object,
+                required: true
+            },
+            reload: {
+                type: Boolean,
+                required: true
+            },
+        },
+        computed: {
+            reloadComputed(){
+                return this.reload;
+            }
+        },
+        watch: {
+            reloadComputed: {
+                handler (newVal){
+                    this.reloadData = newVal;
+                    if(this.reloadData == true){
+                        this.loadWebsites();
+                    }
+                    this.reloadData = false;
+                    this.$emit('website-list-updated');
+                }
+            }
+        },
         data() {
             return {
-                websites: []
+                websites: [],
+                reloadData: false
             }
         },
         created() {
@@ -65,14 +93,11 @@
                 this.$emit('toggle-tool', selection);
             },
             loadWebsites: async function (){
+
                 try {
-                    let identity = localStorage.getItem('identity');
-                    
-                    let credentials = JSON.parse(identity);
-                    let user_id = credentials.sub;
                     let formData = new FormData();
                     const json = {
-                        "id_user": user_id
+                        "id_user": this.identity.sub
                     }
                     formData.append('json', JSON.stringify(json));
                     const response = await axios.post('api/website/websites', formData, { withCredentials: true });
@@ -81,6 +106,9 @@
                         this.websites = response.data.websites;
                         if(this.websites.length > 0){
                             this.loadDashboardData(this.websites[0].id);
+                        }
+                        else {
+                            this.$emit('user-has-no-websites');
                         }
                     } else {
                         throw new Error('Failed to fetch websites. Response status: ' + response.data.status);

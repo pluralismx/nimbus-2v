@@ -7,7 +7,7 @@
             <!-- Title -->
             <div class="modal-header">
                 <span>Eliminar sitio</span>
-                <span class="close-cross" @click="cancelDeleteWebsite">&times;</span>
+                <span class="close-cross" @click="answer(false)">&times;</span>
             </div>
 
             <!-- Form -->

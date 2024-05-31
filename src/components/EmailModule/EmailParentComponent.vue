@@ -154,8 +154,8 @@
             handleCloseSendEmailsModal: function () {
                 this.isVisibleSendEmailsModal = false;
             },
-            handleImageUploaded: function () {
-                this.$emit('image-uploaded');
+            handleImageUploaded: function (notification) {
+                this.$emit('image-uploaded', notification);
             },
             handleShowClientSettings: function () {
                 if(!this.isVisibleClientSettings){

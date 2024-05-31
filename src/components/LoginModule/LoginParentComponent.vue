@@ -1,5 +1,7 @@
 <template>
     <div class="login-main-container">
+
+        <!-- Login -->
         <div class="login-container" v-show="isVisibleLogIn">
             <!-- Header -->
             <div class="login-container-header">
@@ -7,7 +9,7 @@
             </div>
             <!-- Body -->
             <div class="login-container-body">
-                <span v-show="error" class="error-message">Credenciales invalidas</span>
+                <span v-show="error != false" class="error-message">{{ error }}</span>
                 <div class="login-form">
                     <!-- Email -->
                     <div class="input-block">
@@ -17,14 +19,14 @@
                     <!-- Password -->
                     <div class="input-block">
                         <input v-model="password" type="password" placeholder="password">
-                        <span class="input-message">¿Olvidó su contraseña?</span>
                     </div>
 
                     <!-- Login -->
                     <div class="login-block">
-                        <button @click="logIn()" class="btn-primary">continuar</button>
+                        <button @click="logIn()" class="btn-primary">iniciar sesión</button>
+                        <span class="input-message" @click="showForgotPassword">¿Olvidó su contraseña?</span>
                         <br>
-                        <span @click="showCreateAccount">crear una cuenta</span>
+                        <span @click="showCreateAccount">crear cuenta</span>
                     </div>
                 </div>
             </div>
@@ -34,26 +36,46 @@
         <CreateAccountComponent 
             v-show="isVisibleCreateAccount"
             @cancel="showCreateAccount"
+            @user-registered="handleUserRegistered"
+        />
+
+        <!-- Reset password -->
+        <ResetPasswordComponent 
+            v-if="isVisibleResetPassword"
+            @cancel="showForgotPassword"
+        />
+
+        <!-- Success modal -->
+        <SuccessModalComponent 
+            v-show="status !=false"
+            :status="status"
+            @close-success-modal="handleUserRegistered"
         />
     </div>
 </template>
 <script>
     import CreateAccountComponent from './CreateAccountComponent.vue'
+    import ResetPasswordComponent from './ResetPasswordComponent.vue'
+    import SuccessModalComponent from './SuccessModalComponent.vue'
     import axios from '@/lib/axios'
     export default {
         name: 'LoginParentComponent',
         components: {
-            CreateAccountComponent
+            CreateAccountComponent,
+            ResetPasswordComponent,
+            SuccessModalComponent
         },
         data() {
             return {
-                email: 'gerardo@pluralis.com.mx',
+                email: 'gerardotopete7@gmail.com',
                 password: '1234',
                 error: false,
 
                 // Layout
                 isVisibleLogIn: true,
-                isVisibleCreateAccount: false
+                isVisibleCreateAccount: false,
+                isVisibleResetPassword: false,
+                status: false
             }
         },
         methods: {
@@ -62,25 +84,27 @@
                     'email': this.email,
                     'password': this.password
                 }
-                
                 const json = JSON.stringify(data);
                 let formData = new FormData();
                 formData.append('json', json);
                 try {
+                    
                     const response = await axios.post('api/login', formData, {"withCredentials": true})
+                    
                     if(response.data.status=='success') {
-                        let login = this.getIdentity();
+                        let login = await this.getIdentity();
                         if(login){
                             this.$emit('user-logged-in');
                             this.error = false;
                         }
+                    }else if(response.data.message=="inactive"){
+                        this.error = "Por favor activa tu cuenta";
                     }else if(response.data.status=="error"){
-                        this.error = true;
+                        this.error = "Credenciales inválidas";
                     }
                 } catch (error) {
                     console.log(error); 
                 }
-                
             },
             getIdentity: async function() {
                 const data = {
@@ -113,8 +137,26 @@
                     this.isVisibleLogIn = true;
                     this.isVisibleCreateAccount = false;
                 }
-
-            }
+            },
+            showForgotPassword: function () {
+                if(this.isVisibleResetPassword == false) {
+                    this.isVisibleLogIn = false;
+                    this.isVisibleResetPassword = true;
+                }else {
+                    this.isVisibleLogIn = true;
+                    this.isVisibleResetPassword = false;
+                }
+            },
+            handleUserRegistered: function (status) {
+                switch (status) {
+                    case false :
+                        this.status = status;
+                        break;
+                    default:
+                        this.status = status;
+                        break;
+                }
+            },
         }
     }
 </script>

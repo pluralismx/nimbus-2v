@@ -12,14 +12,16 @@
 
         <!-- Aside -->
         <WizardAsideComponent
-            @update-html-template = "handleUpdateHtmlTemplate"
-            @send-emails="handleSendEmails"
-            @email-added="handleEmailAdded"
             :recipientsSettings = "recipientsSettings"
             :templateSettings = "templateSettings"
             :clientSettings="isVisibleClientSettings"
             :images="images"
             :website="website"
+            @update-html-template = "handleUpdateHtmlTemplate"
+            @send-emails="handleSendEmails"
+            @email-added="handleEmailAdded"
+            @image-uploaded="handleImageUploaded"
+
         />
 
         <!-- Preview -->
@@ -111,6 +113,9 @@
             },
             handleCloseSendEmailsModal: function () {
                 this.isVisibleSendEmailsModal = false;
+            },
+            handleImageUploaded: function (notification) {
+                this.$emit('image-uploaded', notification);
             }
         }
     }

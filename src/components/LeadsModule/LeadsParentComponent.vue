@@ -86,6 +86,10 @@
                 type: Number,
                 required: true
             },
+            identity: {
+                type: Object,
+                required: true
+            },
             leads: {
                 type: Array,
                 required: true

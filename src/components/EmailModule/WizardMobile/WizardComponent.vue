@@ -114,7 +114,7 @@
                 templateImageSection: '',
                 templateImageData: {},
                 isVisibleUploadImageModal: false,
-                isVisibleSendEmailsModal: true,
+                isVisibleSendEmailsModal: false,
                 // isVisibleClientSettings: false,
                 emailContent: ''
             }

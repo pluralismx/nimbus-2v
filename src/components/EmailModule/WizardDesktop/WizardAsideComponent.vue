@@ -49,11 +49,11 @@
         <!-- Modals -->
         <ImageUploadModalComponent 
             v-show="isVisibleUploadImageModal"
+            :images="images"
+            :website="website"
             @close-image-modal="handleCloseImageModal"
             @image-selected="handleImageSelected"
             @image-uploaded="handleImageUploaded"
-            :images="images"
-            :website="website"
         />
 
     </aside>
@@ -137,8 +137,8 @@
                 console.log(this.templateImageData);
                 this.templateImageData = json;
             },
-            handleImageUploaded: function () {
-                this.$('image-uploaded');
+            handleImageUploaded: function (notification) {
+                this.$emit('image-uploaded', notification);
             },
             handleEmailAdded: function (notification) {
                 this.$emit('email-added', notification);

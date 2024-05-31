@@ -44,19 +44,21 @@
             return {
                 smViewport: null,
                 isLogged: false,
-                identity: ''
+                identity: {}
             }
         },
         methods: {
-            handleUserLoggedIn(){
-                this.identity = JSON.parse(localStorage.getItem('identity'));
+            handleUserLoggedIn: async function (){
+                this.identity = await JSON.parse(localStorage.getItem('identity'));
                 this.isLogged = true;
+                console.log(this.identity);
             },
             handleUserLoggedOut(){
                 axios.get('api/logout', {"withCredentials": true})
                     .then(res=>{
                         if(res.data == 'success'){
                             this.isLogged = false;
+                            localStorage.removeItem('identity');
                         }
                     })
                     .catch(error=>{

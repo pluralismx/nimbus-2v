@@ -9,6 +9,7 @@
     <ModalAddFriendComponent 
         v-show="isVisibleAddFriendModal"
         @close-modal="this.toggleAddFriendModal"
+        @friend-request-sent="handleFriendRequestSent"
     />
 </template>
 <script>
@@ -112,6 +113,12 @@ export default {
         },
         handleFriendDeleted: function (notification) {
             this.$emit('friend-deleted', notification);
+        },
+        handleFriendRequestSent: function () {
+            this.$emit('friend-request-sent', {
+                "text":"Solicitud de amistad enviada",
+                "status":"success"
+            });
         }
     }
 }

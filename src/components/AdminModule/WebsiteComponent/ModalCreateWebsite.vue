@@ -73,10 +73,10 @@ export default {
             const response = await axios.post('api/website/create', formData, { "withCredentials":  true});
             if (response.data.status == 'success') {
                 this.apiKey = response.data.api_key;
-                this.button = 'aceptar'
-                this.$emit('website-created');
+                this.button = 'aceptar';
+                this.$emit('website-created', {"text":"Sitio creado con éxito", "status":"success"});
             }else {
-                console.log('error');
+                this.$emit('website-created', {"text":"No se pudo crear el sitio", "status":"error"});
             }
         }
     }

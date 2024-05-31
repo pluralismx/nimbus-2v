@@ -131,6 +131,7 @@
                             if(index > -1) {
                                 this.selectedOptions.splice(index, 1);
                             }
+                            this.singleEmail = '';
                             this.isIndividualSelected = false;
                         }
                         break;
@@ -226,6 +227,14 @@
     padding-right: 1rem;
     display: flex;
     justify-content: center;
+}
+
+@media only screen and (max-width: 1440px){
+    .settings-body {
+        display: flex;
+        flex-direction: column;
+        padding: 0 1rem;
+    }
 }
 
 

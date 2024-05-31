@@ -20,6 +20,10 @@ import axios from '@/lib/axios';
             websiteId: {
                 type: Number,
                 required: true
+            },
+            identity: {
+                type: Object,
+                required: true
             }
         },
         data () {
@@ -30,31 +34,31 @@ import axios from '@/lib/axios';
         },
         methods: {
             saveNote: async function () {
+                if(this.websiteId != ''){
+                    let formData = new FormData();
+                    const json = {
+                        'id_user': this.identity.sub,
+                        'id_website': this.websiteId,
+                        'title': this.title,
+                        'content': this.content
+                    }
 
-                let identity = localStorage.getItem('identity');
-                let credentials = JSON.parse(identity);
-                let user_id = credentials.sub;
+                    formData.append('json', JSON.stringify(json));
 
-                let formData = new FormData();
-                const json = {
-                    'id_user': user_id,
-                    'id_website': this.websiteId,
-                    'title': this.title,
-                    'content': this.content
-                }
-
-                formData.append('json', JSON.stringify(json));
-
-                const response = await axios.post('api/note/create', formData, {"withCredentials": true});
-                if(response.data.status=="success"){
-                    this.$emit('note-created', {"text":"Nota guardada", "status":"success"});
-                    this.title = '',
-                    this.content = ''
+                    const response = await axios.post('api/note/create', formData, {"withCredentials": true});
+                    if(response.data.status=="success"){
+                        this.$emit('note-created', {"text":"Nota guardada", "status":"success"});
+                        this.title = '',
+                        this.content = ''
+                    }else {
+                        this.$emit('note-created', {"text":"No se pudo crear la nota", "status":"error"});
+                        this.title = '',
+                        this.content = ''
+                    }
                 }else {
-                    this.$emit('note-created', {"text":"No se pudo crear la nota", "status":"error"});
-                    this.title = '',
-                    this.content = ''
+                    this.$emit('note-created', {"text":"No tienes sitios web", "status":"error"});
                 }
+
             }
         }
     }

@@ -20,6 +20,9 @@
                     @teammate-role-updated="handleTeammateRoleUpdated"
                     @teammate-deleted="handleTeammateDeleted"
                     @teammate-added="handleTeammateAdded"
+                    @website-deleted="handleWebsiteDeleted"
+                    @website-created="handleWebsiteCreated"
+                    @website-updated="handleWebsiteUpdated"
                 />
             </div>
 
@@ -33,6 +36,7 @@
                 <FriendManagerComponent
                     @friends-loaded="handleFriendsLoaded"
                     @friend-deleted="handleFriendDeleted"
+                    @friend-request-sent="handleFriendRequestSent"
                 />
             </div>
             <ModalNotificationsComponent 
@@ -98,6 +102,8 @@ export default {
                 }
             }
         },
+
+        // Friendship
         handleFriendRequestAnswered: function () {
             this.toggleNotificationsModal();
             this.loadNotifications();
@@ -113,7 +119,21 @@ export default {
         },
         handleFriendDeleted: function (notification) {
             this.$emit('friend-deleted', notification);
-        } 
+        },
+        handleFriendRequestSent: function (notification){
+            this.$emit('friend-request-sent', notification);
+        },
+
+        // Websites
+        handleWebsiteDeleted: function (notification) {
+            this.$emit('website-deleted', notification);
+        },
+        handleWebsiteUpdated: function (notification) {
+            this.$emit('website-updated', notification);
+        },
+        handleWebsiteCreated: function (notification) {
+            this.$emit('website-created', notification);
+        }
     },
 
 }

@@ -10,6 +10,9 @@ export function render(data) {
         <meta name="color-scheme" content="light dark">
         <meta name="supported-color-schemes" content="light dark">
         <style>
+        table {
+            font-size: 18px;
+        }
         @media only screen and (max-width: 600px){
             .webkit {
                 width: 100% !important;
@@ -34,7 +37,7 @@ export function render(data) {
         <center class="wrapper">
         <div class="webkit" style="width:600px;padding-bottom:60px;">
             <!-- Header -->
-            <table role="header" style="border-spacing:0;font-size:18px;width: 100%;" align="center" cellspacing="0">
+            <table role="header" style="border-spacing:0;width: 100%;" align="center" cellspacing="0">
             <tr>
                 <td style="border-spacing:0;background-color: ${data.theme}; text-align: center; padding: 16px;">
                 <img src="${data.logo}" alt="Logo" width="180px">
@@ -42,7 +45,7 @@ export function render(data) {
             </tr>
             </table>
             <!-- Banner -->
-            <table role="banner" style="border-spacing:0;font-size:18px;width: 100%;">
+            <table role="banner" style="border-spacing:0;width: 100%;background-color:white;">
             <tr>
                 <td style="border-spacing:0;padding:0px">
                 <img src="${data.banner}" alt="Banner" width="100%"/>
@@ -50,7 +53,7 @@ export function render(data) {
             </tr>
             </table>
             <!-- Offers -->
-            <table role="offers" style="border-spacing:0;font-size:18px;width: 100%; background-color: #FFFFFF;" cellspacing="0">
+            <table role="offers" style="border-spacing:0;width: 100%; background-color: #FFFFFF;" cellspacing="0">
             <tr>
                 <td align="center" style="border-spacing:0;padding-top: 32px; padding-bottom: 16px; width: 50%;">
                 <img src="${data.features}" alt="illustration" width="70%"/>
@@ -73,7 +76,7 @@ export function render(data) {
             </tr>
             </table>
             <!-- Social -->
-            <table width="100%" style="border-spacing:0;font-size:18px;background-color: ${data.theme};" cellspacing="0">
+            <table width="100%" style="border-spacing:0;background-color: ${data.theme};" cellspacing="0">
             <tr>
                 <td align="center" style="border-spacing:0;padding: 16px;">
                 <p style="color: #ffffff;">Conectese con nosotros</p>
@@ -84,7 +87,7 @@ export function render(data) {
             </tr>
             </table>
             <!-- Footer -->
-            <table width="100%" style="border-spacing:0;font-size:18px;background-color: #efefef;" cellspacing="0">
+            <table width="100%" style="border-spacing:0;background-color: #efefef;" cellspacing="0">
             <tr>
                 <td align="center" style="border-spacing:0;padding: 16px;">
                 <img src="${data.footer}" alt="Logo" width="140px">
@@ -96,7 +99,7 @@ export function render(data) {
             </tr>
             </table>
             <!-- Tab -->
-            <table width="100%" cellspacing="0" style="border-spacing:0;font-size:18px;">
+            <table width="100%" cellspacing="0" style="border-spacing:0;">
             <tr>
                 <td style="border-spacing:0;height: 24px; background-color: ${data.theme};">
                 </td>

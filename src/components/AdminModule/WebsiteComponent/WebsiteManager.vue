@@ -7,6 +7,7 @@
             @website-selected="handleWebsiteSelected"
             @website-deleted="handleWebsiteDeleted"
             @website-updated="handleWebsiteUpdated"
+            @website-created="handleWebsiteCreated"
         />
 
         <!-- Website Team Members -->
@@ -61,13 +62,7 @@ export default {
         }
     },
     methods: {
-        handleWebsiteSelected: function (website) {
-            
-            this.website_id = website.id;
-            this.website_name = website.name;
-            this.loadWebsiteTeammates();
 
-        },
         loadWebsiteTeammates: async function () {
             console.log(this.website_id);
             try{
@@ -95,18 +90,32 @@ export default {
             this.loadWebsiteTeammates();
             this.$emit('teammate-added', notification);
         },
-        handleWebsiteDeleted: function () {
-            this.websiteTeam = {};
-        },
-        handleWebsiteUpdated: function (website_name) {
-            this.websiteTeam.website_name = website_name;
-        },
         handleTeammateRoleUpdated: function (notification) {
             this.$emit('teammate-role-updated', notification);
         },
         handleTeammateDeleted: function (notification) {
             this.$emit('teammate-deleted', notification);
-        }
+        },
+
+        //Websites CRUD
+        handleWebsiteSelected: function (website) {
+            this.website_id = website.id;
+            this.website_name = website.name;
+            this.loadWebsiteTeammates();
+        },
+        handleWebsiteCreated: function (notification) {
+            this.$emit('website-created', notification);
+        },
+        handleWebsiteDeleted: function (notification) {
+            this.$emit("website-deleted", notification);
+            this.websiteTeam = {};
+        },
+        handleWebsiteUpdated: function (notification) {
+            this.$emit("website-updated", notification);
+            this.websiteTeam.website_name = notification.website;
+        },
+
+
     }
 }
 </script>

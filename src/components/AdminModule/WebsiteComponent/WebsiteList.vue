@@ -96,9 +96,6 @@ export default {
                 this.isVisibleCreateWebsiteModal = false;
             }
         },
-        handleWebsiteCreated: function () {
-            this.loadAdminWebsites();
-        },
         handleAuthorizationNeeded: function (action, website) {
             this.action = action;
             this.selectedWebsite = website;
@@ -111,37 +108,12 @@ export default {
                 this.isVisibleConfirmationModal = false;
             }
         },
-        handleConfirmationModalAnswer: async function (answer) {
-            let success;
-            if(answer === true) {
-                switch(this.action){
-                    case 'delete-website':
-                        success = await this.deleteWebsite();
-                        if(success){
-                            this.loadAdminWebsites();
-                            this.toggleConfirmationModal();
-                            
-                            this.$emit('website-deleted');
-                        }else{
-                            console.log('error');
-                        }
-                        break;
-                    case 'update-website':
-                        success = await this.updateWebsite();
-                        if(success){
-                            this.loadAdminWebsites();
-                            this.toggleConfirmationModal();
-                            this.$emit('website-updated', this.selectedWebsite.name);
-                        }else{
-                            console.log('error');
-                        }
-                        break;
-                }
-            }else{
-                console.log("action denied");
-                this.toggleConfirmationModal();
-                this.answer = false;
-            }
+
+
+        // Websites CRUD
+        handleWebsiteCreated: function (notification) {
+            this.loadAdminWebsites();
+            this.$emit('website-created', notification);
         },
         deleteWebsite: async function () {
             try {
@@ -173,7 +145,42 @@ export default {
             } catch(error){
                 console.log('try failed');
             }
-        }
+        },
+        handleConfirmationModalAnswer: async function (answer) {
+            let success;
+            if(answer === true) {
+                switch(this.action){
+                    case 'delete-website':
+                        success = await this.deleteWebsite();
+                        if(success){
+                            this.loadAdminWebsites();
+                            this.toggleConfirmationModal();
+                            this.$emit('website-deleted', {"text":"Sitio eliminado", "status":"success"});
+                        }else{
+                            this.$emit('website-deleted', {"text":"No se pudo eliminar el sitio", "status":"error"});
+                        }
+                        break;
+                    case 'update-website':
+                        success = await this.updateWebsite();
+                        if(success){
+                            this.loadAdminWebsites();
+                            this.toggleConfirmationModal();
+                            this.$emit('website-updated', {
+                                "text":"Sitio actualizado", 
+                                "status":"success",
+                                "website":this.selectedWebsite.name
+                            });
+                        }else{
+                            this.$emit('website-updated', {"text":"No se pudo actualizar el sitio", "status":"error"});
+                        }
+                        break;
+                }
+            }else{
+                console.log("action denied");
+                this.toggleConfirmationModal();
+                this.answer = false;
+            }
+        },
     }
 }
 </script>

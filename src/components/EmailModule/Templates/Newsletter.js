@@ -10,7 +10,13 @@ export function render(data) {
         <meta name="color-scheme" content="light dark">
         <meta name="supported-color-schemes" content="light dark">
         <style type="text/css">
+        table {
+            font-size: 18px;
+        }
         @media only screen and (max-width: 600px) {
+            table {
+                font-size: 12px;
+            }
             .webkit {
                 width: 100% !important;
                 max-width: 600px !important;
@@ -31,6 +37,9 @@ export function render(data) {
             }
         }
         @container (max-width: 600px) {
+            table {
+                font-size: 12px;
+            }
             .webkit {
                 width: 100% !important;
                 max-width: 600px !important;
@@ -56,7 +65,7 @@ export function render(data) {
         <center class="wrapper">
         <div class="webkit" style="width:600px;padding-bottom:60px;">
             <!-- Header -->
-            <table role="header" style="border-spacing:0;font-size:18px;width: 100%;" align="center" cellspacing="0">
+            <table role="header" style="border-spacing:0;width: 100%;" align="center" cellspacing="0">
             <tr>
                 <td style="border-spacing:0;background-color: ${data.theme}; text-align: center; padding: 16px;">
                 <img src="${data.logo}" alt="Logo" width="180px">
@@ -64,24 +73,24 @@ export function render(data) {
             </tr>
             </table>
             <!-- Banner -->
-            <table role="banner" style="border-spacing:0;font-size:18px;width: 100%; align="center" cellspacing="0">
+            <table role="banner" style="border-spacing:0;width: 100%; align="center" cellspacing="0">
             <tr>
-                <td style="border-spacing:0;padding:0px;">
+                <td style="border-spacing:0;padding:0px;background-color:white;">
                 <img src="${data.banner}" alt="Banner" width="100%"/>
                 </td>
             </tr>
             </table>
             <!-- Introduction -->
-            <table style="font-size:18px; background-color: #FFFFFF">
+            <table style=" background-color: #FFFFFF">
             <tr>
                 <td>
-                <h1 style="padding: 16px; padding-bottom: 0px; text-align: center;">${data.title}</h1>
+                <h1 style="padding: 16px; padding-bottom: 12px; text-align: center;">${data.title}</h1>
                 <p style="padding: 16px; padding-top: 0px; line-height: 1.5;">${data.content}</p>
                 </td>
             </tr>
             </table>
             <!-- Explanation 1-->
-            <table role="offers" style="border-spacing:0;font-size:18px;width: 100%; background-color: #FFFFFF;" cellspacing="0">
+            <table role="offers" style="border-spacing:0;width: 100%; background-color: #FFFFFF;" cellspacing="0">
             <tr>
                 <td class="stacked" align="center" style="border-spacing:0;padding-top: 32px; padding-bottom: 16px; padding-left: 8px; padding-right: 8px;" width="50%" valign="top">
                 <img src="${data.picture_a}" alt="illustration" width="100%"/>
@@ -92,7 +101,7 @@ export function render(data) {
             </tr>
             </table>
             <!-- Explanation 2-->
-            <table role="offers" style="border-spacing:0;font-size:18px;width: 100%; background-color: #FFFFFF;" cellspacing="0">
+            <table role="offers" style="border-spacing:0;width: 100%; background-color: #FFFFFF;" cellspacing="0">
             <tr>
                 <td class="stacked" align="center" style="border-spacing:0;padding-top: 32px; padding-bottom: 16px; padding-left: 8px; padding-right: 8px;" width="50%" valign="top">
                 <img src="${data.picture_b}" alt="illustration" width="100%"/>
@@ -103,7 +112,7 @@ export function render(data) {
             </tr>
             </table>
             <!-- Social -->
-            <table width="100%" style="border-spacing:0;font-size:18px;background-color: ${data.theme};" cellspacing="0">
+            <table width="100%" style="border-spacing:0;background-color: ${data.theme};" cellspacing="0">
             <tr>
                 <td align="center" style="border-spacing:0;padding: 16px;">
                 <p style="color: #ffffff;">Connect with us</p>
@@ -114,7 +123,7 @@ export function render(data) {
             </tr>
             </table>
             <!-- Footer -->
-            <table width="100%" style="border-spacing:0;font-size:18px;background-color: #efefef;" cellspacing="0">
+            <table width="100%" style="border-spacing:0;background-color: #efefef;" cellspacing="0">
             <tr>
                 <td align="center" style="border-spacing:0;padding: 16px;">
                 <img src="${data.footer}" alt="Logo" width="140px">
@@ -126,7 +135,7 @@ export function render(data) {
             </tr>
             </table>
             <!-- Tab -->
-            <table width="100%" cellspacing="0" style="border-spacing:0;font-size:18px;">
+            <table width="100%" cellspacing="0" style="border-spacing:0;">
             <tr>
                 <td style="border-spacing:0;height: 24px; background-color: ${data.theme};">
                 </td>

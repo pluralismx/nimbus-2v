@@ -75,6 +75,7 @@ export default {
     },
     methods: {
         closeModal: function (){
+            this.errorMessage ='';
             this.$emit('close-modal');
         },
         searchContact: function () {
@@ -120,17 +121,27 @@ export default {
             axios.post('api/friendrequest/send', formData, {"withCredentials":true})
                 .then(res=>{
                     if(res.data.status == 'success'){
-                        this.errorMessage = ''
+                        this.email = null;
+                        this.result = '';
+                        this.selection = '';
+                        this.errorMessage ='';
                         this.closeModal();
+                        this.$emit('friend-request-sent');
                     }else if(res.data.message == 'You can not friend yourself'){
-                        this.errorMessage = 'No puedes agregarte a ti mismo'
+                        this.email = null;
+                        this.result = '';
+                        this.selection = '';
+                        this.errorMessage = 'No puedes agregarte a ti mismo';
+                    }else if(res.data.message == 'Friend request already sent'){
+                        this.email = null;
+                        this.result = '';
+                        this.selection = '';
+                        this.errorMessage = 'Ya has enviado una invitacion a esta persona';
                     }
                 })
                 .catch(error=>{
                     console.log(error);
-                })
-
-
+                });
         }
     }
 }

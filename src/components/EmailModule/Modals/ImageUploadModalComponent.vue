@@ -21,7 +21,7 @@
 
                 <div class="modal-image-footer-row">
                     <label for="input_image">
-                        Buscar en este dispositivo...
+                        {{ imageName }}
                         <input id="input_image" type="file" @change="selectImageToUpload"/>
                     </label>
                     <button class="btn-primary" @click="uploadImage"><img src="../../../assets/images/white-upload.png" width="20"/></button>
@@ -61,6 +61,7 @@ export default {
     data() {
         return {
             imageToUpload: null,
+            imageName: "Buscar en este dispositivo...",
             imageSelected: 'select an image'
         }
     },
@@ -70,25 +71,31 @@ export default {
         },
         selectImageToUpload(event) {
             this.imageToUpload = event.target.files[0];
+            this.imageName = this.imageToUpload.name;
         },
-        uploadImage() {
+        uploadImage: async function () {
             let formData = new FormData();
             formData.append("file0", this.imageToUpload);
             
-            axios.post('api/image/uploadImage/'+this.website, formData, {
+            const response = await axios.post('api/image/uploadImage/'+this.website, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 },
                 "withCredentials":true
             })
-            .then(response => {
-                if(response.data.status) {
-                    this.$emit('image-uploaded');
-                }
-            })
-            .catch(error => {
-                console.error('Error uploading image:', error);
-            });
+
+            if(response.data.status == "success") {
+                this.$emit('image-uploaded', {
+                    "text":"Imagen subida con éxito",
+                    "status":"success"
+                });
+            }else {
+                this.$emit('image-uploaded',{
+                    "text":"Error al cargar la imagen",
+                    "status":"error"
+                });
+            }
+
         },
         handleImageSelected: function (image_name) {
             this.imageSelected = image_name;
@@ -185,6 +192,7 @@ export default {
         align-content: center;
         box-sizing: border-box;
         flex-grow: 1;
+        
     }
 
     .modal-image-footer-row {
@@ -193,6 +201,7 @@ export default {
         grid-template-rows: 1fr;
         column-gap: .5rem;
         height: 100%;
+        overflow-y: hidden;
     }
 
 

@@ -63,7 +63,7 @@ export default {
         website_id: {
             type: Number,
             required: true
-        }
+        },
     },
     data(){
         return {

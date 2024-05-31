@@ -5,10 +5,13 @@
 
         <!-- Navigation bar -->
         <NavbarParentComponent
-            :userId="identity.sub" 
+            :identity="identity"
+            :reload="reload"
+            @website-list-updated="handleWebsiteListUpdated"
             @toggle-tool="handleToggleTool"
             @user-logged-out="handleUserLoggedOut"
             @load-dashboard-data="handleLoadDashboardData"
+            @user-has-no-websites="handleUserHasNoWebsites"
         />
 
         <!-- Aside -->
@@ -16,6 +19,7 @@
             v-show="isVisibleNotes"
             :website="website_id"
             :notes="notes"
+            :identity="identity"
             @note-created="handleNoteCreated"
             @note-deleted="handleStatusBarNotification"
             @note-updated="handleStatusBarNotification"
@@ -25,6 +29,7 @@
         <!-- Center -->
         <LeadsParentComponent 
             v-show="isVisibleLeads"
+            :identity="identity"
             :website="website_id"
             :leads="leads"
             :class="{ 'wide' : !isVisibleNotes }" 
@@ -37,6 +42,7 @@
 
         <EmailParentComponent 
             v-show="isVisibleEmail"
+            :identity="identity"
             :class="{ 'wide' : !isVisibleNotes }"
             :smViewport = smViewport
             :leads="leads"
@@ -49,10 +55,15 @@
         <AdminParentComponent 
             v-show="isVisibleTeam"
             :class="{ 'wide' : !isVisibleNotes }"
+            :identity="identity"
             @teammate-role-updated="handleStatusBarNotification"
             @teammate-added="handleStatusBarNotification"
             @teammate-deleted="handleStatusBarNotification"
             @friend-deleted="handleStatusBarNotification"
+            @friend-request-sent="handleStatusBarNotification"
+            @website-deleted="handleUpdateWebsiteList"
+            @website-created="handleUpdateWebsiteList"
+            @website-updated="handleUpdateWebsiteList"
         />
 
         <!-- Status bar -->
@@ -103,6 +114,7 @@ export default {
             isVisibleTeam: false,
             
             // Dashboard data
+            reload: false,
             website_id: '',
             notes: [],
             leads: [],
@@ -195,15 +207,14 @@ export default {
         handleUserLoggedOut: function (){
             this.$emit('user-logged-out');
         },
+
+        // Dashboard data
         handleLoadDashboardData: function (website_id) {
             this.website_id = website_id;
             this.loadWebsiteNotes();
             this.loadWebsiteLeads();
             this.loadWebsiteImages();
         },
-
-
-        // Dashboard data
         loadWebsiteLeads: async function () {
             try {
                 const response = await axios.get('api/lead/records/'+this.website_id, {"withCredentials": true});
@@ -229,10 +240,14 @@ export default {
             }
         },
 
-        // Update dashboard dadta
+        // Update dashboard data
         handleNoteCreated: function (notification) {
-            this.loadWebsiteNotes();
-            this.handleStatusBarNotification(notification);
+            if(notification.status != 'error'){
+                this.loadWebsiteNotes();
+                this.handleStatusBarNotification(notification);
+            }else {
+                this.handleStatusBarNotification(notification);
+            }
         },
         handleLeadDeleted: function (lead_id, notification) {  
             this.leads.forEach((item, index) => {
@@ -246,12 +261,26 @@ export default {
             this.loadWebsiteLeads();
             this.handleStatusBarNotification(notification);
         },
-        handleImageUploaded: function () {
+        handleImageUploaded: function (notification) {
             this.loadWebsiteImages();
+            this.handleStatusBarNotification(notification);
         },
         handleStatusBarNotification: function (notification){
             this.statusBarMessage=notification;
         },
+        handleUpdateWebsiteList: function (notification) {
+            this.handleStatusBarNotification(notification);
+            this.reload = true;
+        },
+        handleWebsiteListUpdated: function () {
+            this.reload = false;
+        },
+        handleUserHasNoWebsites: function () {
+            this.website_id='';
+            this.notes=[];
+            this.leads=[];
+            this.images=[];
+        }
     }
 }
 

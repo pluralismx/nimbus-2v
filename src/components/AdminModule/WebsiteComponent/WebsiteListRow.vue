@@ -62,7 +62,6 @@ export default {
             this.$emit('authorization-need', "update-website", newWebsiteData);
             this.toggleEditWebsiteRow();
         }
-
     }
 }
 </script>
