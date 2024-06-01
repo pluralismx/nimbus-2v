@@ -61,7 +61,7 @@ export default {
             email: '',
             password: '',
             smtpServer: '',
-            smtpPort: 425
+            smtpPort: 465
         }
     },
     methods: {

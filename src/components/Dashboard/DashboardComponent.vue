@@ -50,6 +50,7 @@
             :images="images"
             @image-uploaded="handleImageUploaded"
             @email-added="handleStatusBarNotification"
+            @image-deleted="handleStatusBarNotification"
         />
 
         <AdminParentComponent 
@@ -71,12 +72,18 @@
             :message="statusBarMessage"
         />
 
+        <!-- Modals -->
+        <IntroMessageComponent 
+            v-show=isVisibleIntroMessageComponent
+            @welcome-message-accepted="handleWelcomeMessageAccepted"
+        />
     </div>
 
 </template>
 
 <script>
 import axios from '@/lib/axios'
+import IntroMessageComponent from './IntroMessageComponent.vue';
 import NavbarParentComponent from '../NavbarModule/NavbarParentComponent.vue';
 import NotesParentComponent from '../NotesModule/NotesParentComponent.vue';
 import LeadsParentComponent from '../LeadsModule/LeadsParentComponent.vue';
@@ -92,7 +99,8 @@ export default {
         LeadsParentComponent,
         EmailParentComponent,
         AdminParentComponent,
-        StatusbarParentComponent
+        StatusbarParentComponent,
+        IntroMessageComponent
     },
     props: {
         smViewport: {
@@ -104,6 +112,9 @@ export default {
             required: true
         }
     },
+    mounted() {
+        this.showIntroMessage();
+    },
     data() {
         return {
 
@@ -112,6 +123,7 @@ export default {
             isVisibleLeads: false,
             isVisibleEmail: false,
             isVisibleTeam: false,
+            isVisibleIntroMessageComponent: false,
             
             // Dashboard data
             reload: false,
@@ -207,6 +219,16 @@ export default {
         handleUserLoggedOut: function (){
             this.$emit('user-logged-out');
         },
+        showIntroMessage: function () {
+            if(this.identity.intro_message == 1) {
+                this.isVisibleIntroMessageComponent = true;
+            }else {
+                this.isVisibleIntroMessageComponent = false;
+            }
+        },
+        handleWelcomeMessageAccepted: function () {
+            this.isVisibleIntroMessageComponent = false;
+        },
 
         // Dashboard data
         handleLoadDashboardData: function (website_id) {
@@ -262,6 +284,10 @@ export default {
             this.handleStatusBarNotification(notification);
         },
         handleImageUploaded: function (notification) {
+            this.loadWebsiteImages();
+            this.handleStatusBarNotification(notification);
+        },
+        handleImageDeleted: function (notification) {
             this.loadWebsiteImages();
             this.handleStatusBarNotification(notification);
         },

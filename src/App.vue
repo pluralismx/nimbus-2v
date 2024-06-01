@@ -27,6 +27,9 @@
             LoginParentComponent,
             DashboardComponent
         },
+        mounted() {
+            this.verifySession();
+        },
         computed: {
             isSmallViewport(){
                 return window.innerWidth < 768;
@@ -48,10 +51,16 @@
             }
         },
         methods: {
+            verifySession: async function () {
+                const response = await axios.get('api/session', {"withCredentials":true});
+                if(response.data.status === "success"){
+                    this.identity = await JSON.parse(localStorage.getItem('identity'));
+                    this.isLogged = true;
+                }
+            },
             handleUserLoggedIn: async function (){
                 this.identity = await JSON.parse(localStorage.getItem('identity'));
                 this.isLogged = true;
-                console.log(this.identity);
             },
             handleUserLoggedOut(){
                 axios.get('api/logout', {"withCredentials": true})
@@ -63,7 +72,7 @@
                     })
                     .catch(error=>{
                         console.log(error);
-                    })
+                    });
             }
         }
     }

@@ -8,7 +8,7 @@
                 <span class="close-cross" @click="closeEmailPreview">&times;</span>
             </div>
             <div class="template-container-body">
-                <iframe :src="'data:text/html;base64,'+previewTemplate" charset="UTF-8" sandbox></iframe>
+                <div class="preview-container" v-html="this.htmlTemplate" charset="UTF-8" sandbox></div>
             </div>
         </div>
     </div>
@@ -20,13 +20,39 @@
 
 export default {
     name: 'EmailPreviewModalComponent',
-    components: {
-
-    },
     props: {
         previewTemplate: {
             type: String,
             required: true
+        }
+    },
+    computed: {
+        htmlTemplate() {
+            let b64 = this.previewTemplate;
+            let html;
+            
+            // Check if previewTemplate is base64 encoded
+            try {
+                // Try to decode base64
+                html = atob(b64);
+                
+                // If successful, check if it's valid HTML
+                let parser = new DOMParser();
+                let doc = parser.parseFromString(html, 'text/html');
+                
+                // If parsing succeeds, it's valid HTML
+                if (doc.documentElement.nodeName === 'HTML') {
+                    return html;
+                } else {
+                    // If parsing fails, it's not valid HTML
+                    throw new Error('Not valid HTML');
+                }
+            } catch (error) {
+                // If decoding or parsing fails, treat it as plain text
+                html = b64;
+            }
+            
+            return html;
         }
     },
     methods: {
@@ -71,10 +97,6 @@ iframe {
     padding: 1rem;
     box-sizing: border-box;
     flex-grow: 1;
-}
-
-::-webkit-scrollbar {
-    display: none;
 }
 
 </style>

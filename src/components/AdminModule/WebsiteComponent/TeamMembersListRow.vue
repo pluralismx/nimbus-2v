@@ -33,9 +33,21 @@ export default {
             formData.append('json', JSON.stringify(json));
             const response = await axios.post('api/team/deleteTeammate', formData, {"withCredentials": true});
             if(response.data.status == "success"){
-                this.$emit('teammate-deleted', this.member.website_user_id, {"text":"Miembro eliminado", "status":"success"});
+                this.$emit('teammate-deleted', {
+                    "member":this.member.website_user_id,
+                    "text":"Miembro eliminado", 
+                    "status":"success"
+                });
+            }else if(response.data.message == "You can not delete yourself"){
+                this.$emit('teammate-deleted', {
+                    "text":"No te puedes eliminar a ti mismo", 
+                    "status":"error"
+                });
             }else{
-                this.$emit('teammate-deleted', this.member.website_user_id, {"text":"No se pudo eliminar al miembro", "status":"error"});
+                this.$emit('teammate-deleted', {
+                    "text":"No se pudo eliminar al miembro", 
+                    "status":"error"
+                });
             }
         },
         updateRole: async function (role) {

@@ -4,7 +4,7 @@
         <div class="modal-container">
 
             <div class="modal-header">
-                <span>Seguimiento</span>
+                <span>Seguimiento a {{ lead.name }}</span>
                 <span class="close-cross" @click="closeNotesModal">&times;</span>
             </div>
 

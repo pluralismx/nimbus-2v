@@ -237,5 +237,14 @@
     }
 }
 
+@media only screen and (max-width: 425px){
+    .settings-body {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        padding: 0 1rem;
+    }
+}
+
 
 </style>

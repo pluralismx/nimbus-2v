@@ -82,9 +82,9 @@ export default {
                 this.$emit('teammate-added', {"text":"No se pudo agregar el miembro al equipo", "status":"error"});
             }
         },
-        handleTeammateDeleted: function (id, notification) {
+        handleTeammateDeleted: function (notification) {
             this.websiteTeamData.team.forEach((teammate, index)=>{
-                if(teammate.website_user_id == id){
+                if(teammate.website_user_id == notification.member){
                     this.websiteTeamData.team.splice(index, 1);
                 }
             });

@@ -2,7 +2,7 @@
     <!-- Original lead -->
     <tr>
         <td v-show="edit==false" width="18%"><span class="span-clickable" @click="showDetails()">{{ name }}</span></td>
-        <td v-show="edit==false" width="18%"><a :href="'tel:'+phone"><span class="span-call-icon">&#128222;&nbsp;&nbsp;</span></a><a :href="'https://wa.me/'+phone" target="_blank"><span>{{ phone }}</span></a></td>
+        <td v-show="edit==false" width="18%"><a :href="'tel:'+phone"><span class="span-call-icon" @click="showDetails()">&#128222;&nbsp;&nbsp;</span></a><a :href="'https://wa.me/'+phone" target="_blank"><span>{{ phone }}</span></a></td>
         <td v-show="edit==false" width="18%"><span>{{ email }}</span></td>
         
         <td v-show="edit==false" width="18%">

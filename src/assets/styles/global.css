@@ -199,3 +199,9 @@ ul {
 .modal-close:hover {
     cursor: pointer;
 }
+
+@media only screen and (max-width: 1440px) {
+    body {
+        font-size: 14px;
+    }
+}

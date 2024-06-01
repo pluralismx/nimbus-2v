@@ -144,6 +144,13 @@ export default {
         width: 100%;
         resize: none;
         border: none;
+        padding: .5rem;
+        box-sizing: border-box;
+        border-radius: .5rem;
+    }
+
+    .input-block textarea:focus {
+        outline: none;
     }
 
     .modal-footer {

@@ -11,8 +11,9 @@
             <div class="modal-body">
                 <!-- Image thumbnailComponent -->
                 <ImageThumbnailComponent 
-                    v-for="image in images" :key="image.id" :image="image"
+                    v-for="image in imagesData" :key="image.id" :image="image"
                     @image-selected="handleImageSelected"
+                    @delete-image="handleDeleteImage"
                 />
             </div>
 
@@ -34,19 +35,24 @@
            </div>
 
         </div>
-
+        <!-- Confirmation Modal -->
+        <ModalConfirmationComponent 
+            v-show="isVisibleConfirmationModal"
+            @answer="handleModalAnswer"
+        />
     </div>
-
 </template>
 
 <script>
 
 import axios from '@/lib/axios.js';
 import ImageThumbnailComponent from './ImageThumbnailComponent.vue'
+import ModalConfirmationComponent from './ModalConfirmationComponent.vue'
 export default {
     name: 'ImageUploadModalComponent',
     components: {
-        ImageThumbnailComponent
+        ImageThumbnailComponent,
+        ModalConfirmationComponent
     },
     props: {
         website: {
@@ -58,18 +64,35 @@ export default {
             required: true
         }
     },
+    computed: {
+        imagesComputed() {
+            return this.images;
+        }
+    },
+    watch: {
+        imagesComputed: {
+            handler(newVal) {
+                this.imagesData = newVal
+            },
+            immediate: true,
+            deep: true
+        }
+    },
     data() {
         return {
+            imagesData: [],
             imageToUpload: null,
             imageName: "Buscar en este dispositivo...",
-            imageSelected: 'select an image'
+            imageSelected: "select an image",
+            isVisibleConfirmationModal: false,
+            imageId: null
         }
     },
     methods: {
-        closeModal(){
+        closeModal: function (){
             this.$emit('close-image-modal');        
         },
-        selectImageToUpload(event) {
+        selectImageToUpload: function (event) {
             this.imageToUpload = event.target.files[0];
             this.imageName = this.imageToUpload.name;
         },
@@ -82,7 +105,7 @@ export default {
                     'Content-Type': 'multipart/form-data'
                 },
                 "withCredentials":true
-            })
+            });
 
             if(response.data.status == "success") {
                 this.$emit('image-uploaded', {
@@ -100,9 +123,49 @@ export default {
         handleImageSelected: function (image_name) {
             this.imageSelected = image_name;
         },
+
         confirmSelection: function () {
             this.$emit('image-selected', this.imageSelected);
             this.$emit('close-image-modal');
+        },
+        handleDeleteImage: function (image_id) {
+            this.imageId = image_id;
+            this.isVisibleConfirmationModal = true;
+        },
+        handleModalAnswer: function (answer) {
+            if(answer==true){
+                this.deleteImage(this.imageId);
+            }else {
+                this.isVisibleConfirmationModal = false;
+            }
+        },
+        deleteImage: async function (image_id) {
+
+            const json = {
+                "website": this.website,
+                "image":image_id
+            }
+            let formData = new FormData();
+            formData.append('json', JSON.stringify(json));
+            const response = await axios.post('api/image/delete', formData, {"withCredentials": true});
+
+            if (response.data.status === "success") {
+                this.isVisibleConfirmationModal = false;
+                for (let i = this.imagesData.length - 1; i >= 0; i--) {
+                    if (this.imagesData[i].id === image_id) {
+                        this.imagesData.splice(i, 1);
+                    }
+                }
+                this.$emit('image-deleted', {
+                    "text":"Imagen eliminada",
+                    "status":"success"
+                });
+            }else {
+                this.$emit('image-deleted', {
+                    "text":"No se pudo eliminar la imagen",
+                    "status":"error"
+                });
+            }
         }
     }
 }

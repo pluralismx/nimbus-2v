@@ -54,6 +54,7 @@
             @close-image-modal="handleCloseImageModal"
             @image-selected="handleImageSelected"
             @image-uploaded="handleImageUploaded"
+            @image-deleted="handleImageDeleted"
         />
 
     </aside>
@@ -142,6 +143,9 @@
             },
             handleEmailAdded: function (notification) {
                 this.$emit('email-added', notification);
+            },
+            handleImageDeleted: function (notification) {
+                this.$emit('image-deleted', notification);
             }
         }
     }

@@ -42,6 +42,10 @@ export default {
         emailContent: {
             type: String,
             required: true // BASE64
+        },
+        website: {
+            type: Number,
+            required: true
         }
     },
     watch: {
@@ -64,13 +68,13 @@ export default {
             this.$emit('close-modal');
         },
         send: async function () {
-            // console.log(this.emailContent);
             try {
                 this.waiting = false;
                 this.sending = true;
                 const json = {
                     "recipients":this.recipientsData,
-                    "body": atob(this.emailContent)
+                    "body": atob(this.emailContent),
+                    "website": this.website
                 }
                 let formData = new FormData();
                 formData.append('json', JSON.stringify(json));
@@ -152,6 +156,7 @@ table {
 tbody tr td{
     padding: .5rem;
     border-bottom: 1px solid var(--accent);
+    font-size: 8px;
 }
 
 .td-success {
@@ -180,6 +185,10 @@ tbody tr td{
         padding: 1rem 1rem;
         background-color: transparent;
     }
+
+    tbody tr td{
+    font-size: 1rem;
+}
 
     .container-footer {        
         display: flex;

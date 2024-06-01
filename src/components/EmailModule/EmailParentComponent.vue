@@ -13,12 +13,12 @@
             @update-html-template="handleUpdateHtmlTemplate"
             @send-emails="handleSendEmails"
             @image-uploaded="handleImageUploaded"
+            @image-deleted="handleImageDeleted"
             @email-added="handleEmailAdded"
             :recipients="isVisibleRecipientsSettings"
             :clientSettings="isVisibleClientSettings"
             :website="website"
             :images="images"
-
         />
 
         <!-- Desktop -->
@@ -26,6 +26,7 @@
             v-else
             @send-emails="handleSendEmails"
             @image-uploaded="handleImageUploaded"
+            @image-deleted="handleImageDeleted"
             @email-added="handleEmailAdded"
             @update-html-template="handleUpdateHtmlTemplate"
             :website="website"
@@ -46,6 +47,7 @@
             @close-modal="handleCloseSendEmailsModal"
             :recipients="recipients"
             :emailContent="this.previewTemplate"
+            :website="website"
         />
 
     </section>
@@ -166,6 +168,9 @@
             },
             handleEmailAdded: function (notification) {
                 this.$emit('email-added', notification);
+            },
+            handleImageDeleted: function (notification) {
+                this.$emit('image-deleted', notification);
             }
 
         },

@@ -111,7 +111,7 @@
                             this.$emit('user-has-no-websites');
                         }
                     } else {
-                        throw new Error('Failed to fetch websites. Response status: ' + response.data.status);
+                        throw new Error('Failed to fetch websites. Response status: ' + response.data.message);
                     }
                 } catch (error) {
                     console.error('Error fetching friends:', error);

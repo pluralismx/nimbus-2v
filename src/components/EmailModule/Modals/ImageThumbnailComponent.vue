@@ -1,5 +1,6 @@
 <template>
     <div class="img-thumbnail" @click="imageSelected()">
+        <span class="modal-close" @click="deleteImage()">&times;</span>
         <img :src="'http://localhost/api-nimbus/storage/app/websites/' + image.name">
     </div>
 </template>
@@ -15,6 +16,9 @@ export default {
     methods: {
         imageSelected: function () {
             this.$emit('image-selected', this.image.name);
+        },
+        deleteImage: function () {
+            this.$emit('delete-image', this.image.id);
         }
     }
 }
@@ -32,7 +36,16 @@ export default {
     justify-content: center;
     border-radius: 4px;
     padding: 4px;
+    position: relative;
 }
+
+span {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    color: white;
+}
+
 
 .img-thumbnail img {
     width: 100%;

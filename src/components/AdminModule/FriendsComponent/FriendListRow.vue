@@ -30,6 +30,7 @@ tbody tr td {
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+    font-size: 14px;
 }
 
 tbody tr {

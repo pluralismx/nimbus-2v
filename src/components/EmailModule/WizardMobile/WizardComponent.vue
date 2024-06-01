@@ -56,13 +56,15 @@
             @close-image-modal="handleCloseImageModal"
             @image-selected="handleImageSelected"
             @image-uploaded="handleImageUploaded"
+            @image-deleted="handleImageDeleted"
         />
 
         <SendingEmailsModal 
             v-show="isVisibleSendEmailsModal"
             :emailContent="emailContent"
-            @close-modal="handleCloseSendEmailsModal"
             :recipients="emailAddresses"
+            :website="website"
+            @close-modal="handleCloseSendEmailsModal"
         />
         
     </div>
@@ -110,7 +112,7 @@
         data() {
             return {
                 template: null,
-                theme: null,
+                theme: "#037e99",
                 templateImageSection: '',
                 templateImageData: {},
                 isVisibleUploadImageModal: false,
@@ -154,11 +156,14 @@
                 }
                 this.templateImageData = json;
             },
-            handleImageUploaded: function () {
-                this.$emit('image-uploaded');
+            handleImageUploaded: function (notification) {
+                this.$emit('image-uploaded', notification);
             },
             handleEmailAdded: function (notification) {
                 this.$emit('email-added', notification);
+            },
+            handleImageDeleted: function (notification) {
+                this.$emit('image-deleted', notification);
             }
         }
     }

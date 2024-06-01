@@ -21,6 +21,7 @@
             @send-emails="handleSendEmails"
             @email-added="handleEmailAdded"
             @image-uploaded="handleImageUploaded"
+            @image-deleted="handleImageDeleted"
 
         />
 
@@ -116,6 +117,9 @@
             },
             handleImageUploaded: function (notification) {
                 this.$emit('image-uploaded', notification);
+            },
+            handleImageDeleted: function (notification) {
+                this.$emit('image-deleted', notification);
             }
         }
     }
