@@ -14,6 +14,7 @@
             :isSelected="template"
             :theme="theme"
             :image="templateImageData"
+
         />
 
         <!-- Promotional -->
@@ -24,6 +25,29 @@
             :isSelected="template"
             :theme="theme"
             :image="templateImageData"
+            :suscription="suscription"
+        />
+
+        <!-- Institutional -->
+        <InstitutionalSettingsComponent
+            v-show="template == 'institutional' && templateSettings == true"
+            @open-image-modal="handleOpenImageModal"
+            @update-html-template="handleUpdateHtmlTemplate" 
+            :isSelected="template"
+            :theme="theme"
+            :image="templateImageData"
+
+        />
+
+        <!-- Call to action -->
+        <CallToActionSettingsComponent
+            v-show="template == 'callToAction' && templateSettings == true"
+            @open-image-modal="handleOpenImageModal"
+            @update-html-template="handleUpdateHtmlTemplate" 
+            :isSelected="template"
+            :theme="theme"
+            :image="templateImageData"
+
         />
 
         <!-- Custom -->
@@ -63,6 +87,8 @@
     import TemplateSelectionComponent from '../TemplateSettings/TemplateSelectionComponent.vue'
     import NewsLetterSettingsComponent from '../TemplateSettings/NewsLetterSettingsComponent.vue'
     import PromotionalSettingsComponent from '../TemplateSettings/PromotionalSettingsComponent.vue'
+    import InstitutionalSettingsComponent from '../TemplateSettings/InstitutionalSettingsComponent.vue'
+    import CallToActionSettingsComponent from '../TemplateSettings/CallToActionSettingsComponent.vue'
     import CustomEmailEditorComponent from '../TemplateSettings/CustomEmailEditorComponent.vue'
     import ImageUploadModalComponent from '../Modals/ImageUploadModalComponent.vue'
     import RecipientsSettingsComponent from '../TemplateSettings/RecipientsSettingsComponent.vue'
@@ -74,6 +100,8 @@
             TemplateSelectionComponent,
             NewsLetterSettingsComponent,
             PromotionalSettingsComponent,
+            InstitutionalSettingsComponent,
+            CallToActionSettingsComponent,
             CustomEmailEditorComponent,
             ImageUploadModalComponent,
             RecipientsSettingsComponent,
@@ -99,11 +127,15 @@
             website: {
                 type: Number,
                 required: true
+            },
+            suscription: {
+                type: String,
+                required: true
             }
         },
         data() {
             return {
-                template: null,
+                template: "",
                 theme: "#037e99",
                 isVisibleUploadImageModal: false,
                 templateImageData: {},

@@ -38,6 +38,7 @@
             @lead-created="handleLeadCreated"
             @lead-updated="handleStatusBarNotification"
             @lead-status-updated="handleStatusBarNotification"
+            @csv-uploaded="handleCsvUploaded"
         />
 
         <EmailParentComponent 
@@ -242,7 +243,7 @@ export default {
                 const response = await axios.get('api/lead/records/'+this.website_id, {"withCredentials": true});
                 if(response.data.status=="success"){
                     this.leads = response.data.leads;
-                    this.getLeadEmails();
+                    console.log(this.leads);
                 }
             } catch (error) {
                 console.error('Error loading website leads:', error);
@@ -306,6 +307,10 @@ export default {
             this.notes=[];
             this.leads=[];
             this.images=[];
+        },
+        handleCsvUploaded: function (notification) {
+            this.handleStatusBarNotification(notification);
+            this.loadWebsiteLeads();
         }
     }
 }

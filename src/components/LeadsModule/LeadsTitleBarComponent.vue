@@ -1,15 +1,22 @@
 <template>
-    <div>
+    <div class="main-container">
         <h1>Prospectos</h1>
-        <span @click="saveLead">agregar</span>
+        <div class="title-bar-menu">
+            <span @click="saveLead()">agregar</span>
+            <span>&nbsp;|&nbsp;</span>
+            <span @click="uploadCvs()">cargar CVS</span>
+        </div>
     </div>
 </template>
 <script>
     export default {
         name: 'LeadsTitleBarComponent',
         methods: {
-            saveLead(){
+            saveLead: function (){
                 this.$emit('save-lead');
+            },
+            uploadCvs: function () {
+                this.$emit('show-upload-cvs');
             }
         }
     }
@@ -18,7 +25,7 @@
 
     /* Mobile first */
 
-    div {
+    .main-container {
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -32,5 +39,6 @@
     span:hover {
         cursor: pointer;
     }
+
 
 </style>

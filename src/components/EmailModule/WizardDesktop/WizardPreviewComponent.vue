@@ -55,7 +55,7 @@
 
     }
 </script>
-<style>
+<style scoped>
 .preview-wrapper {
     box-sizing: border-box;
     width: 100%;
@@ -78,7 +78,6 @@
     scrollbar-width: none; /* Hide the scrollbar for Firefox */
     -ms-overflow-style: none; /* Hide the scrollbar for IE and Edge */
     container-type: size;
-    
 }
 
 .preview-container::-webkit-scrollbar {

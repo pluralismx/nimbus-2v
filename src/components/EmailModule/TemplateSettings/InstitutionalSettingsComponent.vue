@@ -1,4 +1,5 @@
 <template>
+    
     <section>
 
         <!-- Subject -->
@@ -32,98 +33,36 @@
                     <label>Logotipo</label>
                     <div>
                         <input v-model="templateData.logo" class="input-primary" type="text">
-                        <button class="btn-primary" @click="openImageModal('promotionalHeaderLogo')">imagen...</button>
-                    </div>
-                </div>
-                <!-- Banner -->
-                <div class="image-input-block">
-                    <label>Pancarta</label>
-                    <div>
-                        <input v-model="templateData.banner" class="input-primary" type="text">
-                        <button class="btn-primary" @click="openImageModal('promotionalHeaderBanner')">imagen...</button>
+                        <button class="btn-primary" @click="openImageModal('headerImage')">imagen...</button>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Features -->
+        <!-- Introduction -->
         <div class="settings-container">
             <!-- Title -->
             <div class="settings-header">
-                <span>Características</span>
+                <span>Introducción</span>
             </div>
-            <!-- Content -->
             <div class="settings-body">
-                <!-- Image -->
-                <div class="image-input-block">
-                    <label>Imagen</label>
-                    <div>
-                        <input v-model="templateData.features" class="input-primary" type="text">
-                        <button class="btn-primary" @click="openImageModal('promotionalFeaturesImage')">imagen...</button>
-                    </div>
-                </div>
-                <!-- Feature 1 -->
+                <!-- Heading -->
                 <div class="text-input-block">
-                    <label>Característica 1</label>
+                    <label>Título</label>
                     <div>
-                        <input v-model="templateData.feature_a" class="input-primary" type="text">
+                        <input v-model="templateData.title" class="input-primary" type="text">
                     </div>
                 </div>
-                <!-- Feature 2 -->
-                <div class="text-input-block">
-                    <label>Característica 2</label>
-                    <div>
-                        <input v-model="templateData.feature_b" class="input-primary" type="text">
-                    </div>
-                </div>
-                <!-- Feature 3 -->
-                <div class="text-input-block">
-                    <label>Característica 3</label>
-                    <div>
-                        <input v-model="templateData.feature_c" class="input-primary" type="text">
-                    </div>
-                </div>
-            </div>
-        </div>
 
-        <!-- Benefits -->
-        <div class="settings-container">
-            <!-- Title -->
-            <div class="settings-header">
-                <span>Beneficios</span>
-            </div>
-            <!-- Content -->
-            <div class="settings-body">
-                <!-- Image -->
-                <div class="image-input-block">
-                    <label>Imagen</label>
-                    <div>
-                        <input v-model="templateData.benefits" class="input-primary" type="text">
-                        <button class="btn-primary" @click="openImageModal('promotionalBenefitsImage')">imagen...</button>
-                    </div>
-                </div>
-                <!-- Beneficio 1 -->
+                <!-- Content -->
                 <div class="text-input-block">
-                    <label>Beneficio 1</label>
+                    <label>Texto</label>
                     <div>
-                        <input v-model="templateData.benefit_a" class="input-primary" type="text">
-                    </div>
-                </div>
-                <!-- Beneficio 2 -->
-                <div class="text-input-block">
-                    <label>Beneficio 2</label>
-                    <div>
-                        <input v-model="templateData.benefit_b" class="input-primary" type="text">
-                    </div>
-                </div>
-                <!-- Beneficio 3 -->
-                <div class="text-input-block">
-                    <label>Beneficio 3</label>
-                    <div>
-                        <input v-model="templateData.benefit_c" class="input-primary" type="text">
+                        <textarea v-model="templateData.content"></textarea>
                     </div>
                 </div>
             </div>
+
         </div>
 
         <!-- Social -->
@@ -170,8 +109,8 @@
                 <div class="image-input-block">
                     <label>Logotipo</label>
                     <div>
-                        <input v-model="templateData.footer" class="input-primary" type="text">
-                        <button class="btn-primary" @click="openImageModal('promotionalFooterImage')">imagen...</button>
+                        <input class="input-primary" type="text" v-model="templateData.footer">
+                        <button class="btn-primary" @click="openImageModal('footerImage')">imagen...</button>
                     </div>
                 </div>
                 <!-- Slogan -->
@@ -204,17 +143,17 @@
                 </div>
             </div>
         </div>
-
     </section>
+
 </template>
 <script>
-    import { render } from '../Templates/Promotional.js';
+    import { render } from '../Templates/Institutional.js'
     export default {
-        name: 'PromotionalSettingsComponent',
+        name: 'InstitutionalSettingsComponent',
         props: {
             isSelected: {
                 type: String,
-                required: false
+                required: true
             },
             theme: {
                 type: String,
@@ -239,13 +178,15 @@
                 handler(newVal) {
                     
                     this.templateData.theme = newVal;
+                    console.log('se paso el valor de theme');
                 },
                 immediate: true,
                 deep: true
             },
             isSelected: {
                 handler(newVal){
-                    if(newVal === 'promotional'){
+                    console.log(newVal);
+                    if(newVal === 'institutional'){
                         this.html();
                     }
                 },
@@ -254,7 +195,7 @@
             },
             templateData: {
                 handler(){
-                    if(this.isSelected === 'promotional'){
+                    if(this.isSelected === 'institutional'){
                         this.html();
                     }
                 },
@@ -264,19 +205,13 @@
             image: {
                 handler() {
                     switch(this.image.section){
-                        case 'promotionalHeaderLogo' :
+                        case 'headerImage' :
                             this.templateData.logo = "http://localhost/api-nimbus/storage/app/websites/"+this.image.image_name;
                             break;
-                        case 'promotionalHeaderBanner' :
+                        case 'bannerImage' :
                             this.templateData.banner = "http://localhost/api-nimbus/storage/app/websites/"+this.image.image_name;
                             break;
-                        case 'promotionalFeaturesImage' :
-                            this.templateData.features = "http://localhost/api-nimbus/storage/app/websites/"+this.image.image_name;
-                            break;
-                        case 'promotionalBenefitsImage' :
-                            this.templateData.benefits = "http://localhost/api-nimbus/storage/app/websites/"+this.image.image_name;
-                            break;
-                        case 'promotionalFooterImage' :
+                        case 'footerImage' :
                             this.templateData.footer = "http://localhost/api-nimbus/storage/app/websites/"+this.image.image_name;
                             break;
                     }       
@@ -286,41 +221,43 @@
                 handler(){
                     this.html();
                 }
-            },
+            }
         },
         data() {
             return {
                 subject: '',
                 templateData: {
-                    theme: '',
+                    // template content
+                    theme: null,
                     logo: "http://localhost/api-nimbus/storage/assets/logo-template.png",
                     banner: "http://localhost/api-nimbus/storage/assets/banner-template.png",
-                    features: "http://localhost/api-nimbus/storage/assets/illustration-template.png",
-                    feature_a: '',
-                    feature_b: '',
-                    feature_c: '',
-                    benefits: "http://localhost/api-nimbus/storage/assets/illustration-template.png",
-                    benefit_a: '',
-                    benefit_b: '',
-                    benefit_c: '',
-                    facebook_link: '',
-                    instagram_link: '',
-                    youtube_link: '',
+                    title: 'Daedalus et Icarus',
+                    content: 'Daedalus, faber ingeniosus, fuit artifex eximius qui Minos, rex Cretensis, auxiliatus est construere labyrinthum in quo Minotaurus, monstro feroce, inclusus est. Sed Daedalus et filius eius, Icarus, a rege in labyrintho inclusi sunt. Non poterant effugere per vias labyrinthi, itaque Daedalus consilium cepit.<br/><br/>Daedalus de pennarum ordine cogitavit. Ipse sibi alas fecit ex cera et plumis, et ínter eas adhesit plumas leviores. Postquam alas sibi et Icaro imposuit, admonuit filium ne nimium ad caelum attolleret neve nimium appropinquare soli.<br/><br/>Sed Icarus, juvenis temerarius, gaudebat nova potentia alarum. Volabat in caelum, felix et libere, sed, ob audaciam, solis radiis nimium appropinquavit. Cera, quae alas iungebat, solis ardori liquefacta est, et Ícarus in mare cecidit. Pater, aegre dolens, Ícarum nuncupavit, atque sedibus caeli debitum poenam petivit.',
+                    
+
+                    // social link
+                    facebook_link: null,
+                    instagram_link: null,
+                    youtube_link: null,
+                    // footer
                     footer: "http://localhost/api-nimbus/storage/assets/logo-template.png",
-                    slogan: '',
-                    address: '',
-                    email: '',
-                    phone: '',
+                    slogan: "Pluralis - Desarrollo Web",
+                    address: "Ave. Alejandro Von Humboldt #19264, Tijuana, Mexico CP 22434",
+                    email: "contacto@pluralis.com.mx",
+                    phone: "+52 (664) 252 2024",
                     suscription_token: this.suscription
                 }
             }
         },
         methods: {
-            openImageModal: function (section){
+            openImageModal(section){
                 this.$emit('open-image-modal', section);
             },
             html: function (){
+                console.log('voy a renderizar el html');
+                console.log(this.templateData);
                 let b64 = render(this.templateData);
+
                 this.$emit('update-html-template', {
                     "subject": this.subject,
                     "body": b64
@@ -393,5 +330,4 @@
         font-family: 'Regular';
         padding: 4px;
     }
-    
 </style>

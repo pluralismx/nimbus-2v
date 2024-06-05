@@ -2,6 +2,7 @@
     <section>
         <LeadsTitleBarComponent 
             @save-lead="handleSaveLead"
+            @show-upload-cvs="handleShowUploadCsv"
         />
         <!-- Mobile devices -->
         <div class="leads-container" v-if="smViewport">
@@ -9,6 +10,7 @@
                 v-for="lead in leads" :key="lead.id" :lead="lead"
                 @show-edit-lead-modal="handleShowEditLeadModal"
                 @show-notes-modal="handleShowDetails"
+                
                 @lead-status-updated="handleLeadStatusUpdated"
                 @delete-lead="handleDeleteLead"
             />
@@ -54,6 +56,14 @@
             @close-modal="handleConfirmationAnswer"
         />
 
+        <ModalUploadCvsComponent 
+            v-show="isVisibleCvsModal"
+            :website="website"
+            @answer="handleShowUploadCsv"
+            @csv-uploaded="handleCsvUploaded"
+            
+        />
+
     </section>
 </template>
 <script>
@@ -65,6 +75,7 @@
     import EditLeadModalComponent from './EditLeadModalComponent.vue';
     import NotesLeadModalComponent from './NotesLeadModalComponent';
     import ModalConfirmationComponent from './ModalConfirmationComponent.vue';
+    import ModalUploadCvsComponent from './ModalUploadCvsComponent.vue';
 
     export default {
         name: 'LeadsParentComponent',
@@ -75,7 +86,8 @@
             SaveLeadModalComponent,
             EditLeadModalComponent,
             NotesLeadModalComponent,
-            ModalConfirmationComponent
+            ModalConfirmationComponent,
+            ModalUploadCvsComponent
         },
         props: {
             smViewport: {
@@ -101,6 +113,7 @@
                 isVisibleEditLeadModal: false,
                 isVisibleNotesLeadModal: false,
                 isVisibleConfirmationModal: false,
+                isVisibleCvsModal: false,
                 // Data
                 leadToEdit: {},
                 leadDetails: '',
@@ -179,13 +192,24 @@
             handleCancelEditLead: function () {
                 this.isVisibleEditLeadModal = false;
             },
+
+            // Upload CVS
+            handleShowUploadCsv: function () {
+                if(this.isVisibleCvsModal ==  false){
+                    this.isVisibleCvsModal = true;
+                }else {
+                    this.isVisibleCvsModal = false;
+                }
+            },
+            handleCsvUploaded: function (notification) {
+                this.$emit('csv-uploaded', notification);
+            }
         }
     }
 </script>
 <style scoped>
     
     /* Mobile first */
-
     section {
         grid-column: 1/2;
         grid-row: 2/3;
@@ -203,13 +227,11 @@
     }
 
     /* Desktop */
-
     @media only screen and (min-width: 1024px) {
         section {
             grid-column: 2/3;
             grid-row: 2/3;
         }
-
         .wide {
             grid-column: 1/3;
             grid-row: 2/3;
@@ -219,6 +241,5 @@
             height: 100%;
         }
     }
-
 
 </style>

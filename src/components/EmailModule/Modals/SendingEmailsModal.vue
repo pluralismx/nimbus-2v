@@ -23,6 +23,7 @@
                     </table>
                 </div>
             </div>
+            <span class="span-error" v-show="error">Cuenta de correo no configurada</span>
             <div class="container-footer">
                 <button class="btn-warning" @click="send()">enviar</button>
                 <button class="btn-primary" @click="closeModal()">cancelar</button>
@@ -46,6 +47,10 @@ export default {
         website: {
             type: Number,
             required: true
+        },
+        subject: {
+            type: String,
+            required: true
         }
     },
     watch: {
@@ -61,26 +66,32 @@ export default {
             recipientsData: [],
             waiting: true,
             sending: false,
+            error: true
         }
     },
     methods: {
         closeModal: function () {
+            this.error=false;
             this.$emit('close-modal');
         },
         send: async function () {
+            
             try {
                 this.waiting = false;
                 this.sending = true;
                 const json = {
+                    "subject":this.subject,
                     "recipients":this.recipientsData,
                     "body": atob(this.emailContent),
                     "website": this.website
                 }
+
+                console.log(json);
                 let formData = new FormData();
                 formData.append('json', JSON.stringify(json));
                 const response = await axios.post("api/email/sendCampaign", formData, {"withCredentials": true});
                 
-                if(response.data) {
+                if(response.data.status != 'error') {
                     this.sending = false;
                     response.data.forEach((item)=>{
                         this.recipientsData.forEach((contact)=>{
@@ -93,7 +104,7 @@ export default {
                     });
                     this.waiting = true;
                 }else {
-                    console.log(response.data);
+                    this.error = true;
                 }
             } catch (error) {
                 console.log(error);
@@ -110,6 +121,7 @@ export default {
     box-shadow: 2px 2px 8px var(--shadows);
     border-radius: .5rem;
     width: 75%;
+    position: relative;
 }
 
 .container-head {
@@ -167,6 +179,14 @@ tbody tr td{
     color: var(--warn);
 }
 
+.span-error {
+    position: absolute;
+    font-size: 12px;
+    left: 1rem;
+    transform: translateY(-1rem);
+    color: var(--warn);
+}
+
 @media only screen and (min-width: 1024px){
     .container {
         background-color: var(--basic);
@@ -187,8 +207,8 @@ tbody tr td{
     }
 
     tbody tr td{
-    font-size: 1rem;
-}
+        font-size: 1rem;
+    }
 
     .container-footer {        
         display: flex;

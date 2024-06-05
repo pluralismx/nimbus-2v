@@ -45,6 +45,7 @@
         <SendEmailsModalComponent 
             v-show="isVisibleSendEmailsModal"
             @close-modal="handleCloseSendEmailsModal"
+            :subject="this.subject"
             :recipients="recipients"
             :emailContent="this.previewTemplate"
             :website="website"
@@ -94,8 +95,8 @@
                 isVisibleSendEmailsModal: false,
                 isVisibleClientSettings: false,
                 previewTemplate: null,
-                theme: null,
-                recipients: []
+                recipients: [],
+                subject: ''
             }
         },
         methods: {
@@ -111,7 +112,8 @@
 
             // Email
             handleUpdateHtmlTemplate: function (template) {
-                this.previewTemplate = template;
+                this.previewTemplate = template.body;
+                this.subject = template.subject;
             },
             handleShowRecipientSettings: function (){
                 if(!this.isVisibleRecipientsSettings){
@@ -129,9 +131,15 @@
 
                     // Iteramos sobre los leads para agregar correos electrónicos con nombre
                     this.leads.forEach((lead) => {
-                        if (lead.email === list && !addedEmails.includes(lead.email)) {
+                        if (lead.email === list && !addedEmails.includes(lead.email) && lead.subscribed == true) {
                             if (lead.name) {
-                                this.recipients.push({ address: list, sentStatus: '', name: lead.name });
+                                this.recipients.push({ 
+                                    address: list, 
+                                    sentStatus: '', 
+                                    name: lead.name, 
+                                    suscription_token: 
+                                    lead.suscription_token 
+                                });
                                 addedEmails.push(lead.email);  // Actualizamos el array de correos añadidos
                             }
                         }
@@ -139,15 +147,25 @@
 
                     // Verificamos fuera del bucle si aún no se ha añadido el correo electrónico
                     if (!addedEmails.includes(list)) {
-                        this.recipients.push({ address: list, sentStatus: '', name: 'Hola' });
+                        this.recipients.push({ 
+                            address: list, 
+                            sentStatus: '', 
+                            name: 'Hola' 
+                        });
                         addedEmails.push(list);  // Actualizamos el array de correos añadidos
                     }
 
                 } else if (Array.isArray(list)) { 
                     const includeTodos = list.includes("todos");
                     this.leads.forEach((item) => {
-                        if (includeTodos || list.includes(item.status)) {
-                            this.recipients.push({ address: item.email, sentStatus: '', name: item.name });
+                        if (includeTodos || list.includes(item.status) && item.subscribed == true) {
+                            this.recipients.push({ 
+                                address: item.email, 
+                                sentStatus: '', 
+                                name: item.name, 
+                                suscription_token: 
+                                item.suscription_token 
+                            });
                         }
                     });
                 }

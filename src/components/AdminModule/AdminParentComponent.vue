@@ -1,13 +1,12 @@
 <template>
     <section>
-        <!-- Title bar-->
+        <!-- Admin Panel-->
         <AdminPanelTitleBarComponent 
             @show-notification-modal="toggleNotificationsModal"
             :hasNotifications="hasNotifications"
         />
 
         <div class="panel-container">
-            
             <!-- Website manager -->
             <div class="settings-container">
                 <!-- Header -->
@@ -39,6 +38,7 @@
                     @friend-request-sent="handleFriendRequestSent"
                 />
             </div>
+
             <ModalNotificationsComponent 
                 v-show="isVisibleNotificationsModal"
                 @close-notification-modal="toggleNotificationsModal"
@@ -46,6 +46,22 @@
                 :friendRequests="friendRequests"
             />
         </div>
+
+        <!-- My Account -->
+        <AccountPanelTitleBarComponent 
+            @show-notification-modal="toggleNotificationsModal"
+            :hasNotifications="hasNotifications"
+        />
+
+        <div class="panel-container">
+            <div class="settings-container">
+                <AccountManagerComponent
+
+                />
+            </div>
+        </div>
+
+        
     </section>
 </template>
 <script>
@@ -53,6 +69,8 @@ import axios from '@/lib/axios'
 import AdminPanelTitleBarComponent from './AdminPanelTitleBarComponent.vue'
 import ModalNotificationsComponent from './FriendsComponent/ModalNotificationsComponent.vue'
 import WebsiteManagerComponent from './WebsiteComponent/WebsiteManager.vue';
+import AccountPanelTitleBarComponent from './AccountTitleBarComponent.vue';
+import AccountManagerComponent from './AccountComponent/AccountManagerComponent.vue';
 import FriendManagerComponent from './FriendsComponent/FriendManager.vue';
 
 
@@ -63,6 +81,8 @@ export default {
         ModalNotificationsComponent,
         WebsiteManagerComponent,
         FriendManagerComponent,
+        AccountPanelTitleBarComponent,
+        AccountManagerComponent
     },
     data() {
         return {
@@ -144,7 +164,7 @@ export default {
         grid-row: 2/3;
         background-color: var(--basic);
         padding: 1rem;
-        display: flex;
+        display: block;
         flex-direction: column;
         align-items: center;
         overflow-y: scroll;
@@ -152,7 +172,7 @@ export default {
 
     .settings-container {
         margin-bottom: 2rem;
-        box-shadow: 2px 2px 6px var(--shadows);
+        box-shadow: 2px 2px 6px rgba(0,0,0,.8);
         border-radius: .5rem;
         display: flex;
         flex-direction: column;
@@ -189,17 +209,17 @@ export default {
 
         .panel-container {
             box-sizing: border-box;
-
             display: grid;
             grid-template-columns: 1fr 1fr;
             grid-template-rows: 100%;
             column-gap: 2rem;
-            flex-grow: 1;
-            min-height: 0;
+            /* flex-grow: 1;
+            min-height: 0; */
             margin-top: 0;
             margin-left: 1rem;
-            margin-bottom: 1rem;
+            margin-bottom: 4rem;
             margin-right: 1rem;
+            height: 71vh;
         }
 
         .settings-container {

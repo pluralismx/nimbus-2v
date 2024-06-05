@@ -10,12 +10,12 @@ export function render(data) {
         <meta name="color-scheme" content="light dark">
         <meta name="supported-color-schemes" content="light dark">
         <style type="text/css">
-        table {
-            font-size: 18px;
+        p {
+            margin-bottom: 1rem;
         }
         @media only screen and (max-width: 600px) {
             table {
-                font-size: 12px;
+                font-size: 12px !important;
             }
             .webkit {
                 width: 100% !important;
@@ -38,7 +38,7 @@ export function render(data) {
         }
         @container (max-width: 600px) {
             table {
-                font-size: 12px;
+                font-size: 12px !important;
             }
             .webkit {
                 width: 100% !important;
@@ -83,7 +83,7 @@ export function render(data) {
             <!-- Introduction -->
             <table style=" background-color: #FFFFFF">
             <tr>
-                <td>
+                <td style="font-size: 16px;">
                 <h1 style="padding: 16px; padding-bottom: 12px; text-align: center;">${data.title}</h1>
                 <p style="padding: 16px; padding-top: 0px; line-height: 1.5;">${data.content}</p>
                 </td>
@@ -92,10 +92,10 @@ export function render(data) {
             <!-- Explanation 1-->
             <table role="offers" style="border-spacing:0;width: 100%; background-color: #FFFFFF;" cellspacing="0">
             <tr>
-                <td class="stacked" align="center" style="border-spacing:0;padding-top: 32px; padding-bottom: 16px; padding-left: 8px; padding-right: 8px;" width="50%" valign="top">
+                <td class="stacked" align="center" style="border-spacing:0;padding-top: 32px;padding-bottom: 16px;padding-left: 8px;padding-right: 8px;" width="50%" valign="top">
                 <img src="${data.picture_a}" alt="illustration" width="100%"/>
                 </td>
-                <td class="stacked" align="center" style="border-spacing:0;padding-top: 32px; padding-bottom: 16px;" valign="top">
+                <td class="stacked" align="left" style="font-size: 16px; border-spacing:0;padding-top: 32px; padding-bottom: 16px;" valign="top">
                 <p style="padding: 16px; padding-top: 0px; line-height: 1.5;">${data.side_text_a}</p>
                 </td>
             </tr>
@@ -106,7 +106,7 @@ export function render(data) {
                 <td class="stacked" align="center" style="border-spacing:0;padding-top: 32px; padding-bottom: 16px; padding-left: 8px; padding-right: 8px;" width="50%" valign="top">
                 <img src="${data.picture_b}" alt="illustration" width="100%"/>
                 </td>
-                <td class="stacked" align="center" style="border-spacing:0;padding-top: 32px; padding-bottom: 16px;" valign="top">
+                <td class="stacked" align="left" style="font-size: 16px; border-spacing:0;padding-top: 32px; padding-bottom: 16px;" valign="top">
                 <p style="padding: 16px; padding-top: 0px; line-height: 1.5;">${data.side_text_b}</p>
                 </td>
             </tr>

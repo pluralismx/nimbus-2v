@@ -17,6 +17,7 @@
             :clientSettings="isVisibleClientSettings"
             :images="images"
             :website="website"
+            :suscription="suscription"
             @update-html-template = "handleUpdateHtmlTemplate"
             @send-emails="handleSendEmails"
             @email-added="handleEmailAdded"
@@ -54,7 +55,7 @@
             website: {
                 type: Number,
                 required: true
-            }
+            },
         },
         data(){
             return {
@@ -103,7 +104,7 @@
                 }
             },
             handleUpdateHtmlTemplate: function (template) {
-                this.previewTemplate = template;
+                this.previewTemplate = template.body;
                 this.$emit('update-html-template', template);
             },
             handleSendEmails: function (list) {

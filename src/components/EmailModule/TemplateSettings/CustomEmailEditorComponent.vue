@@ -1,14 +1,37 @@
 <template>
-    <div class="settings-container">
+    <section>
+        <!-- Subject -->
+        <div class="settings-container">
+            <!-- Title -->
+            <div class="settings-header">
+                <span>Asunto del correo</span>
+            </div>
+            <!-- Content -->
+            <div class="settings-body">
+                <!-- Facebook -->
+                <div class="text-input-block">
+                    <label>Asunto</label>
+                    <div>
+                        <input v-model="subject" class="input-primary" type="text">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="settings-container">
         <!-- Title -->
         <div class="settings-header">
             <span>Editor de texto plano e hipertexto</span>
         </div>
         <div class="settings-body">
+            <!-- HTML -->
             <textarea v-model="custom_template"></textarea>
         </div>
-
     </div>
+    </section>
+
+
+
 </template>
 <script>
     export default {
@@ -21,7 +44,8 @@
         },
         data() {
             return {
-                custom_template: null
+                custom_template: '',
+                subject: ''
             }
         },
         watch: {
@@ -33,12 +57,20 @@
                 },
                 immediate: true,
                 deep: true
-            }   
+            },
+            subject: {
+                handler(){
+                    this.html();
+                }
+            }
         },
         methods: {
-            html(){
+            html: function (){
                 let b64 = btoa(this.custom_template)
-                this.$emit('update-html-template', b64);
+                this.$emit('update-html-template', {
+                    "subject": this.subject,
+                    "body": b64
+                });
             }
         }
     }
@@ -62,6 +94,19 @@
     display: flex;
     flex-direction: column;
     padding: 0 1rem;
+}
+
+.text-input-block {
+    margin: 1rem 0;
+}
+
+.text-input-block div {
+    margin-top: .5rem;
+}
+
+.text-input-block input[type="text"] {
+    width: 100%;
+    box-sizing: border-box;
 }
 
 textarea {

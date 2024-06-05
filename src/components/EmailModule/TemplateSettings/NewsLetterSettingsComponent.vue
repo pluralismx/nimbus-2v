@@ -1,6 +1,25 @@
 <template>
     
     <section>
+
+        <!-- Subject -->
+        <div class="settings-container">
+            <!-- Title -->
+            <div class="settings-header">
+                <span>Asunto del correo</span>
+            </div>
+            <!-- Content -->
+            <div class="settings-body">
+                <!-- Facebook -->
+                <div class="text-input-block">
+                    <label>Asunto</label>
+                    <div>
+                        <input v-model="subject" class="input-primary" type="text">
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Header and banner -->
         <div class="settings-container">
             <!-- Title -->
@@ -197,6 +216,10 @@
             image: {
                 type: Object,
                 required: true
+            },
+            suscription: {
+                type: String,
+                required: true
             }
         },
         computed: {
@@ -250,10 +273,16 @@
                             break;
                     }       
                 },
+            },
+            subject: {
+                handler(){
+                    this.html();
+                }
             }
         },
         data() {
             return {
+                subject: '',
                 templateData: {
                     theme: null,
                     logo: "http://localhost/api-nimbus/storage/assets/logo-template.png",
@@ -271,7 +300,8 @@
                     slogan: "Pluralis - Desarrollo Web",
                     address: "Ave. Alejandro Von Humboldt #19264, Tijuana, Mexico CP 22434",
                     email: "contacto@pluralis.com.mx",
-                    phone: "+52 (664) 252 2024"
+                    phone: "+52 (664) 252 2024",
+                    suscription_token: this.suscription
                 }
             }
         },
@@ -279,9 +309,12 @@
             openImageModal(section){
                 this.$emit('open-image-modal', section);
             },
-            html(){
-                let html = render(this.templateData);
-                this.$emit('update-html-template', html);
+            html: function (){
+                let b64 = render(this.templateData);
+                this.$emit('update-html-template', {
+                    "subject": this.subject,
+                    "body": b64
+                });
             }
         }
     }
