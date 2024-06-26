@@ -23,10 +23,10 @@
                     </table>
                 </div>
             </div>
-            <span class="span-error" v-show="error">Cuenta de correo no configurada</span>
+            <span class="span-error" v-show="error">{{ error }}</span>
             <div class="container-footer">
                 <button class="btn-warning" @click="send()">enviar</button>
-                <button class="btn-primary" @click="closeModal()">cancelar</button>
+                <button class="btn-primary" @click="closeModal()">{{ this.buttonText }}</button>
             </div>
         </div>
     </div>
@@ -66,13 +66,15 @@ export default {
             recipientsData: [],
             waiting: true,
             sending: false,
-            error: true
+            error: false,
+            buttonText: 'cancelar'
         }
     },
     methods: {
         closeModal: function () {
             this.error=false;
             this.$emit('close-modal');
+            this.buttonText = "cancelar";
         },
         send: async function () {
             
@@ -91,9 +93,11 @@ export default {
                 formData.append('json', JSON.stringify(json));
                 const response = await axios.post("api/email/sendCampaign", formData, {"withCredentials": true});
                 
-                if(response.data.status != 'error') {
+                if(response.data.status =="success") {
+                    this.buttonText = "aceptar";
                     this.sending = false;
-                    response.data.forEach((item)=>{
+                    this.$emit('emails-sent', response.data.emails_sent);
+                    response.data.delivery.forEach((item)=>{
                         this.recipientsData.forEach((contact)=>{
                             if(contact.address == item.recipient && item.status == "success"){
                                 contact.sentStatus = true;
@@ -102,9 +106,14 @@ export default {
                             }
                         });
                     });
+                }else if(response.data.message == 'Email account not found'){
+                    this.error = "Cuenta de correo no configurada";
+                    this.sending = false;
                     this.waiting = true;
                 }else {
-                    this.error = true;
+                    this.error = "No tienes correos suficientes";
+                    this.sending = false;
+                    this.waiting = true;
                 }
             } catch (error) {
                 console.log(error);

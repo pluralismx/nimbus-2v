@@ -39,7 +39,7 @@ export default {
                 if (response.data.status === "success") {
                     this.$emit('welcome-message-accepted');
                 } else {
-                    console.error('Error:', response.data.message); // Opcional: registrar el mensaje de error
+                    console.error('Error:', response.data.message);
                     this.$emit('welcome-message-accepted');
                 }
             } catch (error) {

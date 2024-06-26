@@ -1,11 +1,12 @@
 <template>
     <section>
-        <!-- Admin Panel-->
+        <!-- Admin Title bar-->
         <AdminPanelTitleBarComponent 
             @show-notification-modal="toggleNotificationsModal"
             :hasNotifications="hasNotifications"
         />
 
+        <!-- Friend & Website Manager -->
         <div class="panel-container">
             <!-- Website manager -->
             <div class="settings-container">
@@ -47,21 +48,62 @@
             />
         </div>
 
-        <!-- My Account -->
+        <!-- Account Title bar -->
         <AccountPanelTitleBarComponent 
-            @show-notification-modal="toggleNotificationsModal"
-            :hasNotifications="hasNotifications"
+            @toggle-components="handleToggleComponents"
         />
 
-        <div class="panel-container">
-            <div class="settings-container">
-                <AccountManagerComponent
-
+        <!-- Plan builder -->
+        <div v-show="isVisibleSubscribeSection" class="panel-container">
+            <div class="settings-container">  
+                <PlanBuilderComponent
+                    :account="account"
+                    @selection-made="handleSelectionMade"
+                    @cant-add-feature="handleCantAddFeature"
+                />
+            </div>
+            <div v-show="selection != ''" class="settings-container">
+                <SubscriptionPreviewComponent
+                    :selection="selection"
+                    @open-card-information-modal="handleToggleProcessPaymentModal"
                 />
             </div>
         </div>
 
-        
+        <!-- My account -->
+        <div v-show="isVisiblePaymentSection" class="panel-container">
+            <div class="settings-container">  
+                <AccountSummaryComponent
+                    :account="account"
+                    @selection-made="handleSelectionMade"
+                />
+            </div>
+        </div>
+
+        <!-- Upgrades -->
+        <div v-show="isVisibleUpgradeSection" class="panel-container">
+            <div class="settings-container">  
+                <AccountUpgradesComponent
+                    :account="account"
+                    @selection-made="handleSelectionMade"
+                    @cant-add-feature="handleCantAddFeature"
+                />
+            </div>
+            <div class="settings-container">
+                <UpgradesPreviewComponent
+                    :selection="selection"
+                    @upgrades-selected="handleUpgradesSelected"
+                />
+            </div>
+        </div>
+
+        <!-- Modals -->
+        <ProcessPaymentModalComponent
+            :selection="selection"
+            v-show="isVisibleProcessPaymentModal"
+            @close-proccess-payment-modal="handleToggleProcessPaymentModal"
+            @reload-account="handleReloadAccount"
+        />
     </section>
 </template>
 <script>
@@ -70,8 +112,14 @@ import AdminPanelTitleBarComponent from './AdminPanelTitleBarComponent.vue'
 import ModalNotificationsComponent from './FriendsComponent/ModalNotificationsComponent.vue'
 import WebsiteManagerComponent from './WebsiteComponent/WebsiteManager.vue';
 import AccountPanelTitleBarComponent from './AccountTitleBarComponent.vue';
-import AccountManagerComponent from './AccountComponent/AccountManagerComponent.vue';
+import PlanBuilderComponent from './SubscribeComponent/PlanBuilderComponent.vue';
+import SubscriptionPreviewComponent from './SubscribeComponent/SubscriptionPreviewComponent.vue';
 import FriendManagerComponent from './FriendsComponent/FriendManager.vue';
+import ProcessPaymentModalComponent from './SubscribeComponent/ProcessPaymentModalComponent.vue';
+
+import AccountSummaryComponent from './MyAccountComponent/AccountSummaryComponent.vue';
+import AccountUpgradesComponent from './UpgradeAccountComponent/AccountUpgradesComponent.vue';
+import UpgradesPreviewComponent from './UpgradeAccountComponent/UpgradesPreviewComponent';
 
 
 export default {
@@ -82,7 +130,18 @@ export default {
         WebsiteManagerComponent,
         FriendManagerComponent,
         AccountPanelTitleBarComponent,
-        AccountManagerComponent
+        PlanBuilderComponent,
+        SubscriptionPreviewComponent,
+        ProcessPaymentModalComponent,
+        AccountSummaryComponent,
+        AccountUpgradesComponent,
+        UpgradesPreviewComponent
+    },
+    props: {
+        account: {
+            type: Object,
+            required: true
+        }
     },
     data() {
         return {
@@ -90,7 +149,12 @@ export default {
             friendRequests: [],
             friendRequestAnswer: null,
             friends: '',
-            hasNotifications: false
+            hasNotifications: false,
+            selection: '',
+            isVisibleProcessPaymentModal: false,
+            isVisibleSubscribeSection: false,
+            isVisiblePaymentSection: true,
+            isVisibleUpgradeSection: false
         }
     },
     created() {
@@ -153,6 +217,58 @@ export default {
         },
         handleWebsiteCreated: function (notification) {
             this.$emit('website-created', notification);
+        },
+
+        // Account
+        handleSelectionMade: function (selection) {
+            this.selection = selection;
+            if(selection.type=="monthly_payment"){
+                this.handleToggleProcessPaymentModal();
+            }
+            if(selection.type=="upgrade"){
+                this.handleToggleProcessPaymentModal();
+            }
+        },
+        handleCantAddFeature: function (notification) {
+            this.$emit('cant-add-feature', notification);
+        },
+        handleToggleProcessPaymentModal: function () {
+            if(this.isVisibleProcessPaymentModal == false){
+                this.isVisibleProcessPaymentModal = true;
+            }else{
+                this.isVisibleProcessPaymentModal = false;
+            }
+        },
+        handleToggleComponents: function (component) {
+            switch(component) {
+                case 'subscribe' : 
+                    if(this.isVisibleSubscribeSection == false){
+                        this.isVisibleSubscribeSection = true;
+                        this.isVisiblePaymentSection = false;
+                        this.isVisibleUpgradeSection = false;
+                    }
+                break;
+                case 'payments' : 
+                    if(this.isVisiblePaymentSection == false){
+                        this.isVisibleSubscribeSection = false;
+                        this.isVisiblePaymentSection = true;
+                        this.isVisibleUpgradeSection = false;
+                    }
+                break;
+                case 'upgrades' : 
+                if(this.isVisibleUpgradeSection == false){
+                        this.isVisibleSubscribeSection = false;
+                        this.isVisiblePaymentSection = false;
+                        this.isVisibleUpgradeSection = true;
+                    }
+                break;
+            }
+        },
+        handleUpgradesSelected: function (data) {
+            this.handleSelectionMade(data);
+        },
+        handleReloadAccount: function () {
+            this.$emit('reload-acount');
         }
     },
 

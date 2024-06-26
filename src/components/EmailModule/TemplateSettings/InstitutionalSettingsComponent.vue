@@ -176,9 +176,7 @@
         watch: {
             setTheme: {
                 handler(newVal) {
-                    
                     this.templateData.theme = newVal;
-                    console.log('se paso el valor de theme');
                 },
                 immediate: true,
                 deep: true
@@ -254,10 +252,7 @@
                 this.$emit('open-image-modal', section);
             },
             html: function (){
-                console.log('voy a renderizar el html');
-                console.log(this.templateData);
                 let b64 = render(this.templateData);
-
                 this.$emit('update-html-template', {
                     "subject": this.subject,
                     "body": b64

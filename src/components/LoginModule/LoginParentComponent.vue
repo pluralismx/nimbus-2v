@@ -117,6 +117,7 @@
                 try {
                     const login = await axios.post('api/login', formData, {"withCredentials": true});
                     if(login.data.status == "success"){
+                        console.log(login.data);
                         let identity = JSON.stringify(login.data.identity);
                         localStorage.setItem('identity', identity);
                         return true;

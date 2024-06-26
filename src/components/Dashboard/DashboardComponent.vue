@@ -52,12 +52,14 @@
             @image-uploaded="handleImageUploaded"
             @email-added="handleStatusBarNotification"
             @image-deleted="handleStatusBarNotification"
+            @emails-sent="handleEmailsSent"
         />
 
         <AdminParentComponent 
             v-show="isVisibleTeam"
             :class="{ 'wide' : !isVisibleNotes }"
             :identity="identity"
+            :account="account"
             @teammate-role-updated="handleStatusBarNotification"
             @teammate-added="handleStatusBarNotification"
             @teammate-deleted="handleStatusBarNotification"
@@ -66,11 +68,15 @@
             @website-deleted="handleUpdateWebsiteList"
             @website-created="handleUpdateWebsiteList"
             @website-updated="handleUpdateWebsiteList"
+            @cant-add-feature="handleStatusBarNotification"
+            @reload-acount="loadAccountData"
+            
         />
 
         <!-- Status bar -->
         <StatusbarParentComponent 
             :message="statusBarMessage"
+            :account="account"
         />
 
         <!-- Modals -->
@@ -111,10 +117,11 @@ export default {
         identity: {
             type: Object,
             required: true
-        }
+        },
     },
     mounted() {
         this.showIntroMessage();
+        this.loadAccountData();
     },
     data() {
         return {
@@ -132,6 +139,7 @@ export default {
             notes: [],
             leads: [],
             images: [],
+            account: {},
 
             // Status bar notification data
             statusBarMessage: {}
@@ -173,6 +181,7 @@ export default {
                     if (this.isVisibleLeads == false) {
                         this.isVisibleLeads = true;
                         this.isVisibleEmail = false;
+                        this.isVisibleTeam = false;
                     } else {
                         this.isVisibleLeads = false;
                     }
@@ -232,18 +241,18 @@ export default {
         },
 
         // Dashboard data
-        handleLoadDashboardData: function (website_id) {
+        handleLoadDashboardData: async function (website_id) {
             this.website_id = website_id;
             this.loadWebsiteNotes();
             this.loadWebsiteLeads();
             this.loadWebsiteImages();
+            this.loadAccountData();
         },
         loadWebsiteLeads: async function () {
             try {
                 const response = await axios.get('api/lead/records/'+this.website_id, {"withCredentials": true});
                 if(response.data.status=="success"){
                     this.leads = response.data.leads;
-                    console.log(this.leads);
                 }
             } catch (error) {
                 console.error('Error loading website leads:', error);
@@ -257,9 +266,20 @@ export default {
             }
         },
         loadWebsiteImages: async function () {
-            const response = await axios.get('api/image/websiteImages/'+this.website_id, {"withCredentials":true});
+            if(this.website_id !== undefined && this.website_id !== '' && this.website_id !== null){
+                const response = await axios.get('api/image/websiteImages/'+this.website_id, {"withCredentials":true});
+                if(response.data.status=="success"){
+                    this.images = response.data.images;
+                }
+            }
+        },
+        loadAccountData: async function () {
+            const response = await axios.get('api/account/accountDetails', {"withCredentials": true});
             if(response.data.status=="success"){
-                this.images = response.data.images;
+                console.log(response.data);
+                this.account = response.data.account;
+            }else{
+                console.log(response.data);
             }
         },
 
@@ -276,12 +296,16 @@ export default {
             this.leads.forEach((item, index) => {
                 if(item.id == lead_id){
                     this.leads.splice(index, 1);
+                    this.account.actual_contacts--;
                 }
             });
             this.handleStatusBarNotification(notification);
         },
         handleLeadCreated: function (notification) {
             this.loadWebsiteLeads();
+            if(notification.status == "success"){
+                this.account.actual_contacts++;
+            }
             this.handleStatusBarNotification(notification);
         },
         handleImageUploaded: function (notification) {
@@ -310,7 +334,11 @@ export default {
         },
         handleCsvUploaded: function (notification) {
             this.handleStatusBarNotification(notification);
+            this.account.actual_contacts += notification.records_added;
             this.loadWebsiteLeads();
+        },
+        handleEmailsSent: function (qty) {
+            this.account.sent_emails += qty;
         }
     }
 }

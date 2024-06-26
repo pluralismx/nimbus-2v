@@ -1,8 +1,11 @@
 <template>
-    <div>
+    <div class="div-main">
         <h1>Mi cuenta</h1>
-        <span v-show="!hasNotifications" @click="showNotificationModal()">&#128235;</span>
-        <span v-show="hasNotifications" @click="showNotificationModal()">&#128236;</span>
+        <div class="div-options">
+            <span @click="toggleDashboard('subscribe')">contratar</span>
+            <span @click="toggleDashboard('upgrades')">mejoras</span>
+            <span @click="toggleDashboard('payments')">pagos</span>
+        </div>
     </div>
 </template>
 <script>
@@ -15,8 +18,8 @@
             }
         },
         methods: {
-            showNotificationModal() {
-                this.$emit('show-notification-modal');
+            toggleDashboard: function (component) {
+                this.$emit('toggle-components', component);
             }
         }
     }
@@ -25,7 +28,7 @@
 
     /* Mobile first */
 
-    div {
+    .div-main {
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -36,8 +39,18 @@
         width: 100%;
     }
 
+    .div-options {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
     span {
-        font-size: 1.5rem;
+        margin-right: 2rem;
+    }
+
+    span:nth-last-child(1) {
+        margin: 0;
     }
 
     span:hover {

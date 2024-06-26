@@ -76,7 +76,8 @@ export default {
                     this.answer();
                     this.$emit('csv-uploaded', {
                         "text":"CSV subida con éxito",
-                        "status":"success"
+                        "status":"success",
+                        "records_added":response.data.records_added
                     });
                 }else {
                     this.answer();

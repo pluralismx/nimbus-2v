@@ -47,7 +47,7 @@
             return {
                 smViewport: null,
                 isLogged: false,
-                identity: {}
+                identity: {},
             }
         },
         methods: {

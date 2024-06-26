@@ -44,7 +44,6 @@
             <li><span @click="toggleTool('team-desktop')">Administración&nbsp;</span></li>
             <li><span>|&nbsp;</span></li>
             <li><span @click="logout()">Cerrar sesión</span></li>
-
         </ul>
     </nav>
 </template>

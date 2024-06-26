@@ -241,6 +241,7 @@ export default {
         width: 100%;
         border-collapse: collapse;
         box-shadow: 2px 2px 3px #222;
+        margin-bottom: 1rem;
     }
 
     thead{

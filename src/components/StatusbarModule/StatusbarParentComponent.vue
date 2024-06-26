@@ -1,6 +1,14 @@
 <template>
     <footer>
-        <span v-show="isVisible" :class="message.status == 'error' ? 'red' : 'green' ">{{ message.text }}</span>
+        <div class="account-info">
+            <span>Sitios: {{ account.actual_websites }}/{{ account.websites }}</span>
+            <span>Negocios: {{ account.actual_businesses }}/{{ account.businesses }}</span>
+            <span>Correos: {{ account.sent_emails }}/{{ account.emails }}</span>
+            <span>Contactos: {{ account.actual_contacts }}/{{ account.contacts }}</span>
+        </div>
+        <div class="message-bar">
+            <span v-show="isVisible" :class="message.status == 'error' ? 'red' : 'green' ">{{ message.text }}</span>
+        </div>
     </footer>
 </template>
 <script>
@@ -8,6 +16,10 @@
         name: 'StatusbarParentComponent',
         props: {
             message: {
+                type: Object,
+                required: true
+            },
+            account: {
                 type: Object,
                 required: true
             }
@@ -29,16 +41,12 @@
         },
         data() {
             return {
-                isVisible: false
+                isVisible: false,
             }
         }
     }
 </script>
 <style scoped>
-
-    span {
-        color: white;
-    }
 
     .green {
         color: yellowgreen;
@@ -54,10 +62,9 @@
         grid-column: 1/2;
         grid-row: 3/4;
         background-color: var(--shadows);
-        display: flex;
-        justify-content: flex-end;
-        align-items: center;
-        padding: 0 1rem;
+        display: grid;
+        grid-template-columns: 75% 25%;
+        grid-template-rows: 100%;
     }
 
     /* Desktop */
@@ -66,6 +73,32 @@
         footer {
             grid-column: 1/3;
             grid-row: 3/4;
+            background-color: var(--shadows);
+            display: grid;
+            grid-template-columns: 75% 25%;
+            grid-template-rows: 100%;
+            padding: 0 2rem;
+        }
+
+        .message-bar {
+            grid-column: 2/3;
+            grid-row: 1/2;
+            width: 100%;
+            display: flex;
+            flex-direction: row-reverse;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .account-info {
+            grid-column: 1/2;
+            grid-row: 1/2;
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--primary);
         }
     }
 

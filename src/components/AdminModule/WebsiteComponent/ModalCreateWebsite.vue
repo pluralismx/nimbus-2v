@@ -71,6 +71,7 @@ export default {
             }
             formData.append('json', JSON.stringify(data));
             const response = await axios.post('api/website/create', formData, { "withCredentials":  true});
+            console.log(response.data);
             if (response.data.status == 'success') {
                 this.apiKey = response.data.api_key;
                 this.button = 'aceptar';

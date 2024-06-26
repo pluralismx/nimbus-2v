@@ -100,24 +100,34 @@ export default {
             let formData = new FormData();
             formData.append("file0", this.imageToUpload);
             
-            const response = await axios.post('api/image/uploadImage/'+this.website, formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                },
-                "withCredentials":true
-            });
-
-            if(response.data.status == "success") {
-                this.$emit('image-uploaded', {
-                    "text":"Imagen subida con éxito",
-                    "status":"success"
+            if(this.website !== undefined && this.website !== '' && this.website !== null){
+                const response = await axios.post('api/image/uploadImage/'+this.website, formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    },
+                    "withCredentials":true
                 });
+
+                if(response.data.status == "success") {
+                    this.$emit('image-uploaded', {
+                        "text":"Imagen subida con éxito",
+                        "status":"success"
+                    });
+                    this.imageName = "Buscar en este dispositivo...";
+                }else {
+                    this.$emit('image-uploaded',{
+                        "text":"Error al cargar la imagen",
+                        "status":"error"
+                    });
+                    this.imageName = "Buscar en este dispositivo...";
+                }
             }else {
                 this.$emit('image-uploaded',{
-                    "text":"Error al cargar la imagen",
-                    "status":"error"
-                });
+                        "text":"No tienes sitios web o negocios",
+                        "status":"error"
+                    });
             }
+
 
         },
         handleImageSelected: function (image_name) {

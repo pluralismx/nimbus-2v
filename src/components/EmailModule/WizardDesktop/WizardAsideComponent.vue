@@ -167,7 +167,6 @@
                     "image_name": image_name,
                     "section": this.templateImageSection
                 }
-                console.log(this.templateImageData);
                 this.templateImageData = json;
             },
             handleImageUploaded: function (notification) {

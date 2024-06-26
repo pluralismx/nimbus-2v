@@ -14,14 +14,6 @@
                     <option value="callToAction">Llamada a la acción</option>
                     <option value="custom">personalizado</option>
                 </select>
-                <!-- <div class="menu">
-                    <span class="menu-button">menú</span>
-                    <div class="dropdown-content">
-                        <span class="dropdown-item">Opción 1</span>
-                        <span class="dropdown-item">Opción 2</span>
-                        <span class="dropdown-item">Opción 3</span>
-                    </div>
-                </div> -->
             </div>
             <div class="select-block">
                 <label>Tema</label>

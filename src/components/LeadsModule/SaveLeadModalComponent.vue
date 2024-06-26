@@ -67,7 +67,7 @@ export default {
     },
     data(){
         return {
-            name: 'Dillion',
+            name: 'Dillion Harper',
             phone: '3056232236',
             email: 'dillion@pluralis.com.mx',
             status: 'nuevo',
@@ -86,12 +86,22 @@ export default {
             let formData = new FormData();
             formData.append('json', JSON.stringify(json));
 
-            const response = await axios.post('api/lead/create/'+this.website_id, formData, {"withCredentials": true});
-            if(response.data.status=="success"){
-                this.$emit('lead-created', {"text":"Prospecto creado", "status":"success"});
-            }else {
-                this.$emit('lead-created', {"text":"No se pudo crear prospecto", "status":"error"});
+            if (this.website_id !== undefined && this.website_id !== '' && this.website_id !== null) {
+                try {
+                    const response = await axios.post('api/lead/create/' + this.website_id, formData, { withCredentials: true });
+                    if (response.data.status === "success") {
+                        this.$emit('lead-created', { text: "Prospecto creado", status: "success" });
+                    } else {
+                        this.$emit('lead-created', { text: "No se pudo crear prospecto", status: "error" });
+                    }
+                } catch (error) {
+                    this.$emit('lead-created', { text: "Error al crear prospecto", status: "error" });
+                }
+            } else {
+                this.$emit('lead-created', { text: "No tienes sitios webs o negocios", status: "error" });
             }
+
+
         },
         cancelSaveLead(){
             this.$emit('cancel-save-lead');

@@ -45,6 +45,7 @@
         <SendEmailsModalComponent 
             v-show="isVisibleSendEmailsModal"
             @close-modal="handleCloseSendEmailsModal"
+            @emails-sent="handleEmailsSent"
             :subject="this.subject"
             :recipients="recipients"
             :emailContent="this.previewTemplate"
@@ -189,6 +190,9 @@
             },
             handleImageDeleted: function (notification) {
                 this.$emit('image-deleted', notification);
+            },
+            handleEmailsSent: function (qty) {
+                this.$emit('emails-sent', qty);
             }
 
         },
