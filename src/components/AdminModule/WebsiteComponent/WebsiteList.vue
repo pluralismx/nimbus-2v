@@ -176,7 +176,6 @@ export default {
                         break;
                 }
             }else{
-                console.log("action denied");
                 this.toggleConfirmationModal();
                 this.answer = false;
             }

@@ -318,6 +318,7 @@ td {
     display: flex;
     flex-wrap: wrap;
     gap: 1rem 1rem;
+    
 }
 
 .upgrade-card {

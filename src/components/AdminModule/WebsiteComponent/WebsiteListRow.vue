@@ -53,7 +53,6 @@ export default {
             this.$emit('authorization-need', "delete-website", this.website);
         },
         updateWebsite: function () {
-
             const newWebsiteData = {
                 'id_website': this.website.id,
                 'name':this.new_name,

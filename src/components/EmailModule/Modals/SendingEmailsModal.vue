@@ -126,7 +126,6 @@ export default {
 <style scoped>
 
 .container {
-    background-color: var(--basic);
     box-shadow: 2px 2px 8px var(--shadows);
     border-radius: .5rem;
     width: 75%;

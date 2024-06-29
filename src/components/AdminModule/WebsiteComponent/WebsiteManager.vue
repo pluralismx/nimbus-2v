@@ -31,17 +31,12 @@ export default {
     components: {
         WebsiteListComponent,
         TeamMembersListComponent,
-        
     },
     props: {
-        contacts: {
-            type: Array,
-            required: true
-        },
         friends: {
             type: Array,
             required: true
-        }
+        },
     },
     computed: {
         websitesComputed(){
@@ -64,7 +59,6 @@ export default {
     methods: {
 
         loadWebsiteTeammates: async function () {
-            console.log(this.website_id);
             try{
                 const json = {
                     "id_website": this.website_id
@@ -114,8 +108,6 @@ export default {
             this.$emit("website-updated", notification);
             this.websiteTeam.website_name = notification.website;
         },
-
-
     }
 }
 </script>

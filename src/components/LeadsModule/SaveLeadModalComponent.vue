@@ -91,8 +91,10 @@ export default {
                     const response = await axios.post('api/lead/create/' + this.website_id, formData, { withCredentials: true });
                     if (response.data.status === "success") {
                         this.$emit('lead-created', { text: "Prospecto creado", status: "success" });
+                    } else if (response.data.message === "Forbidden"){
+                        this.$emit('lead-created', { text: "Permisos insuficientes", status: "error" });
                     } else {
-                        this.$emit('lead-created', { text: "No se pudo crear prospecto", status: "error" });
+                        this.$emit('lead-created', { text: response.data.message, status: "error" });
                     }
                 } catch (error) {
                     this.$emit('lead-created', { text: "Error al crear prospecto", status: "error" });
@@ -100,8 +102,6 @@ export default {
             } else {
                 this.$emit('lead-created', { text: "No tienes sitios webs o negocios", status: "error" });
             }
-
-
         },
         cancelSaveLead(){
             this.$emit('cancel-save-lead');

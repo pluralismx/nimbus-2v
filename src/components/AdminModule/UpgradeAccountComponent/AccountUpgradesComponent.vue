@@ -204,7 +204,8 @@ export default {
 }
 
 h4 {
-    margin: 1rem 0;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
 }
 
 span {

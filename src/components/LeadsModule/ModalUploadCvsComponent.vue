@@ -71,13 +71,18 @@ export default {
                     "withCredentials":true
                 });
 
-                console.log(response.data);
                 if(response.data.status == "success") {
                     this.answer();
                     this.$emit('csv-uploaded', {
                         "text":"CSV subida con éxito",
                         "status":"success",
                         "records_added":response.data.records_added
+                    });
+                }else if(response.data.message == "Forbidden"){
+                    this.answer();
+                    this.$emit('csv-uploaded',{
+                        "text":"Permisos insuficientes",
+                        "status":"error"
                     });
                 }else {
                     this.answer();

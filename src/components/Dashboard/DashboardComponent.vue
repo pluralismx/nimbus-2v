@@ -2,12 +2,15 @@
 
     <!-- Layout -->
     <div id="dashboard">
-
+        <!-- Loading screen -->
+         <div class="loading-app-screen" v-show="loadingApp">
+            <h1>Cargando</h1>
+            <img src="../../assets/images/Fading circles.gif" alt="">
+         </div>
         <!-- Navigation bar -->
         <NavbarParentComponent
             :identity="identity"
             :reload="reload"
-            @website-list-updated="handleWebsiteListUpdated"
             @toggle-tool="handleToggleTool"
             @user-logged-out="handleUserLoggedOut"
             @load-dashboard-data="handleLoadDashboardData"
@@ -36,9 +39,10 @@
             :smViewport = smViewport
             @lead-deleted="handleLeadDeleted"
             @lead-created="handleLeadCreated"
-            @lead-updated="handleStatusBarNotification"
-            @lead-status-updated="handleStatusBarNotification"
+            @lead-updated="handleLeadUpdated"
+            @lead-status-updated="handleLeadUpdated"
             @csv-uploaded="handleCsvUploaded"
+            @excel-downloaded="handleStatusBarNotification"
         />
 
         <EmailParentComponent 
@@ -120,13 +124,14 @@ export default {
         },
     },
     mounted() {
+        this.loadAccountData()    
         this.showIntroMessage();
-        this.loadAccountData();
     },
     data() {
         return {
 
-            // Layout 
+            // Layout
+            loadingApp: false,
             isVisibleNotes: true,
             isVisibleLeads: false,
             isVisibleEmail: false,
@@ -242,13 +247,18 @@ export default {
 
         // Dashboard data
         handleLoadDashboardData: async function (website_id) {
+            
             this.website_id = website_id;
-            this.loadWebsiteNotes();
-            this.loadWebsiteLeads();
-            this.loadWebsiteImages();
-            this.loadAccountData();
+            await Promise.all([
+                this.loadWebsiteNotes(),
+                this.loadWebsiteLeads(),
+                this.loadWebsiteImages(),
+                this.loadAccountData()
+            ]);
+            
         },
         loadWebsiteLeads: async function () {
+            console.log('updating dashboard');
             try {
                 const response = await axios.get('api/lead/records/'+this.website_id, {"withCredentials": true});
                 if(response.data.status=="success"){
@@ -276,7 +286,6 @@ export default {
         loadAccountData: async function () {
             const response = await axios.get('api/account/accountDetails', {"withCredentials": true});
             if(response.data.status=="success"){
-                console.log(response.data);
                 this.account = response.data.account;
             }else{
                 console.log(response.data);
@@ -293,13 +302,18 @@ export default {
             }
         },
         handleLeadDeleted: function (lead_id, notification) {  
-            this.leads.forEach((item, index) => {
-                if(item.id == lead_id){
-                    this.leads.splice(index, 1);
-                    this.account.actual_contacts--;
-                }
-            });
-            this.handleStatusBarNotification(notification);
+            if(lead_id){
+                this.leads.forEach((item, index) => {
+                    if(item.id == lead_id){
+                        this.leads.splice(index, 1);
+                        this.account.actual_contacts--;
+                    }
+                });
+                this.handleStatusBarNotification(notification);
+            }else{
+                this.handleStatusBarNotification(notification);
+            }
+            
         },
         handleLeadCreated: function (notification) {
             this.loadWebsiteLeads();
@@ -321,16 +335,18 @@ export default {
         },
         handleUpdateWebsiteList: function (notification) {
             this.handleStatusBarNotification(notification);
-            this.reload = true;
-        },
-        handleWebsiteListUpdated: function () {
-            this.reload = false;
+            if(this.reload == false){
+                this.reload = true;
+            }else if(this.reload == true){
+                this.reload = false;
+            }
         },
         handleUserHasNoWebsites: function () {
             this.website_id='';
             this.notes=[];
             this.leads=[];
             this.images=[];
+            this.loadAccountData();
         },
         handleCsvUploaded: function (notification) {
             this.handleStatusBarNotification(notification);
@@ -339,6 +355,10 @@ export default {
         },
         handleEmailsSent: function (qty) {
             this.account.sent_emails += qty;
+        },
+        handleLeadUpdated: function (notification) {
+            this.loadWebsiteLeads();
+            this.handleStatusBarNotification(notification);
         }
     }
 }

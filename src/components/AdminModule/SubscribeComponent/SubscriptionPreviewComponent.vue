@@ -41,7 +41,7 @@
             </table>
         </div>
         <div v-show="showNotesMessage" class="footer">
-            <p>Notas:</p>
+            <h4>Notas:</h4>
             <br>
             <p>&#128073;&#127996; El servicio CRM se ha prorrateado para el período del <span class="span-attention">{{ selection.period_begins }}</span> al <span class="span-attention">{{ selection.period_end }}</span></p>
             <br>
@@ -115,19 +115,28 @@
         background-color: #d2d8db;
         border-radius: .5rem
     }
+
     .header {
         display: flex;
         flex-direction: row;
         justify-content: space-between;
         align-items: center;
         margin-top: 1rem;
-        margin-bottom: 2rem;
+        margin-bottom: 1rem;
+    }
+
+    .header h1{
+        font-size: 16px;
+    }
+
+    .header p{
+        font-size: 10px;
     }
     
     table {
         width: 100%;
         border-collapse: collapse;
-        font-size: 14px;
+        font-size: 10px;
         margin-bottom: 2rem;
     }
 
@@ -153,7 +162,44 @@
     tbody tr td:nth-child(2) {
         text-align: center;
     }
+
     .span-attention {
         color: var(--warn);
+    }
+
+    .footer p{
+        font-size: 10px;
+    }
+
+    button {
+        font-size: 10px;
+    }
+
+    @media only screen and (min-width: 1024px) {
+        .header {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1rem;
+            margin-bottom: 2rem;
+            font-size: 14px;
+        }
+
+        .header h1{
+            font-size: 1.5em;
+        }
+
+        table {
+            font-size: 14px;
+        }
+
+        .footer p{
+            font-size: 14px;
+        }
+
+        button {
+            font-size: 14px;
+        }
     }
 </style>

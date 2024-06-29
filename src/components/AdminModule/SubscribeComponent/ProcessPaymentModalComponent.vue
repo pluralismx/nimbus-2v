@@ -313,7 +313,7 @@
 }
 
 .modal-container {
-    width: 500px;
+    width: 80%;
     border-radius: .5rem;
     background-color: var(--basic);
     box-shadow: 2px 2px 16px var(--shadows);
@@ -376,5 +376,11 @@
 
 .cvv-icon {
     width: 50px;
+}
+
+@media only screen and (min-width: 1024px) {
+    .modal-container {
+        width: 500px;
+    }
 }
 </style>

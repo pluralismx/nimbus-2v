@@ -3,6 +3,8 @@
         <LeadsTitleBarComponent 
             @save-lead="handleSaveLead"
             @show-upload-cvs="handleShowUploadCsv"
+            @excel-downloaded="handleExcelDownloaded"
+            :website="website"
         />
         <!-- Mobile devices -->
         <div class="leads-container" v-if="smViewport">
@@ -187,13 +189,16 @@
                 }
             },
             handleLeadDeleted: function (lead_id, notification) {
+                if(!lead_id){
+                    this.$emit('lead-deleted', notification);
+                }
                 this.$emit('lead-deleted', lead_id, notification);
             },
             handleCancelEditLead: function () {
                 this.isVisibleEditLeadModal = false;
             },
 
-            // Upload CVS
+            // Excel and CVS
             handleShowUploadCsv: function () {
                 if(this.isVisibleCvsModal ==  false){
                     this.isVisibleCvsModal = true;
@@ -203,6 +208,9 @@
             },
             handleCsvUploaded: function (notification) {
                 this.$emit('csv-uploaded', notification);
+            },
+            handleExcelDownloaded: function (notification) {
+                this.$emit('excel-downloaded', notification);
             }
         }
     }

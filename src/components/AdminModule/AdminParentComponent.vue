@@ -154,7 +154,7 @@ export default {
             isVisibleProcessPaymentModal: false,
             isVisibleSubscribeSection: false,
             isVisiblePaymentSection: true,
-            isVisibleUpgradeSection: false
+            isVisibleUpgradeSection: false,
         }
     },
     created() {

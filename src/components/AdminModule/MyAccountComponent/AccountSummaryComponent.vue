@@ -93,12 +93,12 @@ export default {
                 {"name": "diciembre", "days": 31}
             ],
             
-            due_date: '',
-            amount_due: '',
-            late_fee: '',
-            subtotal: '',
-            taxes: '',
-            total: ''
+            due_date: 0,
+            amount_due: 0,
+            late_fee: 0,
+            subtotal: 0,
+            taxes: 0,
+            total: 0
         }
     },
     methods: {
@@ -106,30 +106,32 @@ export default {
             return Math.floor(number * 100) / 100;
         },
         paymentDetails: function () {
-            let date = new Date();
-            let today = date.getDate();
-            let month = date.getMonth();
-            let due_date = new Date(this.account.due_date);
-            let due_date_month = due_date.getMonth();
-            
-            this.due_date = (due_date.getDate()+1)+"/"+(due_date_month+1)+"/"+due_date.getFullYear(); 
-    
-            if(month == due_date_month && today > 15) {
+            if(this.account.amount_due != null){
+                let date = new Date();
+                let today = date.getDate();
+                let month = date.getMonth();
+                let due_date = new Date(this.account.due_date);
+                let due_date_month = due_date.getMonth();
                 
-                let days_late = today - 15;
-                let pricePerDay = parseFloat(this.account.amount_due) / this.months[month].days;
-                
-                this.amount_due = parseFloat(this.account.amount_due);
-                this.late_fee = this.truncateDecimals(pricePerDay) * days_late;
-                this.subtotal = this.truncateDecimals(parseFloat(this.account.amount_due) + this.late_fee);
-                this.taxes = this.truncateDecimals(this.subtotal * 0.08);
-                this.total = this.truncateDecimals(this.subtotal + this.taxes);
-            }else {
-                this.amount_due = parseFloat(this.account.amount_due);
-                this.late_fee = 0;
-                this.subtotal = parseFloat(this.account.amount_due);
-                this.taxes = this.truncateDecimals(this.amount_due * 0.08);
-                this.total = this.truncateDecimals(this.subtotal + this.taxes);
+                this.due_date = (due_date.getDate()+1)+"/"+(due_date_month+1)+"/"+due_date.getFullYear(); 
+        
+                if(month == due_date_month && today > 15) {
+                    
+                    let days_late = today - 15;
+                    let pricePerDay = parseFloat(this.account.amount_due) / this.months[month].days;
+                    
+                    this.amount_due = parseFloat(this.account.amount_due);
+                    this.late_fee = this.truncateDecimals(pricePerDay) * days_late;
+                    this.subtotal = this.truncateDecimals(parseFloat(this.account.amount_due) + this.late_fee);
+                    this.taxes = this.truncateDecimals(this.subtotal * 0.08);
+                    this.total = this.truncateDecimals(this.subtotal + this.taxes);
+                }else {
+                    this.amount_due = parseFloat(this.account.amount_due);
+                    this.late_fee = 0;
+                    this.subtotal = parseFloat(this.account.amount_due);
+                    this.taxes = this.truncateDecimals(this.amount_due * 0.08);
+                    this.total = this.truncateDecimals(this.subtotal + this.taxes);
+                }
             }
         },
         makePayment: function () {
@@ -170,7 +172,9 @@ table {
     width: 100%;
     border-collapse: collapse;
     font-size: 10px;
+    margin-bottom: 2rem;
 }
+
 thead {
     width: 100%;
     color: var(--basic);
@@ -246,11 +250,18 @@ button {
         padding: 0 1rem;
         padding-bottom: 1rem;
     }
+
     .upgrade-card-container {
         display: flex;
         flex-wrap: wrap;
         gap: 1rem 1rem;
     }
+
+    .heading h1 {
+        font-size: 1.5em;
+        margin-bottom: 1rem;
+    }
+
     .upgrade-card {
         padding: 1rem;
         box-sizing: border-box;
@@ -271,6 +282,10 @@ button {
 
     table {
         font-size: 14px;
+    }
+
+    button {
+        font-size: 12px;
     }
 }
 

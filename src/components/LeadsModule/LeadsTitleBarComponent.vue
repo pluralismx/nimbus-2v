@@ -4,22 +4,61 @@
         <div class="title-bar-menu">
             <span @click="saveLead()">agregar</span>
             <span>&nbsp;|&nbsp;</span>
-            <span @click="uploadCvs()">cargar CVS</span>
+            <span @click="uploadCvs()">subir CSV</span>
+            <span>&nbsp;|&nbsp;</span>
+            <span @click="downloadXLSX()">bajar XLS</span>
         </div>
     </div>
 </template>
 <script>
-    export default {
-        name: 'LeadsTitleBarComponent',
-        methods: {
-            saveLead: function (){
-                this.$emit('save-lead');
-            },
-            uploadCvs: function () {
-                this.$emit('show-upload-cvs');
-            }
+import axios from "@/lib/axios"
+export default {
+    name: 'LeadsTitleBarComponent',
+    props: {
+        website: {
+            type: Number,
+            required: true
         }
+    },
+    methods: {
+        saveLead: function (){
+            this.$emit('save-lead');
+        },
+        uploadCvs: function () {
+            this.$emit('show-upload-cvs');
+        },
+        downloadXLSX: async function () {
+            axios({
+                url: 'api/leads/export/' + this.website,
+                method: 'GET',
+                responseType: 'blob',
+                withCredentials: true
+            })
+            .then(response => {
+                const url = window.URL.createObjectURL(new Blob([response.data]));
+                const link = document.createElement('a');
+                link.href = url;
+                link.setAttribute('download', 'leads.xlsx');
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+
+                this.$emit("excel-downloaded", {
+                    "status": "success",
+                    "text": "Excel descargado exitosamente"
+                });
+            })
+            .catch(error => {
+                console.error(error);
+                this.$emit("excel-downloaded", {
+                    "status": "error",
+                    "text": "No se pudo descargar el archivo"
+                });
+            });
+        }
+
     }
+}
 </script>
 <style scoped>
 

@@ -206,6 +206,7 @@ button {
     @media only screen and (min-width: 1024px) {
         
         .header h1 {
+            font-size: 1.5em;
             margin-bottom: 1rem;
         }
 

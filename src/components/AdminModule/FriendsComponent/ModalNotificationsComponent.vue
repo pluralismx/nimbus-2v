@@ -57,6 +57,7 @@ export default {
             this.$emit("close-notification-modal");
         },
         answerFriendRequest: async function (answer, id, contact_id) {
+            console.log(answer);
             try{
                 let identity = localStorage.getItem('identity');
                 let credentials = JSON.parse(identity);
@@ -86,8 +87,7 @@ export default {
 .modal-container {
     width: 75%;
     border-radius: .5rem;
-    background-color: var(--basic);
-    box-shadow: 4px 4px 16px var(--shadows);
+    box-shadow: 4px 4px 16px rgba(0,0,0,0.6);
 }
 
 .modal-header {
@@ -112,7 +112,7 @@ export default {
 .contact-card {
     background-color: var(--primary);
     border-radius: .5rem;
-    box-shadow: 2px 2px 5px var(--shadows);
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.5);
     margin-bottom: 1rem;
 }
 

@@ -78,7 +78,7 @@ export default {
             this.errorMessage ='';
             this.$emit('close-modal');
         },
-        searchContact: function () {
+        searchContact: function async () {
             let email = this.email;
             let formData = new FormData();
             const data = {
@@ -86,7 +86,7 @@ export default {
             }
             let json = JSON.stringify(data);
             formData.append('json', json);
-            axios.post('api/users/search', formData, { "withCredentials": true })
+            axios.post('api/friends/search', formData, { "withCredentials": true })
                 .then(res=>{
                     if(res.data.status == 'success'){
                         this.result = res.data.user;
@@ -137,6 +137,11 @@ export default {
                         this.result = '';
                         this.selection = '';
                         this.errorMessage = 'Ya has enviado una invitacion a esta persona';
+                    }else if(res.data.message == 'You can not add more friends'){
+                        this.email = null;
+                        this.result = '';
+                        this.selection = '';
+                        this.errorMessage = 'No puedes agregar mas amigos';
                     }
                 })
                 .catch(error=>{

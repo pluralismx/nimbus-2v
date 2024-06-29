@@ -78,13 +78,26 @@ export default {
                 const response = await axios.post('api/register', formData);
                 // Request status success
                 if (response.data.status == "success"){
+
+                    this.name = '',
+                    this.surname = '',
+                    this.email = '',
+                    this.password = '',
+                    this.verified = '',
+
                     this.$emit('cancel');
                     this.$emit('user-registered', {
                         "title":"Cuenta creada exitosamente", 
                         "content":"Revise su bandeja de entrada para activar su cuenta"
                     });
                 }else{
-                    // Request failed
+                    
+                    this.name = '',
+                    this.surname = '',
+                    this.email = '',
+                    this.password = '',
+                    this.verified = '',
+
                     this.$emit('user-registered', {
                         "title":"Error al crear cuenta", 
                         "content": "El correo ya ha sido utilizado o hubo un error al intentar crear su cuenta"

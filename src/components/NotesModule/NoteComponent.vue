@@ -58,7 +58,7 @@
     .note-container {
         background-color: var(--shadows);
         border-radius: .5rem;
-        box-shadow: 2px 2px 3px black;
+        box-shadow: 2px 2px 3px rgba(0,0,0,0.7);
         box-sizing: border-box;
         height: 45vh;
         width: 100%;

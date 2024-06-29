@@ -2,8 +2,8 @@
     <div class="div-main">
         <h1>Mi cuenta</h1>
         <div class="div-options">
-            <span @click="toggleDashboard('subscribe')">contratar</span>
-            <span @click="toggleDashboard('upgrades')">mejoras</span>
+            <span @click="toggleDashboard('subscribe')">contratar | </span>
+            <span @click="toggleDashboard('upgrades')">mejoras | </span>
             <span @click="toggleDashboard('payments')">pagos</span>
         </div>
     </div>
@@ -39,19 +39,19 @@
         width: 100%;
     }
 
-    .div-options {
+    /* .div-options {
         display: flex;
         align-items: center;
         justify-content: space-between;
-    }
+    } */
 
-    span {
+    /* span {
         margin-right: 2rem;
     }
 
     span:nth-last-child(1) {
         margin: 0;
-    }
+    } */
 
     span:hover {
         cursor:pointer;

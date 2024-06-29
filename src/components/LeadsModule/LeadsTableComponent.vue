@@ -200,6 +200,9 @@ export default {
                     this.handleLeadDeleted(this.leadToDelete);
                     this.isVisibleConfirmationModal=false;
                     this.$emit('lead-deleted', this.leadToDelete, {"text":"Prospecto eliminado", "status":"success"});
+                }else if(response.data.message=="Forbidden"){
+                    this.isVisibleConfirmationModal=false;
+                    this.$emit('lead-deleted', false, {"text":"Permisos insuficientes", "status":"error"});
                 }else{
                     this.isVisibleConfirmationModal=false;
                     this.$emit('lead-deleted', this.leadToDelete, {"text":"No se pudo eliminar el prospecto", "status":"error"});

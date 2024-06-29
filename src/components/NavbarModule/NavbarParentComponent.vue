@@ -68,20 +68,16 @@
         },
         watch: {
             reloadComputed: {
+                immediate: true,
                 handler (newVal){
-                    this.reloadData = newVal;
-                    if(this.reloadData == true){
-                        this.loadWebsites();
-                    }
-                    this.reloadData = false;
-                    this.$emit('website-list-updated');
+                    console.log(newVal);
+                    this.loadWebsites();
                 }
             }
         },
         data() {
             return {
                 websites: [],
-                reloadData: false
             }
         },
         created() {
