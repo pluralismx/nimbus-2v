@@ -97,7 +97,7 @@ import axios from '@/lib/axios';
         min-height: 30%;
         width: 100%;
         border-radius: 6px;
-        box-shadow: 2px 2px 3px var(--shadows);
+        box-shadow: 2px 2px 3px rgba(0,0,0,0.7);
         display: grid;
         grid-template-columns: 100%;
         grid-template-rows: 18% 82%;

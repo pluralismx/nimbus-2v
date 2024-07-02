@@ -58,10 +58,22 @@
                     this.isLogged = true;
                 }
             },
-            handleUserLoggedIn: async function (){
-                this.identity = await JSON.parse(localStorage.getItem('identity'));
-                this.isLogged = true;
+            handleUserLoggedIn: async function () {
+                const storedIdentity = localStorage.getItem('identity');
+                if (storedIdentity) {
+                    try {
+                        this.identity = JSON.parse(storedIdentity);
+                        this.isLogged = true;
+                    } catch (error) {
+                        console.error('Error parsing identity from localStorage:', error);
+                        // Manejar el error según sea necesario
+                    }
+                } else {
+                    console.warn('No identity found in localStorage');
+                    // Manejar el caso donde no hay datos en localStorage
+                }
             },
+
             handleUserLoggedOut(){
                 axios.get('api/logout', {"withCredentials": true})
                     .then(res=>{

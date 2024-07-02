@@ -265,19 +265,19 @@
                 handler() {
                     switch(this.image.section){
                         case 'promotionalHeaderLogo' :
-                            this.templateData.logo = "http://localhost/api-nimbus/storage/app/websites/"+this.image.image_name;
+                            this.templateData.logo = process.env.VUE_APP_IMAGE_PATH+"/"+this.image.image_name;
                             break;
                         case 'promotionalHeaderBanner' :
-                            this.templateData.banner = "http://localhost/api-nimbus/storage/app/websites/"+this.image.image_name;
+                            this.templateData.banner = process.env.VUE_APP_IMAGE_PATH+"/"+this.image.image_name;
                             break;
                         case 'promotionalFeaturesImage' :
-                            this.templateData.features = "http://localhost/api-nimbus/storage/app/websites/"+this.image.image_name;
+                            this.templateData.features = process.env.VUE_APP_IMAGE_PATH+"/"+this.image.image_name;
                             break;
                         case 'promotionalBenefitsImage' :
-                            this.templateData.benefits = "http://localhost/api-nimbus/storage/app/websites/"+this.image.image_name;
+                            this.templateData.benefits = process.env.VUE_APP_IMAGE_PATH+"/"+this.image.image_name;
                             break;
                         case 'promotionalFooterImage' :
-                            this.templateData.footer = "http://localhost/api-nimbus/storage/app/websites/"+this.image.image_name;
+                            this.templateData.footer = process.env.VUE_APP_IMAGE_PATH+"/"+this.image.image_name;
                             break;
                     }       
                 },

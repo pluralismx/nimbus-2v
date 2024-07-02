@@ -357,7 +357,7 @@ export default {
             this.account.sent_emails += qty;
         },
         handleLeadUpdated: function (notification) {
-            this.loadWebsiteLeads();
+            // this.loadWebsiteLeads();
             this.handleStatusBarNotification(notification);
         }
     }

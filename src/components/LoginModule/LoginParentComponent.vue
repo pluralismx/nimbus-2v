@@ -92,7 +92,9 @@
                     const response = await axios.post('api/login', formData, {"withCredentials": true})
                     
                     if(response.data.status=='success') {
+                        
                         let login = await this.getIdentity();
+                        
                         if(login){
                             this.$emit('user-logged-in');
                             this.error = false;
@@ -114,10 +116,10 @@
                 const json = JSON.stringify(data);
                 let formData = new FormData();
                 formData.append('json', json);
+                
                 try {
                     const login = await axios.post('api/login', formData, {"withCredentials": true});
                     if(login.data.status == "success"){
-                        console.log(login.data);
                         let identity = JSON.stringify(login.data.identity);
                         localStorage.setItem('identity', identity);
                         return true;
@@ -128,6 +130,8 @@
                     console.error('Error:', error);
                     return false;
                 }
+
+                
             },
             showCreateAccount: function () {
 

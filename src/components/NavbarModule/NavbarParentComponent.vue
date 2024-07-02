@@ -132,7 +132,7 @@
         grid-column: 1/2;
         grid-row: 1/2;
         position: relative;
-        box-shadow: 0px 2px 6px var(--shadows);
+        box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.7);
         z-index: 95;
         display: grid;
         grid-template-columns: 100%;

@@ -250,13 +250,13 @@
                 handler() {
                     switch(this.image.section){
                         case 'headerImage' :
-                            this.templateData.logo = "http://localhost/api-nimbus/storage/app/websites/"+this.image.image_name;
+                            this.templateData.logo = process.env.VUE_APP_IMAGE_PATH+"/"+this.image.image_name;
                             break;
                         case 'bannerImage' :
-                            this.templateData.banner = "http://localhost/api-nimbus/storage/app/websites/"+this.image.image_name;
+                            this.templateData.banner = process.env.VUE_APP_IMAGE_PATH+"/"+this.image.image_name;
                             break;
                         case 'footerImage' :
-                            this.templateData.footer = "http://localhost/api-nimbus/storage/app/websites/"+this.image.image_name;
+                            this.templateData.footer = process.env.VUE_APP_IMAGE_PATH+"/"+this.image.image_name;
                             break;
                     }       
                 },

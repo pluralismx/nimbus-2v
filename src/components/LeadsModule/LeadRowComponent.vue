@@ -2,7 +2,7 @@
     <!-- Original lead -->
     <tr>
         <td v-show="edit==false" width="18%"><span class="span-clickable" @click="showDetails()">{{ name }}</span></td>
-        <td v-show="edit==false" width="18%"><a :href="'tel:'+phone"><span class="span-call-icon" @click="showDetails()">&#128222;&nbsp;&nbsp;</span></a><a :href="'https://wa.me/'+phone" target="_blank"><span>{{ phone }}</span></a></td>
+        <td v-show="edit==false" width="18%"><a :href="'tel:'+phone"><span v-show="this.phone!=''" class="span-call-icon" @click="showDetails()">&#128222;&nbsp;&nbsp;</span></a><a :href="'https://wa.me/'+phone" target="_blank"><span>{{ phone }}</span></a></td>
         <td v-show="edit==false" width="18%"><span>{{ email }}</span></td>
         
         <td v-show="edit==false" width="18%">
@@ -91,6 +91,7 @@
             updateLead: async function () {
                 if(this.name != ''){
                     const json = {
+                        'id': this.lead.id,
                         'name': this.name,
                         'phone': this.phone,
                         'email': this.email,
@@ -102,7 +103,7 @@
                     formData.append('_method', 'put');
                     const response = await axios.post('api/lead/update/'+this.lead.id, formData, {"withCredentials":true});
                     if(response.data.status=="success"){
-                        this.$emit('lead-updated', {"text":"Prospecto actualizado", "status":"success"});
+                        this.$emit('lead-updated', json, {"text":"Prospecto actualizado", "status":"success"});
                         this.toggleEditWebsiteRow();
                     }else {
                         this.$emit('lead-updated', {"text":"No se pudo actualizar el prospecto", "status":"error"});

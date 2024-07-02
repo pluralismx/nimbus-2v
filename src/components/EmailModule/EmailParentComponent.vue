@@ -126,8 +126,11 @@
                 }
             },
             handleSendEmails: function (list) {
+                
                 this.recipients = [];
+                // Correo individual
                 if (typeof list === "string") {
+                    
                     const addedEmails = [];
 
                     // Iteramos sobre los leads para agregar correos electrónicos con nombre
@@ -146,7 +149,7 @@
                         }
                     });
 
-                    // Verificamos fuera del bucle si aún no se ha añadido el correo electrónico
+                    // Verificamos fuera del bucle si aún no se ha añadido el correo electrónico MOVER AL AL SIGUIENTE IF CUANDO ES UNA COLECCION DE CORREOS
                     if (!addedEmails.includes(list)) {
                         this.recipients.push({ 
                             address: list, 
@@ -155,11 +158,12 @@
                         });
                         addedEmails.push(list);  // Actualizamos el array de correos añadidos
                     }
-
-                } else if (Array.isArray(list)) { 
+                // VARIOS DESTINATARIOS   
+                } else if (Array.isArray(list)) {
+                    console.log('es un arreglo');
                     const includeTodos = list.includes("todos");
                     this.leads.forEach((item) => {
-                        if (includeTodos || list.includes(item.status) && item.subscribed == true) {
+                        if (includeTodos || list.includes(item.status) && item.subscribed == true && item.email != '') {
                             this.recipients.push({ 
                                 address: item.email, 
                                 sentStatus: '', 

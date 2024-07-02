@@ -3,12 +3,12 @@
         <thead>
             <tr class="table-tools">
                 <td class="table-search" colspan="2">
-                    <label for="">Search:&nbsp;</label>
+                    <label for="">Buscar:&nbsp;</label>
                     <input v-model="search_query" type="text">&nbsp;
                     <button class="btn-warning compact" @click="search()">{{ search_btn_text }}</button>
                 </td>
                 <td class="table-pagination" colspan="4">
-                    <label for="rows_per_page">rows per page: </label>
+                    <label for="rows_per_page">resultados: </label>
                     <select v-model="this.rp" class="select-rows">
                         <option value="5">5</option>
                         <option value="10">10</option>
@@ -21,12 +21,12 @@
                 </td>
             </tr>
             <tr>
-                <th width="18%"><span @click="sortTable('name')">Company</span></th>
-                <th width="18%"><span @click="sortTable('phone')">Phone</span></th>
-                <th width="18%"><span @click="sortTable('email')">E-mail</span></th>
-                <th width="18%"><span @click="sortTable('status')">Status</span></th>
-                <th width="18%"><span @click="sortTable('date')">Date</span></th>
-                <th width="18%">Actions</th>
+                <th width="18%"><span class="column-name" @click="sortTable('name')">Company</span></th>
+                <th width="18%"><span class="column-name" @click="sortTable('phone')">Phone</span></th>
+                <th width="18%"><span class="column-name" @click="sortTable('email')">E-mail</span></th>
+                <th width="18%"><span class="column-name" @click="sortTable('status')">Status</span></th>
+                <th width="18%"><span class="column-name" @click="sortTable('date')">Date</span></th>
+                <th width="18%">Acciones</th>
             </tr>
         </thead>
         <tbody v-if="!results">
@@ -127,38 +127,32 @@ export default {
             }
         },
         sortTable(index) {
-            let asc = true;
-            let desc = true;
-
-            for (let i = 1; i < this.leadsData.length; i++) {
-                if (this.leadsData[i][index] < this.leadsData[i - 1][index]) {
-                    asc = false;
-                }
-                if (this.leadsData[i][index] > this.leadsData[i - 1][index]) {
-                    desc = false;
-                }
+            // Verificar el estado actual del orden
+            if (this.orderByColumn === index) {
+                // Si ya estamos ordenando por esta columna, invertir el orden
+                this.orderAsc = !this.orderAsc;
+            } else {
+                // Si es una nueva columna, ordenar ascendente por defecto
+                this.orderByColumn = index;
+                this.orderAsc = true;
             }
 
-            if (desc) {
+            // Ordenar según el estado actual
+            if (this.orderAsc) {
                 this.leadsData.sort((a, b) => {
-                    let columnA = a[index];
-                    let columnB = b[index];
+                    let columnA = a[index].toLowerCase(); // Convertir a minúsculas para ordenar de manera no sensible a mayúsculas
+                    let columnB = b[index].toLowerCase(); // Convertir a minúsculas para ordenar de manera no sensible a mayúsculas
                     return columnA.localeCompare(columnB, 'es', { sensitivity: 'base' });
-                });
-            } else if (asc) {
-                this.leadsData.sort((a, b) => {
-                    let columnA = a[index];
-                    let columnB = b[index];
-                    return -columnA.localeCompare(columnB, 'es', { sensitivity: 'base' });
                 });
             } else {
                 this.leadsData.sort((a, b) => {
-                    let columnA = a[index];
-                    let columnB = b[index];
-                    return columnA.localeCompare(columnB, 'es', { sensitivity: 'base' });
+                    let columnA = a[index].toLowerCase(); // Convertir a minúsculas para ordenar de manera no sensible a mayúsculas
+                    let columnB = b[index].toLowerCase(); // Convertir a minúsculas para ordenar de manera no sensible a mayúsculas
+                    return columnB.localeCompare(columnA, 'es', { sensitivity: 'base' });
                 });
             }
         },
+
         search (){
             if(this.results == false){
                 this.search_btn_text = 'limpiar';
@@ -183,7 +177,15 @@ export default {
         handleShowDetails: function (lead) {
             this.$emit('show-details', lead);
         },
-        handleLeadUpdated: function (notification) {
+        handleLeadUpdated: function (lead, notification) {
+            this.leadsData.forEach((item)=>{
+                if(item.id == lead.id){
+                    item.name = lead.name;
+                    item.surname = lead.surname;
+                    item.email = lead.email;
+                    item.phone = lead.phone;
+                }
+            });
             this.$emit('lead-updated', notification);
         },
         handleLeadStatusUpdated: function (notification) {
@@ -243,7 +245,7 @@ export default {
     table{
         width: 100%;
         border-collapse: collapse;
-        box-shadow: 2px 2px 3px #222;
+        box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
         margin-bottom: 1rem;
     }
 
@@ -260,7 +262,6 @@ export default {
 
     thead tr th span{
         color: var(--basic);
-        transition: all 300ms;
     }
 
     tbody tr:nth-child(odd) {
@@ -298,6 +299,11 @@ export default {
 
     .table-search input{
         width: 15rem;
+    }
+
+    .column-name:hover {
+        cursor: pointer;
+        color: var(--accent);
     }
 
     .table-pagination {

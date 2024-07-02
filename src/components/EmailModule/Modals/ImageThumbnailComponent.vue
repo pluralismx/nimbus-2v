@@ -1,7 +1,7 @@
 <template>
     <div class="img-thumbnail" @click="imageSelected()">
         <span class="modal-close" @click="deleteImage()">&times;</span>
-        <img :src="'http://localhost/api-nimbus/storage/app/websites/' + image.name">
+        <img :src="imageUrl">
     </div>
 </template>
 <script>
@@ -19,6 +19,11 @@ export default {
         },
         deleteImage: function () {
             this.$emit('delete-image', this.image.id);
+        }
+    },
+    computed: {
+        imageUrl() {
+            return `${process.env.VUE_APP_IMAGE_PATH}/${this.image.name}`;
         }
     }
 }

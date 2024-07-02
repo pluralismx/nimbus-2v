@@ -88,12 +88,11 @@ export default {
                     "website": this.website
                 }
 
-                console.log(json);
                 let formData = new FormData();
                 formData.append('json', JSON.stringify(json));
                 const response = await axios.post("api/email/sendCampaign", formData, {"withCredentials": true});
-                
-                if(response.data.status =="success") {
+                console.log(response.data);
+                if(response.data.status =="finished") {
                     this.buttonText = "aceptar";
                     this.sending = false;
                     this.$emit('emails-sent', response.data.emails_sent);
@@ -111,6 +110,7 @@ export default {
                     this.sending = false;
                     this.waiting = true;
                 }else {
+                    console.log(response.data.message);
                     this.error = "No tienes correos suficientes";
                     this.sending = false;
                     this.waiting = true;
