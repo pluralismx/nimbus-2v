@@ -115,10 +115,10 @@ export function render(data) {
             <table width="100%" style="border-spacing:0;background-color: ${data.theme};" cellspacing="0">
             <tr>
                 <td align="center" style="border-spacing:0;padding: 16px;">
-                <p style="color: #ffffff;">Connect with us</p>
-                <a href="${data.facebook_link}"><img src="http://localhost/api-nimbus/storage/assets/white-facebook.png" alt="facebook" width="30" style="margin-left: 4px; margin-right: 4px;"></a>
-                <a href="${data.instagram_link}"><img src="http://localhost/api-nimbus/storage/assets/white-instagram.png" alt="instagram" width="30" style="margin-left: 4px; margin-right: 4px;"></a>
-                <a href="${data.youtube_link}"><img src="http://localhost/api-nimbus/storage/assets/white-youtube.png" alt="youtube" width="30" style="margin-left: 4px; margin-right: 4px;"></a>
+                <p style="color: #ffffff;">Síganos en redes</p>
+                <a href="${data.facebook_link}"><img src="https://api.nimbus.pluralis.com.mx/assets/white-facebook.png" alt="facebook" width="30" style="margin-left: 4px; margin-right: 4px;"></a>
+                <a href="${data.instagram_link}"><img src="https://api.nimbus.pluralis.com.mx/assets/white-instagram.png" alt="instagram" width="30" style="margin-left: 4px; margin-right: 4px;"></a>
+                <a href="${data.youtube_link}"><img src="https://api.nimbus.pluralis.com.mx/assets/white-youtube.png" alt="youtube" width="30" style="margin-left: 4px; margin-right: 4px;"></a>
                 </td>
             </tr>
             </table>
@@ -130,7 +130,7 @@ export function render(data) {
                 <p>${data.slogan}</p>
                 <p>${data.address}</p>
                 <p><a href="mailto:${data.email}">${data.email}</a></p>
-                <p><a href="tel:${data.phone}">Call: ${data.phone}</a></p>
+                <p><a href="tel:${data.phone}">Llame: ${data.phone}</a></p>
                 </td>
             </tr>
             </table>

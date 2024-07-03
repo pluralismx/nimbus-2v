@@ -114,6 +114,7 @@ import axios from '@/lib/axios';
         font-family: 'regular';
         color: var(--shadows);
         resize: none;
+        line-height: 1.5;
     }
 
     .note-body textarea:focus{

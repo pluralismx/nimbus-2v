@@ -1,7 +1,7 @@
 <template>
     <div>
-        <h1>Notes</h1>
-        <span @click="toggleNewNote">add</span>
+        <h1>Memos</h1>
+        <span @click="toggleNewNote">crear</span>
     </div>
 </template>
 <script>

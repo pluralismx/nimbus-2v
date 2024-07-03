@@ -187,10 +187,14 @@
                 </div>
             </div>
         </div>
+        <div class="save-button-container">
+            <button @click="saveFormData" class="btn-primary">guardar cambios</button>
+        </div>
     </section>
-
+    
 </template>
 <script>
+    import Cookies from 'js-cookie';
     import { render } from '../Templates/CallToAction.js'
     export default {
         name: 'CallToActionSettingsComponent',
@@ -215,6 +219,13 @@
         computed: {
             setTheme() {
                 return this.theme;
+            }
+        },
+        created() {
+            const savedData = Cookies.getJSON('callToAction-template');
+            if (savedData) {
+                this.subject = savedData.subject;
+                this.templateData = savedData.templateData;
             }
         },
         watch: {
@@ -273,8 +284,8 @@
                 templateData: {
                     // template content
                     theme: null,
-                    logo: "http://localhost/api-nimbus/storage/assets/logo-template.png",
-                    banner: "http://localhost/api-nimbus/storage/assets/banner-template.png",
+                    logo: "http://api.nimbus.pluralis.com.mx/assets/logo-template.png",
+                    banner: "http://api.nimbus.pluralis.com.mx/assets/banner-template.png",
                     title: 'Daedalus et Icarus',
                     content: 'Daedalus, faber ingeniosus, fuit artifex eximius qui Minos, rex Cretensis, auxiliatus est construere labyrinthum in quo Minotaurus, monstro feroce, inclusus est. Sed Daedalus et filius eius, Icarus, a rege in labyrintho inclusi sunt. Non poterant effugere per vias labyrinthi, itaque Daedalus consilium cepit.<br/><br/>Daedalus de pennarum ordine cogitavit. Ipse sibi alas fecit ex cera et plumis, et ínter eas adhesit plumas leviores. Postquam alas sibi et Icaro imposuit, admonuit filium ne nimium ad caelum attolleret neve nimium appropinquare soli.<br/><br/>Sed Icarus, juvenis temerarius, gaudebat nova potentia alarum. Volabat in caelum, felix et libere, sed, ob audaciam, solis radiis nimium appropinquavit. Cera, quae alas iungebat, solis ardori liquefacta est, et Ícarus in mare cecidit. Pater, aegre dolens, Ícarum nuncupavit, atque sedibus caeli debitum poenam petivit.',
                     // Button text
@@ -285,7 +296,7 @@
                     instagram_link: null,
                     youtube_link: null,
                     // footer
-                    footer: "http://localhost/api-nimbus/storage/assets/logo-template.png",
+                    footer: "http://api.nimbus.pluralis.com.mx/assets/logo-template.png",
                     slogan: "Pluralis - Desarrollo Web",
                     address: "Ave. Alejandro Von Humboldt #19264, Tijuana, Mexico CP 22434",
                     email: "contacto@pluralis.com.mx",
@@ -308,6 +319,11 @@
                     "subject": this.subject,
                     "body": b64
                 });
+            },
+            saveFormData() {
+                // Guardar los datos del formulario en una cookie
+                Cookies.set('callToAction-template', { subject: this.subject, templateData: this.templateData }, { expires: 28 });
+                alert('Datos guardados en una cookie!');
             }
         }
     }
@@ -316,7 +332,7 @@
 
     .settings-container {
         margin-top: 2rem;
-        box-shadow: 2px 2px 6px var(--shadows);
+        box-shadow: 2px 2px 4px rgba(0,0,0,0.6);
         border-radius: .5rem;
     }
 
@@ -375,5 +391,12 @@
         border: none;
         font-family: 'Regular';
         padding: 4px;
+    }
+
+    .save-button-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 16px;
     }
 </style>

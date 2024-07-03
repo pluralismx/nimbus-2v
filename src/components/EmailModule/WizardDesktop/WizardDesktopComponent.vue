@@ -132,7 +132,7 @@
         grid-template-rows: 8% 92%;
         flex-grow: 1;
         border-radius: .5rem;
-        box-shadow: 3px 3px 6px var(--shadows);
+        box-shadow: 2px 2px 6px rgba(0,0,0,0.7);
         min-height: 0;
         margin-top: 0;
         margin-left: 1rem;

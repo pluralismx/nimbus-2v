@@ -60,7 +60,7 @@
     margin-top: 0;
     grid-row: 1/2;
     grid-column: 1/2;
-    box-shadow: 2px 2px 6px var(--shadows);
+    box-shadow: 2px 2px 4px rgba(0,0,0,0.6);
     border-radius: .5rem;
 }
 

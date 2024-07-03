@@ -204,10 +204,13 @@
                 </div>
             </div>
         </div>
-
+        <div class="save-button-container">
+            <button @click="saveFormData" class="btn-primary">guardar cambios</button>
+        </div>
     </section>
 </template>
 <script>
+    import Cookies from 'js-cookie';
     import { render } from '../Templates/Promotional.js';
     export default {
         name: 'PromotionalSettingsComponent',
@@ -232,6 +235,13 @@
         computed: {
             setTheme() {
                 return this.theme;
+            }
+        },
+        created() {
+            const savedData = Cookies.getJSON('promotional-template');
+            if (savedData) {
+                this.subject = savedData.subject;
+                this.templateData = savedData.templateData;
             }
         },
         watch: {
@@ -293,20 +303,20 @@
                 subject: '',
                 templateData: {
                     theme: '',
-                    logo: "http://localhost/api-nimbus/storage/assets/logo-template.png",
-                    banner: "http://localhost/api-nimbus/storage/assets/banner-template.png",
-                    features: "http://localhost/api-nimbus/storage/assets/illustration-template.png",
+                    logo: "https://api.nimbus.pluralis.com.mx/assets/logo-template.png",
+                    banner: "https://api.nimbus.pluralis.com.mx/assets/banner-template.png",
+                    features: "https://api.nimbus.pluralis.com.mx/assets/illustration-template.png",
                     feature_a: '',
                     feature_b: '',
                     feature_c: '',
-                    benefits: "http://localhost/api-nimbus/storage/assets/illustration-template.png",
+                    benefits: "https://api.nimbus.pluralis.com.mx/assets/illustration-template.png",
                     benefit_a: '',
                     benefit_b: '',
                     benefit_c: '',
                     facebook_link: '',
                     instagram_link: '',
                     youtube_link: '',
-                    footer: "http://localhost/api-nimbus/storage/assets/logo-template.png",
+                    footer: "https://api.nimbus.pluralis.com.mx/assets/logo-template.png",
                     slogan: '',
                     address: '',
                     email: '',
@@ -325,6 +335,11 @@
                     "subject": this.subject,
                     "body": b64
                 });
+            },
+            saveFormData() {
+                // Guardar los datos del formulario en una cookie
+                Cookies.set('promotional-template', { subject: this.subject, templateData: this.templateData }, { expires: 28 });
+                alert('Datos guardados en una cookie!');
             }
         }
     }
@@ -333,7 +348,7 @@
 
     .settings-container {
         margin-top: 2rem;
-        box-shadow: 2px 2px 6px var(--shadows);
+        box-shadow: 2px 2px 4px rgba(0,0,0,0.6);
         border-radius: .5rem;
     }
 
@@ -392,6 +407,12 @@
         border: none;
         font-family: 'Regular';
         padding: 4px;
+    }
+    .save-button-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 16px;
     }
     
 </style>

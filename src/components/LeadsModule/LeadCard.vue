@@ -2,6 +2,7 @@
     <article>
         <div class="lead-header">
             <h3>{{ lead.name }}</h3>
+            <h3>{{ lead.date }}</h3>
         </div>
         <div class="lead-body">
             <div class="lead-info">
@@ -112,6 +113,7 @@ import axios from '@/lib/axios';
         border-top-left-radius: 6px;
         display: flex;
         align-items: center;
+        justify-content: space-between;
         padding: 0px .5rem;
     }
 

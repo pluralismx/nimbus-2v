@@ -1,6 +1,7 @@
 <template>
     <div class="main-container">
-        <h1>Prospectos</h1>
+        <h1 id="title-desktop">Prospectos</h1>
+        <h1 id="title-mobile" @click="showOptions">Prospectos</h1>
         <div class="title-bar-menu">
             <span @click="saveLead()">agregar</span>
             <span>&nbsp;|&nbsp;</span>
@@ -55,6 +56,9 @@ export default {
                     "text": "No se pudo descargar el archivo"
                 });
             });
+        },
+        showOptions: function () {
+            this.$emit('show-options');
         }
 
     }
@@ -77,6 +81,24 @@ export default {
 
     span:hover {
         cursor: pointer;
+    }
+
+    #title-mobile {
+        display: block;
+    }
+
+    #title-desktop {
+        display: none;
+    }
+
+    @media only screen and (min-width: 1024px) {
+        #title-mobile {
+            display: none;
+        }
+
+        #title-desktop {
+            display: block;
+        }
     }
 
 

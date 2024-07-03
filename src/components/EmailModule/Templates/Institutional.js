@@ -64,9 +64,9 @@ export function render(data) {
             <tr>
                 <td align="center" style="border-spacing:0;padding: 16px;">
                 <p style="color: #fff;">Síganos en redes</p>
-                <a href="#"><img src="http://localhost/crm-gama/assets/images/white-facebook.png" alt="facebook" width="30" style="margin-left: 4px; margin-right: 4px;"></a>
-                <a href="#"><img src="http://localhost/crm-gama/assets/images/white-instagram.png" alt="instagram" width="30" style="margin-left: 4px; margin-right: 4px;"></a>
-                <a href="#"><img src="http://localhost/crm-gama/assets/images/white-youtube.png" alt="youtube" width="30" style="margin-left: 4px; margin-right: 4px;"></a>
+                <a href="#"><img src="https://api.nimbus.pluralis.com.mx/assets/white-facebook.png" alt="facebook" width="30" style="margin-left: 4px; margin-right: 4px;"></a>
+                <a href="#"><img src="https://api.nimbus.pluralis.com.mx/assets/white-instagram.png" alt="instagram" width="30" style="margin-left: 4px; margin-right: 4px;"></a>
+                <a href="#"><img src="https://api.nimbus.pluralis.com.mx/assets/white-youtube.png" alt="youtube" width="30" style="margin-left: 4px; margin-right: 4px;"></a>
                 </td>
             </tr>
             </table>
@@ -78,7 +78,7 @@ export function render(data) {
                 <p>${data.slogan}</p>
                 <p>${data.address}</p>
                 <p><a href="mailto:${data.email}">${data.email}</a></p>
-                <p><a href="tel:${data.phone}">Call: ${data.phone}</a></p>
+                <p><a href="tel:${data.phone}">Llame: ${data.phone}</a></p>
                 </td>
             </tr>
             </table>

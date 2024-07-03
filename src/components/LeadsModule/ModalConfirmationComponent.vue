@@ -45,8 +45,7 @@ export default {
 .modal-container {
     width: 75%;
     border-radius: .5rem;
-    background-color: var(--basic);
-    box-shadow: 2px 2px 16px var(--shadows);
+    box-shadow: 2px 2px 4px rgba(0,0,0,0.6);
 }
 
 .modal-header {
@@ -63,7 +62,7 @@ export default {
 .modal-body {
     padding: .5rem;
     background-color: var(--basic);
-    margin: 2rem 0;
+    padding: 2rem 0;
     text-align: center;
 }
 

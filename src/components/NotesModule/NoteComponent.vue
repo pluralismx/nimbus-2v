@@ -66,6 +66,10 @@
         transition: transform 300ms;
     }
 
+    .note-container:hover textarea {
+        color: var(--accent);
+    }
+
     .note-header {
         height: 15%;
         background-color: var(--accent);
@@ -102,8 +106,9 @@
         background-color: transparent;
         border: none;
         font-family: 'regular';
-        color: var(--accent);
+        color: var(--warn);
         resize: none;
+        line-height: 1.5;
     }
 
     .note-body textarea:focus{

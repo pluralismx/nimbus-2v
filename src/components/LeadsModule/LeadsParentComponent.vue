@@ -4,20 +4,33 @@
             @save-lead="handleSaveLead"
             @show-upload-cvs="handleShowUploadCsv"
             @excel-downloaded="handleExcelDownloaded"
+            @show-options="handleShowOptions"
             :website="website"
         />
         <!-- Mobile devices -->
         <div class="leads-container" v-if="smViewport">
             <LeadCardComponent
-                v-for="lead in leads" :key="lead.id" :lead="lead"
+                v-show="!results"
+                v-for="lead in displayedData" :key="lead.id" :lead="lead"
                 @show-edit-lead-modal="handleShowEditLeadModal"
-                @show-notes-modal="handleShowDetails"
-                
+                @show-notes-modal="handleShowDetails" 
                 @lead-status-updated="handleLeadStatusUpdated"
                 @delete-lead="handleDeleteLead"
             />
+            <LeadCardComponent
+                v-show="results"
+                v-for="lead in results_data" :key="lead.id" :lead="lead"
+                @show-edit-lead-modal="handleShowEditLeadModal"
+                @show-notes-modal="handleShowDetails" 
+                @lead-status-updated="handleLeadStatusUpdated"
+                @delete-lead="handleDeleteLead"
+            />
+            <div class="mobile-pagination-controlls">
+                <button class="btn-primary" @click="previousPage">&lt;</button>
+                <span>&nbsp;{{ this.cp }}&nbsp;/&nbsp;{{ this.pages }}&nbsp;</span>
+                <button class="btn-primary" @click="nextPage">&gt;</button>
+            </div>
         </div>
-
         <!-- Desktop devices -->
         <div class="leads-container" v-else>
             <LeadsTableComponent 
@@ -28,8 +41,6 @@
                 @lead-status-updated="handleLeadStatusUpdated"
             />
         </div>
-
-
         <!-- Modals -->
         <SaveLeadModalComponent 
             v-show="isVisibleSaveLeadModal"
@@ -63,7 +74,14 @@
             :website="website"
             @answer="handleShowUploadCsv"
             @csv-uploaded="handleCsvUploaded"
-            
+        />
+
+        <ModalLeadOptionsComponent 
+            v-show="isVisibleLeadOptions"
+            @close-modal="handleShowOptions"
+            @sort-leads-by="handleSortLeadsBy"
+            @change-displayed-results="handleDisplyedResults"
+            @search-query="handleSearchQuery"
         />
 
     </section>
@@ -78,6 +96,7 @@
     import NotesLeadModalComponent from './NotesLeadModalComponent';
     import ModalConfirmationComponent from './ModalConfirmationComponent.vue';
     import ModalUploadCvsComponent from './ModalUploadCvsComponent.vue';
+    import ModalLeadOptionsComponent from './ModalLeadOptionsComponent.vue';
 
     export default {
         name: 'LeadsParentComponent',
@@ -89,7 +108,8 @@
             EditLeadModalComponent,
             NotesLeadModalComponent,
             ModalConfirmationComponent,
-            ModalUploadCvsComponent
+            ModalUploadCvsComponent,
+            ModalLeadOptionsComponent
         },
         props: {
             smViewport: {
@@ -109,6 +129,32 @@
                 required: true
             }
         },
+        computed: {
+            leadsComputed() {
+                return this.leads;
+            },
+            pages() {
+                return Math.ceil((this.leadsData.length / this.rp));
+            },
+            limitStart() {
+                return (this.cp - 1) * this.rp;
+            },
+            limitEnd(){
+                return (this.rp * this.cp);
+            },
+            displayedData(){
+                return this.leadsData.slice(this.limitStart, this.limitEnd);
+            }
+        },
+        watch: {
+            leadsComputed: {
+                handler(newVal){
+                    this.leadsData = newVal;
+                }
+            },
+            immediate: true,
+            deep: true
+        },
         data() {
             return {
                 isVisibleSaveLeadModal: false,
@@ -116,11 +162,23 @@
                 isVisibleNotesLeadModal: false,
                 isVisibleConfirmationModal: false,
                 isVisibleCvsModal: false,
+                isVisibleLeadOptions: false,
+                
                 // Data
+                leadsData: [],
                 leadToEdit: {},
                 leadDetails: '',
                 leadNotes: [],
-                leadToDelete: ''
+                leadToDelete: '',
+
+                // Display options
+                sortBy: '',
+                leads_per_page: null,
+                rp: 10,
+                cp: 1,
+                search_query: null,
+                results: false,
+                results_data: [],
             }
         },
         methods: {
@@ -211,7 +269,78 @@
             },
             handleExcelDownloaded: function (notification) {
                 this.$emit('excel-downloaded', notification);
-            }
+            },
+
+            // Mobile lead Options
+            handleShowOptions: function () {
+                if(this.isVisibleLeadOptions == false){
+                    this.isVisibleLeadOptions = true;
+                }else {
+                    this.isVisibleLeadOptions = false;
+                }
+            },
+            handleSortLeadsBy: function (criteria) {
+            // Verificar el estado actual del orden
+                if (this.orderByColumn === criteria) {
+                    // Si ya estamos ordenando por esta columna, invertir el orden
+                    this.orderAsc = !this.orderAsc;
+                } else {
+                    // Si es una nueva columna, ordenar ascendente por defecto
+                    this.orderByColumn = criteria;
+                    this.orderAsc = true;
+                }
+
+                // Ordenar según el estado actual
+                if (this.orderAsc) {
+                    this.leadsData.sort((a, b) => {
+                        let columnA = a[criteria].toLowerCase(); // Convertir a minúsculas para ordenar de manera no sensible a mayúsculas
+                        let columnB = b[criteria].toLowerCase(); // Convertir a minúsculas para ordenar de manera no sensible a mayúsculas
+                        return columnA.localeCompare(columnB, 'es', { sensitivity: 'base' });
+                    });
+                } else {
+                    this.leadsData.sort((a, b) => {
+                        let columnA = a[criteria].toLowerCase(); // Convertir a minúsculas para ordenar de manera no sensible a mayúsculas
+                        let columnB = b[criteria].toLowerCase(); // Convertir a minúsculas para ordenar de manera no sensible a mayúsculas
+                        return columnB.localeCompare(columnA, 'es', { sensitivity: 'base' });
+                    });
+                }
+            },
+            handleDisplyedResults: function (results) {
+                this.rp = results;
+            },
+            nextPage (){
+                if(this.cp < this.pages){
+                    this.cp++;
+                }
+            },
+            previousPage (){
+                if(this.cp > 1){
+                    this.cp--;
+                }
+            },
+            handleSearchQuery: function (query) {
+                this.search_query = query;
+                this.search();
+            },
+            search: function (){
+                if(this.results == false){
+                    let query = this.search_query;
+                    console.log(this.search_query);
+                    this.leadsData.forEach(lead => {
+                        if (query === lead.name || query === lead.phone || query === lead.email) {
+                            let id = lead.id_lead;
+                            if (!this.results_data.some(match => match.id_lead === id)) {
+                                this.results_data.push(lead);
+                            }
+                        }
+                    });
+                    this.results = true;
+                }else{
+                    this.results_data = [];
+                    this.search_query = null;
+                    this.results = false;
+                }
+            },
         }
     }
 </script>
@@ -226,12 +355,25 @@
         display: flex;
         flex-direction: column;
         align-items: center;
+        box-sizing: border-box;
         overflow-y: scroll;
     }
 
     .leads-container {
         width: 100%;
         height: 100%;
+        box-sizing: border-box;
+    }
+
+    .leads-container::-webkit-scrollbar {
+        display: none;
+    }
+
+    .mobile-pagination-controlls {
+        display: flex;
+        align-items: center;
+        font-size: 16px;
+        justify-content: center;
     }
 
     /* Desktop */

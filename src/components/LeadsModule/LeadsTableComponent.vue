@@ -21,11 +21,11 @@
                 </td>
             </tr>
             <tr>
-                <th width="18%"><span class="column-name" @click="sortTable('name')">Company</span></th>
-                <th width="18%"><span class="column-name" @click="sortTable('phone')">Phone</span></th>
+                <th width="18%"><span class="column-name" @click="sortTable('name')">Compañia</span></th>
+                <th width="18%"><span class="column-name" @click="sortTable('phone')">Télefono</span></th>
                 <th width="18%"><span class="column-name" @click="sortTable('email')">E-mail</span></th>
                 <th width="18%"><span class="column-name" @click="sortTable('status')">Status</span></th>
-                <th width="18%"><span class="column-name" @click="sortTable('date')">Date</span></th>
+                <th width="18%"><span class="column-name" @click="sortTable('date')">Fecha</span></th>
                 <th width="18%">Acciones</th>
             </tr>
         </thead>
@@ -46,6 +46,7 @@
                 @show-details="handleShowDetails"
                 @lead-updated="handleLeadUpdated"
                 @lead-status-updated="handleLeadStatusUpdated"
+                @delete-lead="handleDeleteLead"
             />
         </tbody>
     </table>
@@ -152,7 +153,6 @@ export default {
                 });
             }
         },
-
         search (){
             if(this.results == false){
                 this.search_btn_text = 'limpiar';
