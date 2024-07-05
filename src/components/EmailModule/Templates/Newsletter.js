@@ -81,18 +81,18 @@ export function render(data) {
             </tr>
             </table>
             <!-- Introduction -->
-            <table style=" background-color: #FFFFFF">
+            <table style=" background-color: #FFFFFF; padding: 24px;">
             <tr>
                 <td style="font-size: 16px;">
-                <h1 style="padding: 16px; padding-bottom: 12px; text-align: center;">${data.title}</h1>
-                <p style="padding: 16px; padding-top: 0px; line-height: 1.5;">${data.content}</p>
+                <h1 style="padding: 16px; padding-bottom: 24px; text-align: center;">${data.title}</h1>
+                <p style="padding: 16px; padding-top: 0px; line-height: 1.5; text-align: justify; margin: 0;">${data.content}</p>
                 </td>
             </tr>
             </table>
             <!-- Explanation 1-->
-            <table role="offers" style="border-spacing:0;width: 100%; background-color: #FFFFFF;" cellspacing="0">
+            <table role="offers" style="border-spacing:0;width: 100%; background-color: #FFFFFF; padding: 0 24px;" cellspacing="0">
             <tr>
-                <td class="stacked" align="center" style="border-spacing:0;padding-top: 32px;padding-bottom: 16px;padding-left: 8px;padding-right: 8px;" width="50%" valign="top">
+                <td class="stacked" align="center" style="border-spacing:0;padding-top: 32px; padding-bottom: 16px; padding-left: 8px;padding-right: 8px;" width="50%" valign="top">
                 <img src="${data.picture_a}" alt="illustration" width="100%"/>
                 </td>
                 <td class="stacked" align="left" style="font-size: 16px; border-spacing:0;padding-top: 32px; padding-bottom: 16px;" valign="top">
@@ -101,7 +101,7 @@ export function render(data) {
             </tr>
             </table>
             <!-- Explanation 2-->
-            <table role="offers" style="border-spacing:0;width: 100%; background-color: #FFFFFF;" cellspacing="0">
+            <table role="offers" style="border-spacing:0;width: 100%; background-color: #FFFFFF; padding: 0 24px;" cellspacing="0">
             <tr>
                 <td class="stacked" align="center" style="border-spacing:0;padding-top: 32px; padding-bottom: 16px; padding-left: 8px; padding-right: 8px;" width="50%" valign="top">
                 <img src="${data.picture_b}" alt="illustration" width="100%"/>

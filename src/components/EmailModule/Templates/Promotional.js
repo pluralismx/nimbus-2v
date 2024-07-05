@@ -56,8 +56,8 @@ export function render(data) {
             <table role="offers" style="border-spacing:0;width: 100%; background-color: #FFFFFF;" cellspacing="0">
             <tr>
                 <td align="center" style="border-spacing:0;padding-top: 32px; padding-bottom: 16px; width: 50%;">
-                <img src="${data.features}" alt="illustration" width="70%"/>
-                <h3>Caracteristicas</h3>
+                <img src="${data.features}" style="margin-bottom: 16px; alt="illustration" width="70%"/>
+                <h3 style="margin-bottom: 16px;">Caracteristicas</h3>
                 <ul style="list-style: none; padding: 0; line-height: 1.5;">
                     <li>${data.feature_a}</li>
                     <li>${data.feature_b}</li>
@@ -65,8 +65,8 @@ export function render(data) {
                 </ul>
                 </td>
                 <td align="center" style="border-spacing:0;padding-top: 32px; padding-bottom: 16px; width: 50%;">
-                <img src="${data.benefits}" alt="illustration" width="70%"/>
-                <h3>Beneficios</h3>
+                <img src="${data.benefits}" style="margin-bottom: 16px; alt="illustration" width="70%"/>
+                <h3 style="margin-bottom: 16px;">Beneficios</h3>
                 <ul style="list-style: none; padding: 0; line-height: 1.5;">
                     <li>${data.benefit_a}</li>
                     <li>${data.benefit_b}</li>
@@ -91,10 +91,10 @@ export function render(data) {
             <tr>
                 <td align="center" style="border-spacing:0;padding: 16px;">
                 <img src="${data.footer}" alt="Logo" width="140px">
-                <p>${data.slogan}</p>
-                <p>${data.address}</p>
-                <p><a href="mailto:${data.email}">${data.email}</a></p>
-                <p><a href="tel:${data.phone}">Llame: ${data.phone}</a></p>
+                <p style="margin-bottom: 12px;">${data.slogan}</p>
+                <p style="margin-bottom: 12px;>${data.address}</p>
+                <p style="margin-bottom: 12px;><a href="mailto:${data.email}">${data.email}</a></p>
+                <p style="margin-bottom: 12px;><a href="tel:${data.phone}">Llame: ${data.phone}</a></p>
                 </td>
             </tr>
             </table>

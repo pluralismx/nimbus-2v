@@ -45,7 +45,7 @@ export function render(data) {
             <!-- Main text -->
             <table role="content" style="border-spacing:0;font-size:18px;width: 100%;">
             <tr>
-                <td style="border-spacing:0; background-color:#fff; padding: 1rem;">
+                <td style="border-spacing:0; background-color:#fff; padding: 1rem 2rem;">
                     <h3>${data.title}</h3>
                     <p style="line-height: 1.5;">
                         ${data.content}
@@ -68,11 +68,11 @@ export function render(data) {
             <table width="100%" style="border-spacing:0;font-size:18px;background-color: #fff;" cellspacing="0">
             <tr>
                 <td align="center" style="border-spacing:0;padding: 16px;">
-                <img src="${data.footer}" alt="Logo" width="140px">
-                <p>${data.slogan}</p>
-                <p>${data.address}</p>
-                <p><a href="mailto:${data.email}">${data.email}</a></p>
-                <p><a href="tel:${data.phone}">Llame: ${data.phone}</a></p>
+                <img style="margin-bottom: 12px;" src="${data.footer}" alt="Logo" width="140px" />
+                <p style="margin-bottom: 12px;>${data.slogan}</p>
+                <p style="margin-bottom: 12px;>${data.address}</p>
+                <p style="margin-bottom: 12px;><a href="mailto:${data.email}">${data.email}</a></p>
+                <p style="margin-bottom: 12px;><a href="tel:${data.phone}">Llame: ${data.phone}</a></p>
                 </td>
             </tr>
             </table>

@@ -51,7 +51,7 @@ export function render(data) {
             <!-- Main text -->
             <table role="content" style="border-spacing:0;font-size:18px;width: 100%;">
             <tr>
-                <td style="border-spacing:0; background-color:#fff; padding: 1rem;">
+                <td style="border-spacing:0; background-color:#fff; padding: 1rem 2rem;">
                 <h3 style="margin: 1em 0;">${data.title}</h3>
                 <p style="line-height: 1.5;">
                     ${data.content}
