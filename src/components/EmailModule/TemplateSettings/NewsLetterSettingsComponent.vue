@@ -224,18 +224,15 @@
             suscription: {
                 type: String,
                 required: true
+            },
+            website: {
+                type: Number,
+                required: true
             }
         },
         computed: {
             setTheme() {
                 return this.theme;
-            }
-        },
-        created() {
-            const savedData = Cookies.getJSON('newsletter-template');
-            if (savedData) {
-                this.subject = savedData.subject;
-                this.templateData = savedData.templateData;
             }
         },
         watch: {
@@ -250,6 +247,11 @@
                 handler(newVal){
                     if(newVal === 'newsletter'){
                         this.html();
+                    }
+                    const savedData = Cookies.getJSON('newsletter-template'+this.website);
+                    if (savedData) {
+                        this.subject = savedData.subject;
+                        this.templateData = savedData.templateData;
                     }
                 },
                 immediate: true,
@@ -288,6 +290,33 @@
             subject: {
                 handler(){
                     this.html();
+                }
+            },
+            website: {
+                handler(newVal) {
+                    const savedData = Cookies.getJSON('newsletter-template'+newVal);
+                    if (savedData) {
+                        this.subject = savedData.subject;
+                        this.templateData = savedData.templateData;
+                    }else {
+                        this.subject = '';
+                        this.templateData.logo = "https://api.nimbus.pluralis.com.mx/assets/logo-template.png";
+                        this.templateData.banner = "https://api.nimbus.pluralis.com.mx/assets/banner-template.png";
+                        this.templateData.title = 'Daedalus et Icarus';
+                        this.templateData.content = 'Daedalus faber ingeniosus, exsilium petens ab insula Creta, alas ex pennis et cera confecit. Ea alis Icarum, filium suum, primum instruxit, monens eum ne ad solis radios appropinquaret. Sed cupiditate ductus, Icarus monita patris neglexit, altius volans et ad caelum appropinquans. Cera, solis ardore liquefacta, alas eius dissolvit. Icarus igitur in mare decidit et perit.';
+                        this.templateData.picture_a = "https://api.nimbus.pluralis.com.mx/assets/illustration-template.png",
+                        this.templateData.side_text_a = "Daedalus, dolens filii mortem, alia nave navigat ad terram Siciliam, ubi regem Cocalum invenit. Cocalus, benignus rex, Daedalum benigne excipit et in suam amicitiam recipit. Tum Daedalus in Sicilia moratur, artem suam fabrum ostendens et Cocalo multa praeclara opera fabricante.";
+                        this.templateData.picture_b = "https://api.nimbus.pluralis.com.mx/assets/illustration-template.png";
+                        this.templateData.side_text_b = "Interim, Creta rex Minos, filium suum deplorans, Daedalum quaerit. Sed Daedalus se Latium ad regem Ancum movet, ubi pacem et asylum invenit. Sic Daedalus et Icarus fabulae in historia perpetua memoriae manent, exemplo peritiae et prudentiae, sed etiam temeritatis et tristitiae.";
+                        this.templateData.facebook_link = null;
+                        this.templateData.instagram_link = null;
+                        this.templateData.youtube_link = null;
+                        this.templateData.footer = "https://api.nimbus.pluralis.com.mx/assets/logo-template.png";
+                        this.templateData.slogan = "Pluralis - Desarrollo Web";
+                        this.templateData.address = "Tijuana, Mexico";
+                        this.templateData.email = "contacto@pluralis.com.mx";
+                        this.templateData.phone = "+52 (664) 252 2024"; 
+                    }
                 }
             }
         },
@@ -329,7 +358,7 @@
             },
             saveFormData() {
                 // Guardar los datos del formulario en una cookie
-                Cookies.set('newsletter-template', { subject: this.subject, templateData: this.templateData }, { expires: 28 });
+                Cookies.set('newsletter-template'+this.website, { subject: this.subject, templateData: this.templateData }, { expires: 28 });
                 alert('Datos guardados en una cookie!');
             }
         }

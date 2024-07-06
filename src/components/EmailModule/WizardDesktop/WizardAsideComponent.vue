@@ -14,7 +14,7 @@
             :isSelected="template"
             :theme="theme"
             :image="templateImageData"
-
+            :website="website"
         />
 
         <!-- Promotional -->
@@ -26,6 +26,7 @@
             :theme="theme"
             :image="templateImageData"
             :suscription="suscription"
+            :website="website"
         />
 
         <!-- Institutional -->
@@ -36,7 +37,7 @@
             :isSelected="template"
             :theme="theme"
             :image="templateImageData"
-
+            :website="website"
         />
 
         <!-- Call to action -->
@@ -47,6 +48,7 @@
             :isSelected="template"
             :theme="theme"
             :image="templateImageData"
+            :website="website"
 
         />
 

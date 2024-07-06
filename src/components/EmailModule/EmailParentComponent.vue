@@ -160,7 +160,6 @@
                     }
                 // VARIOS DESTINATARIOS   
                 } else if (Array.isArray(list)) {
-                    console.log('es un arreglo');
                     const includeTodos = list.includes("todos");
                     this.leads.forEach((item) => {
                         if (includeTodos || list.includes(item.status) && item.subscribed == true && item.email != '') {

@@ -263,7 +263,7 @@
 
                 axios.post('/api/payments/'+url, formData, {"withCredentials":true})
                 .then(response => {
-                    console.log(response.data);
+                    
                     if(response.data.status == "success"){
                         // Reset layout
                         this.isVisibleUserDetails = false;

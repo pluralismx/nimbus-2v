@@ -325,7 +325,6 @@
             search: function (){
                 if(this.results == false){
                     let query = this.search_query;
-                    console.log(this.search_query);
                     this.leadsData.forEach(lead => {
                         if (query === lead.name || query === lead.phone || query === lead.email) {
                             let id = lead.id_lead;

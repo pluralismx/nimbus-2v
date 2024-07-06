@@ -230,18 +230,15 @@
             suscription: {
                 type: String,
                 required: true
+            },
+            website: {
+                type: Number,
+                required: true
             }
         },
         computed: {
             setTheme() {
                 return this.theme;
-            }
-        },
-        created() {
-            const savedData = Cookies.getJSON('promotional-template');
-            if (savedData) {
-                this.subject = savedData.subject;
-                this.templateData = savedData.templateData;
             }
         },
         watch: {
@@ -258,6 +255,11 @@
                     if(newVal === 'promotional'){
                         this.html();
                     }
+                    const savedData = Cookies.getJSON('promotional-template'+this.website);
+                    if (savedData) {
+                        this.subject = savedData.subject;
+                        this.templateData = savedData.templateData;
+                    }   
                 },
                 immediate: true,
                 deep: true
@@ -297,6 +299,36 @@
                     this.html();
                 }
             },
+            website: {
+                handler(newVal){
+                    const savedData = Cookies.getJSON('promotional-template'+newVal);
+                    if (savedData) {
+                        this.subject = savedData.subject;
+                        this.templateData = savedData.templateData;
+                    }else{
+                        this.subject = '';
+                        this.templateData.theme = '',
+                        this.templateData.logo = "https://api.nimbus.pluralis.com.mx/assets/logo-template.png";
+                        this.templateDate.banner = "https://api.nimbus.pluralis.com.mx/assets/banner-template.png";
+                        this.templateDate.features = "https://api.nimbus.pluralis.com.mx/assets/illustration-template.png";
+                        this.templateData.feature_a = "";
+                        this.templateData.feature_b = "";
+                        this.templateDate.feature_c = "";
+                        this.templateData.benefits = "https://api.nimbus.pluralis.com.mx/assets/illustration-template.png";
+                        this.templateData.benefit_a = "";
+                        this.templateData.benefit_b = "";
+                        this.templateData.benefit_c = "";
+                        this.templateData.facebook_link = "";
+                        this.templateData.instagram_link = "";
+                        this.templateData.youtube_link = "";
+                        this.templateData.footer = "https://api.nimbus.pluralis.com.mx/assets/logo-template.png";
+                        this.templateData.slogan = "";
+                        this.templateData.address = "";
+                        this.templateData.email = "";
+                        this.templatedata.phone = "";
+                    }
+                }
+            }
         },
         data() {
             return {
@@ -338,7 +370,7 @@
             },
             saveFormData() {
                 // Guardar los datos del formulario en una cookie
-                Cookies.set('promotional-template', { subject: this.subject, templateData: this.templateData }, { expires: 28 });
+                Cookies.set('promotional-template'+this.website, { subject: this.subject, templateData: this.templateData }, { expires: 28 });
                 alert('Datos guardados en una cookie!');
             }
         }

@@ -170,18 +170,15 @@
             suscription: {
                 type: String,
                 required: true
+            },
+            website: {
+                type: Number,
+                required: true
             }
         },
         computed: {
             setTheme() {
                 return this.theme;
-            }
-        },
-        created() {
-            const savedData = Cookies.getJSON('institutional-template');
-            if (savedData) {
-                this.subject = savedData.subject;
-                this.templateData = savedData.templateData;
             }
         },
         watch: {
@@ -194,9 +191,13 @@
             },
             isSelected: {
                 handler(newVal){
-                    console.log(newVal);
                     if(newVal === 'institutional'){
                         this.html();
+                    }
+                    const savedData = Cookies.getJSON('institutional-template'+this.website);
+                    if (savedData) {
+                        this.subject = savedData.subject;
+                        this.templateData = savedData.templateData;
                     }
                 },
                 immediate: true,
@@ -230,6 +231,31 @@
                 handler(){
                     this.html();
                 }
+            },
+            website: {
+                handler(newVal) {
+                    const savedData = Cookies.getJSON('institutional-template'+newVal);
+                    if (savedData) {
+                        this.subject = savedData.subject;
+                        this.templateData = savedData.templateData;
+                    }else {
+                        this.subject= '';
+                        this.templateData.logo= "https://api.nimbus.pluralis.com.mx/assets/logo-template.png";
+                        this.templateData.banner= "https://api.nimbus.pluralis.com.mx/assets/banner-template.png";
+                        this.templateData.title= 'Daedalus et Icarus';
+                        this.templateData.content= 'Daedalus, faber ingeniosus, fuit artifex eximius qui Minos, rex Cretensis, auxiliatus est construere labyrinthum in quo Minotaurus, monstro feroce, inclusus est. Sed Daedalus et filius eius, Icarus, a rege in labyrintho inclusi sunt. Non poterant effugere per vias labyrinthi, itaque Daedalus consilium cepit.<br/><br/>Daedalus de pennarum ordine cogitavit. Ipse sibi alas fecit ex cera et plumis, et ínter eas adhesit plumas leviores. Postquam alas sibi et Icaro imposuit, admonuit filium ne nimium ad caelum attolleret neve nimium appropinquare soli.<br/><br/>Sed Icarus, juvenis temerarius, gaudebat nova potentia alarum. Volabat in caelum, felix et libere, sed, ob audaciam, solis radiis nimium appropinquavit. Cera, quae alas iungebat, solis ardori liquefacta est, et Ícarus in mare cecidit. Pater, aegre dolens, Ícarum nuncupavit, atque sedibus caeli debitum poenam petivit.',
+                        // social link
+                        this.templateData.facebook_link= null;
+                        this.templateData.instagram_link= null;
+                        this.templateData.youtube_link= null;
+                        // footer
+                        this.templateData.footer= "https://api.nimbus.pluralis.com.mx/assets/logo-template.png";
+                        this.templateData.slogan="Pluralis - Desarrollo Web";
+                        this.templateData.address="Tijuana, Mexico";
+                        this.templateData.email="contacto@pluralis.com.mx";
+                        this.templateData.phone="+52664252 2024";
+                    }
+                }
             }
         },
         data() {
@@ -242,8 +268,6 @@
                     banner: "https://api.nimbus.pluralis.com.mx/assets/banner-template.png",
                     title: 'Daedalus et Icarus',
                     content: 'Daedalus, faber ingeniosus, fuit artifex eximius qui Minos, rex Cretensis, auxiliatus est construere labyrinthum in quo Minotaurus, monstro feroce, inclusus est. Sed Daedalus et filius eius, Icarus, a rege in labyrintho inclusi sunt. Non poterant effugere per vias labyrinthi, itaque Daedalus consilium cepit.<br/><br/>Daedalus de pennarum ordine cogitavit. Ipse sibi alas fecit ex cera et plumis, et ínter eas adhesit plumas leviores. Postquam alas sibi et Icaro imposuit, admonuit filium ne nimium ad caelum attolleret neve nimium appropinquare soli.<br/><br/>Sed Icarus, juvenis temerarius, gaudebat nova potentia alarum. Volabat in caelum, felix et libere, sed, ob audaciam, solis radiis nimium appropinquavit. Cera, quae alas iungebat, solis ardori liquefacta est, et Ícarus in mare cecidit. Pater, aegre dolens, Ícarum nuncupavit, atque sedibus caeli debitum poenam petivit.',
-                    
-
                     // social link
                     facebook_link: null,
                     instagram_link: null,
@@ -253,7 +277,7 @@
                     slogan: "Pluralis - Desarrollo Web",
                     address: "Tijuana, Mexico",
                     email: "contacto@pluralis.com.mx",
-                    phone: "+52 (664) 252 2024",
+                    phone: "+526642522024",
                     suscription_token: this.suscription
                 }
             }
@@ -271,7 +295,7 @@
             },
             saveFormData() {
                 // Guardar los datos del formulario en una cookie
-                Cookies.set('institutional-template', { subject: this.subject, templateData: this.templateData }, { expires: 28 });
+                Cookies.set('institutional-template'+this.website, { subject: this.subject, templateData: this.templateData }, { expires: 28 });
                 alert('Datos guardados en una cookie!');
             }
         }

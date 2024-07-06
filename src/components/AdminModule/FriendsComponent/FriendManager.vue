@@ -70,7 +70,7 @@ export default {
                 .then(res => {
                     if(res.data.status == 'success'){
                         this.friendRequests = res.data.friendRequests;
-                        console.log(this.friendRequests);
+                        
                     }
                 })
                 .catch(error => {

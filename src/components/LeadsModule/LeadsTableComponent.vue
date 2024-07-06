@@ -157,7 +157,6 @@ export default {
             if(this.results == false){
                 this.search_btn_text = 'limpiar';
                 let query = this.search_query;
-                console.log(this.search_query);
                 this.leadsData.forEach(lead => {
                     if (query === lead.name || query === lead.phone || query === lead.email) {
                         let id = lead.id_lead;

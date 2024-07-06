@@ -69,8 +69,7 @@
         watch: {
             reloadComputed: {
                 immediate: true,
-                handler (newVal){
-                    console.log(newVal);
+                handler (){
                     this.loadWebsites();
                 }
             }

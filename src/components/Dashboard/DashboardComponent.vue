@@ -258,7 +258,7 @@ export default {
             
         },
         loadWebsiteLeads: async function () {
-            console.log('updating dashboard');
+            
             try {
                 const response = await axios.get('api/lead/records/'+this.website_id, {"withCredentials": true});
                 if(response.data.status=="success"){
@@ -287,8 +287,6 @@ export default {
             const response = await axios.get('api/account/accountDetails', {"withCredentials": true});
             if(response.data.status=="success"){
                 this.account = response.data.account;
-            }else{
-                console.log(response.data);
             }
         },
 
@@ -354,7 +352,7 @@ export default {
             this.loadWebsiteLeads();
         },
         handleEmailsSent: function (qty) {
-            this.account.sent_emails += qty;
+            this.account.sent_emails = Number(this.account.sent_emails) + qty;
         },
         handleLeadUpdated: function (notification) {
             // this.loadWebsiteLeads();
