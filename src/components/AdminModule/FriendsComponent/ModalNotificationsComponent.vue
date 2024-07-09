@@ -57,7 +57,7 @@ export default {
             this.$emit("close-notification-modal");
         },
         answerFriendRequest: async function (answer, id, contact_id) {
-            console.log(answer);
+            
             try{
                 let identity = localStorage.getItem('identity');
                 let credentials = JSON.parse(identity);

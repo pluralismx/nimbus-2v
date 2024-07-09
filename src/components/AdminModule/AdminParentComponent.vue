@@ -49,7 +49,8 @@
         </div>
 
         <!-- Account Title bar -->
-        <AccountPanelTitleBarComponent 
+        <AccountPanelTitleBarComponent
+            :type="account.type"
             @toggle-components="handleToggleComponents"
         />
 
@@ -57,6 +58,7 @@
         <div v-show="isVisibleSubscribeSection" class="panel-container">
             <div class="settings-container">  
                 <PlanBuilderComponent
+                    v-if="this.account.type != 'standard'"
                     :account="account"
                     @selection-made="handleSelectionMade"
                     @cant-add-feature="handleCantAddFeature"
@@ -268,6 +270,7 @@ export default {
             this.handleSelectionMade(data);
         },
         handleReloadAccount: function () {
+            this.selection = '';
             this.$emit('reload-acount');
         }
     },

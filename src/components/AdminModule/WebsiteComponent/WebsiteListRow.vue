@@ -115,4 +115,9 @@ tbody tr:nth-last-child(2){
         display: none;
     }
 }
+
+.btn-primary.compact{
+    width: 80px;
+    box-shadow: 1px 1px 2px rgba(0,0,0,.6);
+}
 </style>

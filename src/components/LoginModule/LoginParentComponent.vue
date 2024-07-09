@@ -174,13 +174,13 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        animation: aurora 12s ease-in-out infinite;
+        animation: aurora 8s ease-in-out infinite;
     }
 
     .login-container {
         background-color: var(--shadows);
         border-radius: .5rem;
-        box-shadow: 3px 3px 14px #000;
+        box-shadow: 3px 3px 12px  rgba(0,0,0,.7);
     }
 
     .login-container-header {

@@ -15,14 +15,14 @@
                 <div class="text-input-block">
                     <label>Contraseña</label>
                     <div>
-                        <input v-model="password" class="input-primary" type="text"/>
+                        <input v-model="password" class="input-primary" type="password"/>
                     </div>
                 </div>
 
                 <div class="text-input-block">
                     <label>Confirmar contraseña</label>
                     <div>
-                        <input v-model="verified" class="input-primary" type="text"/>
+                        <input v-model="verified" class="input-primary" type="password"/>
                     </div>
                 </div>
 
@@ -56,6 +56,13 @@ export default {
             required: true
         }
     },
+    watch: {
+        website: {
+            handler(){
+                this.showEmailSettings();
+            }
+        }
+    },
     data() {
         return {
             email: '',
@@ -65,6 +72,13 @@ export default {
         }
     },
     methods: {
+        showEmailSettings: async function () {
+            const response = await axios.get("api/website/websiteEmail/"+this.website, {withCredentials: true});
+            if(response.data.status=="success"){
+                this.email = response.data.website_email;
+                this.smtpServer = response.data.email_server;
+            }
+        },
         addEmail: async function () {
 
             let password;
@@ -87,6 +101,11 @@ export default {
                 this.$emit('email-added', {
                     "text":"Se agrego la cuenta de correo",
                     "status":"success"
+                });
+            }else if(response.data.message == "Forbidden"){
+                this.$emit('email-added', {
+                    "text":"No eres el propietario del sitio",
+                    "status":"error"
                 });
             }else{
                 this.$emit('email-added', {
@@ -128,7 +147,7 @@ export default {
     margin-top: .5rem;
 }
 
-.text-input-block input[type="text"] {
+.text-input-block input[type="text"], input[type="password"] {
     width: 100%;
     box-sizing: border-box;
 }

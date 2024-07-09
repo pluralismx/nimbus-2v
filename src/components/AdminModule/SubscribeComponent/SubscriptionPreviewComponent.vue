@@ -183,11 +183,14 @@
             align-items: center;
             margin-top: 1rem;
             margin-bottom: 2rem;
-            font-size: 14px;
         }
 
         .header h1{
             font-size: 1.5em;
+        }
+
+        .header p{
+            font-size: 1em;
         }
 
         table {

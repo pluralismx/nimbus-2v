@@ -210,6 +210,7 @@
     </section>
 </template>
 <script>
+    import axios from '@/lib/axios';
     import Cookies from 'js-cookie';
     import { render } from '../Templates/Promotional.js';
     export default {
@@ -304,28 +305,30 @@
                     const savedData = Cookies.getJSON('promotional-template'+newVal);
                     if (savedData) {
                         this.subject = savedData.subject;
-                        this.templateData = savedData.templateData;
+                        this.templateData = savedData.templateData;   
                     }else{
-                        this.subject = '';
-                        this.templateData.theme = '',
-                        this.templateData.logo = "https://api.nimbus.pluralis.com.mx/assets/logo-template.png";
-                        this.templateDate.banner = "https://api.nimbus.pluralis.com.mx/assets/banner-template.png";
-                        this.templateDate.features = "https://api.nimbus.pluralis.com.mx/assets/illustration-template.png";
-                        this.templateData.feature_a = "";
-                        this.templateData.feature_b = "";
-                        this.templateDate.feature_c = "";
-                        this.templateData.benefits = "https://api.nimbus.pluralis.com.mx/assets/illustration-template.png";
-                        this.templateData.benefit_a = "";
-                        this.templateData.benefit_b = "";
-                        this.templateData.benefit_c = "";
-                        this.templateData.facebook_link = "";
-                        this.templateData.instagram_link = "";
-                        this.templateData.youtube_link = "";
-                        this.templateData.footer = "https://api.nimbus.pluralis.com.mx/assets/logo-template.png";
-                        this.templateData.slogan = "";
-                        this.templateData.address = "";
-                        this.templateData.email = "";
-                        this.templatedata.phone = "";
+                        let byDefault = this.loadTemplate();
+                        if(byDefault == false){
+                            this.subject = '';
+                            this.templateData.logo = "https://api.nimbus.pluralis.com.mx/assets/logo-template.png";
+                            this.templateData.banner = "https://api.nimbus.pluralis.com.mx/assets/banner-template.png";
+                            this.templateData.features = "https://api.nimbus.pluralis.com.mx/assets/illustration-template.png";
+                            this.templateData.feature_a = "";
+                            this.templateData.feature_b = "";
+                            this.templateData.feature_c = "";
+                            this.templateData.benefits = "https://api.nimbus.pluralis.com.mx/assets/illustration-template.png";
+                            this.templateData.benefit_a = "";
+                            this.templateData.benefit_b = "";
+                            this.templateData.benefit_c = "";
+                            this.templateData.facebook_link = "";
+                            this.templateData.instagram_link = "";
+                            this.templateData.youtube_link = "";
+                            this.templateData.footer = "https://api.nimbus.pluralis.com.mx/assets/logo-template.png";
+                            this.templateData.slogan = "";
+                            this.templateData.address = "";
+                            this.templateData.email = "";
+                            this.templateData.phone = "";
+                        }
                     }
                 }
             }
@@ -368,10 +371,35 @@
                     "body": b64
                 });
             },
-            saveFormData() {
+            saveFormData: async function() {
                 // Guardar los datos del formulario en una cookie
                 Cookies.set('promotional-template'+this.website, { subject: this.subject, templateData: this.templateData }, { expires: 28 });
+                const template = {
+                    name: 'promotional',
+                    template: {
+                        subject: this.subject,
+                        templateData: this.templateData
+                    }
+                }
+                let formData = new FormData();
+                formData.append('json', JSON.stringify(template));
+                const response = await axios.post('/api/email/saveTemplate/'+this.website, formData, {withCredentials: true});
+                if(response.data.status == "success"){
+                    console.log(response.data);
+                }else{
+                    console.log(response.data);
+                }
                 alert('Datos guardados en una cookie!');
+            },
+            loadTemplate: async function () {
+                const response = await axios.get('api/email/myTemplates/'+this.website+'/promotional', {withCredentials: true});
+                if(response.data.status == "success"){
+                    let json = JSON.parse(response.data.template);
+                    this.subject = json.subject;
+                    this.templateData = json.templateData;
+                }else{
+                    return false;
+                }
             }
         }
     }

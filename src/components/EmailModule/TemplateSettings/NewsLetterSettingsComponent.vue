@@ -204,6 +204,7 @@
 
 </template>
 <script>
+    import axios from '@/lib/axios';
     import Cookies from 'js-cookie';
     import { render } from '../Templates/Newsletter.js'
     export default {
@@ -356,9 +357,24 @@
                     "body": b64
                 });
             },
-            saveFormData() {
+            saveFormData: async function () {
                 // Guardar los datos del formulario en una cookie
                 Cookies.set('newsletter-template'+this.website, { subject: this.subject, templateData: this.templateData }, { expires: 28 });
+                const template = {
+                    name: 'newsletter',
+                    template: {
+                        subject: this.subject,
+                        templateData: this.templateData
+                    }
+                }
+                let formData = new FormData();
+                formData.append('json', JSON.stringify(template));
+                const response = await axios.post('/api/email/saveTemplate/'+this.website, formData, {withCredentials: true});
+                if(response.data.status == "success"){
+                    console.log(response.data);
+                }else{
+                    console.log(response.data);
+                }
                 alert('Datos guardados en una cookie!');
             }
         }

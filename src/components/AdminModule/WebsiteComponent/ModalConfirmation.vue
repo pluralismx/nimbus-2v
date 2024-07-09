@@ -12,7 +12,10 @@
 
             <!-- Form -->
             <div class="modal-body">
-                <p>Esta seguro que desea continuar</p>
+                <p>
+                Se eliminarán, prospectos, notas, imágenes, amigos y toda información relacionada al sitio/negocio. <br/><br/>
+                ¿Está seguro que desea continuar?
+                </p>
             </div>
 
             <!-- Buttons -->
@@ -45,7 +48,7 @@ export default {
 .modal-container {
     width: 75%;
     border-radius: .5rem;
-    background-color: var(--basic);
+    /* background-color: var(--basic); */
     box-shadow: 2px 2px 16px var(--shadows);
 }
 
@@ -63,7 +66,7 @@ export default {
 .modal-body {
     padding: .5rem;
     background-color: var(--basic);
-    margin: 2rem 0;
+    padding: 2rem 0;
     text-align: center;
 }
 

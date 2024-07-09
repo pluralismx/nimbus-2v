@@ -3,8 +3,8 @@
             <table>
                 <thead>
                     <tr>
-                        <th>Integrante</th>
-                        <th>correo</th>
+                        <th>Nombre</th>
+                        <th>Correo</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
@@ -150,6 +150,7 @@ thead {
 }
 
 thead tr th {
+    font-size: 14px;
     text-align: left;
     padding: .5rem;
     width: 50%;
@@ -172,6 +173,9 @@ thead tr th:last-child{
 @media only screen and (min-width: 1024px) {
 
 }
-
+.btn-warning.compact{
+    width: 80px;
+    box-shadow: 1px 1px 2px rgba(0,0,0,.6);
+}
 
 </style>

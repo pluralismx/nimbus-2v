@@ -122,7 +122,7 @@ export default {
                     this.cost = this.truncateDecimals(this.cost);
                     break;
                 case 'remove-users' :
-                    if(this.users > 1){
+                    if(this.users >= 1){
                         this.users--;
                         this.cost -= 4.99;
                         this.cost = this.truncateDecimals(this.cost);
@@ -131,7 +131,7 @@ export default {
                     }
                     break;
                 case 'remove-websites' :
-                    if(this.websites > 1){
+                    if(this.websites >= 1){
                         this.websites--;
                         this.cost -= 24.99;
                         this.cost = this.truncateDecimals(this.cost);
@@ -140,7 +140,7 @@ export default {
                     }
                     break;
                 case 'remove-emails' :
-                    if(this.emails >= 2500){
+                    if(this.emails >= 500){
                         this.emails -= 500;
                         this.cost -= 9.99;
                         this.cost = this.truncateDecimals(this.cost);
@@ -149,7 +149,7 @@ export default {
                     }
                     break;
                 case 'remove-contacts' :
-                    if(this.contacts > 1000){
+                    if(this.contacts >= 500){
                         this.contacts -= 500;
                         this.cost -= 11.99;
                         this.cost = this.truncateDecimals(this.cost);
@@ -158,7 +158,7 @@ export default {
                     }
                     break;
                 case 'remove-businesses' :
-                    if(this.businesses > 1) {
+                    if(this.businesses >= 1) {
                         this.businesses--;
                         this.cost -= 14.99;
                         this.cost = this.truncateDecimals(this.cost);

@@ -14,11 +14,11 @@
             <div class="modal-body">
                 <div class="checkbox-block">
                     <div>
-                        <input type="checkbox" v-model="this.checkboxOptions.website">
+                        <input type="checkbox" v-model="checkboxOptions.website" @change="toggleCheckbox('website')">
                         <label>Sitio</label>
                     </div>
                     <div>
-                        <input type="checkbox" v-model="this.checkboxOptions.business">
+                        <input type="checkbox" v-model="checkboxOptions.business" @change="toggleCheckbox('business')">
                         <label>Negocio</label>
                     </div>
                 </div>
@@ -63,6 +63,13 @@ export default {
         }
     },
     methods: {
+        toggleCheckbox(selected) {
+            if (selected === 'website') {
+                this.checkboxOptions.business = false;
+            } else if (selected === 'business') {
+                this.checkboxOptions.website = false;
+            }
+        },
         closeModal: function (){
             this.apiKey = ''
             this.button = 'cancelar'

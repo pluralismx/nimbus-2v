@@ -301,12 +301,10 @@ export default {
         },
         handleLeadDeleted: function (lead_id, notification) {  
             if(lead_id){
-                this.leads.forEach((item, index) => {
-                    if(item.id == lead_id){
-                        this.leads.splice(index, 1);
-                        this.account.actual_contacts--;
-                    }
-                });
+                this.leads = this.leads.filter(item => item.id !== lead_id);
+                if (notification && notification.owner) {
+                    this.account.actual_contacts--;
+                }
                 this.handleStatusBarNotification(notification);
             }else{
                 this.handleStatusBarNotification(notification);
@@ -315,7 +313,7 @@ export default {
         },
         handleLeadCreated: function (notification) {
             this.loadWebsiteLeads();
-            if(notification.status == "success"){
+            if(notification.status == "success" && notification.owner != false){
                 this.account.actual_contacts++;
             }
             this.handleStatusBarNotification(notification);
@@ -348,7 +346,9 @@ export default {
         },
         handleCsvUploaded: function (notification) {
             this.handleStatusBarNotification(notification);
-            this.account.actual_contacts += notification.records_added;
+            if(notification && notification.owner){
+                this.account.actual_contacts = Number(this.account.actual_contacts + notification.records_added);
+            }
             this.loadWebsiteLeads();
         },
         handleEmailsSent: function (qty) {

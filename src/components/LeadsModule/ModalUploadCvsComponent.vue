@@ -76,6 +76,7 @@ export default {
                     this.$emit('csv-uploaded', {
                         "text":"CSV subida con éxito",
                         "status":"success",
+                        "owner":response.data.owner,
                         "records_added":response.data.records_added
                     });
                 }else if(response.data.message == "Forbidden"){

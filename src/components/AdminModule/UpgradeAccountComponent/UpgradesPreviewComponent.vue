@@ -78,12 +78,14 @@
         watch: {
             selectionComputed: {
                 handler(newVal) {
-                    this.users = newVal.users;
-                    this.websites = newVal.websites;
-                    this.emails = newVal.emails;
-                    this.contacts = newVal.contacts;
-                    this.businesses = newVal.businesses;
-                    this.calculateTotal();
+                    if (typeof newVal === 'object' && newVal !== null) {
+                        this.users = newVal.users;
+                        this.websites = newVal.websites;
+                        this.emails = newVal.emails;
+                        this.contacts = newVal.contacts;
+                        this.businesses = newVal.businesses;
+                        this.calculateTotal();
+                    }
                 }
             }
         },

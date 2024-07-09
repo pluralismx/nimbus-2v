@@ -89,8 +89,16 @@ export default {
             if (this.website_id !== undefined && this.website_id !== '' && this.website_id !== null) {
                 try {
                     const response = await axios.post('api/lead/create/' + this.website_id, formData, { withCredentials: true });
+                    
                     if (response.data.status === "success") {
-                        this.$emit('lead-created', { text: "Prospecto creado", status: "success" });
+                        
+                        if(response.data.owner == true){
+                            this.$emit('lead-created', { text: "Prospecto creado", status: "success" });
+                        }else {
+                            this.$emit('lead-created', { text: "Prospecto creado", status: "success", "owner": false });
+                        }
+                        
+
                     } else if (response.data.message === "Forbidden"){
                         this.$emit('lead-created', { text: "Permisos insuficientes", status: "error" });
                     } else {

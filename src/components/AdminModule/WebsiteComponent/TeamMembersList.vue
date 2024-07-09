@@ -22,7 +22,7 @@
             </table>
         </div>
         <div class="table-container-footer">
-            <select class="compact" v-model="asignedUser"> 
+            <select class="compact" v-model="asignedUser">
                 <option v-for="friend in friends" :key="friend.id" :value="friend">{{ friend.name }} {{ friend.surname }}</option>
             </select>
             <button class="btn-warning compact" @click="addTeammate()">asignar</button>
@@ -196,5 +196,8 @@ thead tr th:nth-last-child(1) {
     }
 }
 
-
+.btn-warning.compact{
+    width: 80px;
+    box-shadow: 1px 1px 2px rgba(0,0,0,.6);
+}
 </style>

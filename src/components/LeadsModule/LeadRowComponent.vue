@@ -3,7 +3,7 @@
     <tr>
         <td v-show="edit==false" width="18%"><span class="span-clickable" @click="showDetails()">{{ name }}</span></td>
         <td v-show="edit==false" width="18%"><a :href="'tel:'+phone"><span v-show="this.phone!=''" class="span-call-icon" @click="showDetails()">&#128222;&nbsp;&nbsp;</span></a><a :href="'https://wa.me/'+phone" target="_blank"><span>{{ phone }}</span></a></td>
-        <td v-show="edit==false" width="18%"><span>{{ email }}</span></td>
+        <td v-show="edit==false" width="18%"><span :class="{ 'unsubscribed': this.lead.subscribed == 0 }">{{ email }}</span></td>
         
         <td v-show="edit==false" width="18%">
             <select class="select-status" v-model="status" @change="editStatus()">
@@ -140,6 +140,9 @@ td {
     height: 2rem;
 }
 
+.unsubscribed {
+    color: gray;
+}
 .select-status {
     color: var(--shadows);
     width: 75%;

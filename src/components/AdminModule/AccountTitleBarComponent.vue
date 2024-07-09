@@ -2,9 +2,9 @@
     <div class="div-main">
         <h1>Mi cuenta</h1>
         <div class="div-options">
-            <span @click="toggleDashboard('subscribe')">contratar | </span>
-            <span @click="toggleDashboard('upgrades')">mejoras | </span>
-            <span @click="toggleDashboard('payments')">pagos</span>
+            <span v-show="this.type=='free'" @click="toggleDashboard('subscribe')">contratar | </span>
+            <span v-show="this.type=='standard'" @click="toggleDashboard('upgrades')">mejoras | </span>
+            <span v-show="this.type=='standard'" @click="toggleDashboard('payments')">pagar mensualidad</span>
         </div>
     </div>
 </template>
@@ -14,6 +14,10 @@
         props: {
             hasNotifications: {
                 type: Boolean,
+                required: true
+            },
+            type: {
+                type: String,
                 required: true
             }
         },

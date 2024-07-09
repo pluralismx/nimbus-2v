@@ -95,7 +95,13 @@ export default {
                 if(response.data.status =="finished") {
                     this.buttonText = "aceptar";
                     this.sending = false;
-                    this.$emit('emails-sent', response.data.emails_sent);
+                    
+                    if(response.data.owner == true){
+                        this.$emit('emails-sent', response.data.emails_sent);
+                    }else {
+                        this.$emit('emails-sent', 0);
+                    }
+                    
                     response.data.delivery.forEach((item)=>{
                         this.recipientsData.forEach((contact)=>{
                             if(contact.address == item.recipient && item.status == "success"){
