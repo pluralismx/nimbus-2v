@@ -5,7 +5,6 @@
         <!-- Loading screen -->
          <div class="loading-app-screen" v-show="loadingApp">
             <h1>Cargando</h1>
-            <img src="../../assets/images/Fading circles.gif" alt="">
          </div>
         <!-- Navigation bar -->
         <NavbarParentComponent

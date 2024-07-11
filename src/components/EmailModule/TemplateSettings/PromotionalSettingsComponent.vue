@@ -245,7 +245,6 @@
         watch: {
             setTheme: {
                 handler(newVal) {
-                    
                     this.templateData.theme = newVal;
                 },
                 immediate: true,
@@ -255,12 +254,15 @@
                 handler(newVal){
                     if(newVal === 'promotional'){
                         this.html();
+                        const savedData = Cookies.getJSON('promotional-template'+this.website);
+                        if (savedData) {
+                            this.subject = savedData.subject;
+                            this.templateData = savedData.templateData;
+                        }else {
+                            this.loadTemplate();
+                        }   
                     }
-                    const savedData = Cookies.getJSON('promotional-template'+this.website);
-                    if (savedData) {
-                        this.subject = savedData.subject;
-                        this.templateData = savedData.templateData;
-                    }   
+
                 },
                 immediate: true,
                 deep: true
@@ -301,33 +303,35 @@
                 }
             },
             website: {
-                handler(newVal){
-                    const savedData = Cookies.getJSON('promotional-template'+newVal);
-                    if (savedData) {
-                        this.subject = savedData.subject;
-                        this.templateData = savedData.templateData;   
-                    }else{
-                        let byDefault = this.loadTemplate();
-                        if(byDefault == false){
-                            this.subject = '';
-                            this.templateData.logo = "https://api.nimbus.pluralis.com.mx/assets/logo-template.png";
-                            this.templateData.banner = "https://api.nimbus.pluralis.com.mx/assets/banner-template.png";
-                            this.templateData.features = "https://api.nimbus.pluralis.com.mx/assets/illustration-template.png";
-                            this.templateData.feature_a = "";
-                            this.templateData.feature_b = "";
-                            this.templateData.feature_c = "";
-                            this.templateData.benefits = "https://api.nimbus.pluralis.com.mx/assets/illustration-template.png";
-                            this.templateData.benefit_a = "";
-                            this.templateData.benefit_b = "";
-                            this.templateData.benefit_c = "";
-                            this.templateData.facebook_link = "";
-                            this.templateData.instagram_link = "";
-                            this.templateData.youtube_link = "";
-                            this.templateData.footer = "https://api.nimbus.pluralis.com.mx/assets/logo-template.png";
-                            this.templateData.slogan = "";
-                            this.templateData.address = "";
-                            this.templateData.email = "";
-                            this.templateData.phone = "";
+                handler: async function(newVal){
+                    if(this.isSelected == "promotional"){
+                        const savedData = Cookies.getJSON('promotional-template'+newVal);
+                        if (savedData) {
+                            this.subject = savedData.subject;
+                            this.templateData = savedData.templateData;   
+                        }else{
+                            let byDefault = await this.loadTemplate();
+                            if(byDefault == false){
+                                this.subject = '';
+                                this.templateData.logo = "https://api.nimbus.pluralis.com.mx/assets/logo-template.png";
+                                this.templateData.banner = "https://api.nimbus.pluralis.com.mx/assets/banner-template.png";
+                                this.templateData.features = "https://api.nimbus.pluralis.com.mx/assets/illustration-template.png";
+                                this.templateData.feature_a = "";
+                                this.templateData.feature_b = "";
+                                this.templateData.feature_c = "";
+                                this.templateData.benefits = "https://api.nimbus.pluralis.com.mx/assets/illustration-template.png";
+                                this.templateData.benefit_a = "";
+                                this.templateData.benefit_b = "";
+                                this.templateData.benefit_c = "";
+                                this.templateData.facebook_link = "";
+                                this.templateData.instagram_link = "";
+                                this.templateData.youtube_link = "";
+                                this.templateData.footer = "https://api.nimbus.pluralis.com.mx/assets/logo-template.png";
+                                this.templateData.slogan="Mi empresa - Slogan";
+                                this.templateData.address="Mi ciudad, pais";
+                                this.templateData.email="ejemplo@correo.com";
+                                this.templateData.phone="+1234567890";
+                            }
                         }
                     }
                 }
@@ -352,10 +356,10 @@
                     instagram_link: '',
                     youtube_link: '',
                     footer: "https://api.nimbus.pluralis.com.mx/assets/logo-template.png",
-                    slogan: '',
-                    address: '',
-                    email: '',
-                    phone: '',
+                    slogan: "Mi empresa - slogan",
+                    address: "Mi direccion, 1234",
+                    email: "ejemplo@correo.com",
+                    phone: "+123456789",
                     suscription_token: this.suscription
                 }
             }
@@ -398,7 +402,7 @@
                     this.subject = json.subject;
                     this.templateData = json.templateData;
                 }else{
-                    return false;
+                    return Promise.resolve(false);
                 }
             }
         }

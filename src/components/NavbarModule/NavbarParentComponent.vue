@@ -34,7 +34,7 @@
                     </option>
                 </select>
             </li>
-            <li><span @click="toggleTool('notes-desktop')">Notas</span></li>
+            <li><span @click="toggleTool('notes-desktop')">Memos</span></li>
             <li><span @click="toggleTool('leads-desktop')">Prospectos</span></li>
             <li><span @click="toggleTool('email-desktop')">Email</span></li>
         </ul>

@@ -60,51 +60,65 @@ export default {
             this.$emit('cancel');
         },
         register: async function () {
-
-            if(this.password === this.verified){
-                const json = {
-                    "name":this.name,
-                    "surname":this.surname,
-                    "email":this.email,
-                    "password":this.verified
-                }
-                let formData = new FormData();
-                formData.append('json', JSON.stringify(json));
-                // Request to the backend
+            if (this.password !== this.verified) {
                 this.$emit('user-registered', {
-                    "title":"Creando cuenta", 
-                    "content":"Un momento por favor..."
+                    title: "Error al crear cuenta",
+                    content: "Las contraseñas no coinciden."
                 });
-                const response = await axios.post('api/register', formData);
-                // Request status success
-                if (response.data.status == "success"){
-
-                    this.name = '',
-                    this.surname = '',
-                    this.email = '',
-                    this.password = '',
-                    this.verified = '',
-
-                    this.$emit('cancel');
-                    this.$emit('user-registered', {
-                        "title":"Cuenta creada exitosamente", 
-                        "content":"Revise su bandeja de entrada para activar su cuenta"
-                    });
-                }else{
-                    
-                    this.name = '',
-                    this.surname = '',
-                    this.email = '',
-                    this.password = '',
-                    this.verified = '',
-
-                    this.$emit('user-registered', {
-                        "title":"Error al crear cuenta", 
-                        "content": "El correo ya ha sido utilizado o hubo un error al intentar crear su cuenta"
-                    });
-                }
+                return;
             }
 
+            if (this.password.length < 8) {
+                this.$emit('user-registered', {
+                    title: "Error al crear cuenta",
+                    content: "La contraseña debe tener al menos 8 caracteres."
+                });
+                return;
+            }
+
+            const json = {
+                name: this.name,
+                surname: this.surname,
+                email: this.email,
+                password: this.verified
+            };
+            
+            let formData = new FormData();
+            formData.append('json', JSON.stringify(json));
+            
+            // Request to the backend
+            this.$emit('user-registered', {
+                title: "Creando cuenta",
+                content: "Un momento por favor..."
+            });
+
+            const response = await axios.post('api/register', formData);
+
+            // Request status success
+            if (response.data.status == "success") {
+                this.name = '';
+                this.surname = '';
+                this.email = '';
+                this.password = '';
+                this.verified = '';
+
+                this.$emit('cancel');
+                this.$emit('user-registered', {
+                    title: "Cuenta creada exitosamente",
+                    content: "Revise su bandeja de entrada para activar su cuenta"
+                });
+            } else {
+                this.name = '';
+                this.surname = '';
+                this.email = '';
+                this.password = '';
+                this.verified = '';
+
+                this.$emit('user-registered', {
+                    title: "Error al crear cuenta",
+                    content: "El correo ya ha sido utilizado o hubo un error al intentar crear su cuenta"
+                });
+            }
         }
     }
 }

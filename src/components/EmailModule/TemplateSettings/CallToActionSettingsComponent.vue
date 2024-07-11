@@ -238,12 +238,15 @@
                 handler(newVal){
                     if(newVal === 'callToAction'){
                         this.html();
+                        const savedData = Cookies.getJSON('callToAction-template'+this.website);
+                        if (savedData) {
+                            this.subject = savedData.subject;
+                            this.templateData = savedData.templateData;
+                        }else {
+                            this.loadTemplate();
+                        } 
                     }
-                    const savedData = Cookies.getJSON('callToAction-template'+this.website);
-                    if (savedData) {
-                        this.subject = savedData.subject;
-                        this.templateData = savedData.templateData;
-                    }
+
                 },
                 immediate: true,
                 deep: true
@@ -278,30 +281,35 @@
                 }
             },
             website: {
-                handler(newVal) {
-                    const savedData = Cookies.getJSON('callToAction-template'+newVal);
-                    if (savedData) {
-                        this.subject = savedData.subject;
-                        this.templateData = savedData.templateData;
-                    }else {
-                        this.subject = '';
-                        this.templateData.logo= "http://api.nimbus.pluralis.com.mx/assets/logo-template.png";
-                        this.templateData.banner= "http://api.nimbus.pluralis.com.mx/assets/banner-template.png";
-                        this.templateData.title= 'Daedalus et Icarus';
-                        this.templateData.content= 'Daedalus, faber ingeniosus, fuit artifex eximius qui Minos, rex Cretensis, auxiliatus est construere labyrinthum in quo Minotaurus, monstro feroce, inclusus est. Sed Daedalus et filius eius, Icarus, a rege in labyrintho inclusi sunt. Non poterant effugere per vias labyrinthi, itaque Daedalus consilium cepit.<br/><br/>Daedalus de pennarum ordine cogitavit. Ipse sibi alas fecit ex cera et plumis, et ínter eas adhesit plumas leviores. Postquam alas sibi et Icaro imposuit, admonuit filium ne nimium ad caelum attolleret neve nimium appropinquare soli.<br/><br/>Sed Icarus, juvenis temerarius, gaudebat nova potentia alarum. Volabat in caelum, felix et libere, sed, ob audaciam, solis radiis nimium appropinquavit. Cera, quae alas iungebat, solis ardori liquefacta est, et Ícarus in mare cecidit. Pater, aegre dolens, Ícarum nuncupavit, atque sedibus caeli debitum poenam petivit.';
-                        // Button text
-                        this.templateData.buttonText= 'ver mas...';
-                        this.templateData.buttonLink= 'pluralis.com.mx';
-                        // social link
-                        this.templateData.facebook_link= null;
-                        this.templateData.instagram_link= null;
-                        this.templateData.youtube_link= null;
-                        // footer
-                        this.templateData.footer= "http://api.nimbus.pluralis.com.mx/assets/logo-template.png";
-                        this.templateData.slogan= "Pluralis - Desarrollo Web";
-                        this.templateData.address= "Ave. Alejandro Von Humboldt #19264, Tijuana, Mexico CP 22434";
-                        this.templateData.email= "contacto@pluralis.com.mx";
-                        this.templateData.phone= "+52 (664) 252 2024";
+                handler: async function (newVal) {
+                    if(this.isSelected == "callToAction"){
+                        const savedData = Cookies.getJSON('callToAction-template'+newVal);
+                        if (savedData) {
+                            this.subject = savedData.subject;
+                            this.templateData = savedData.templateData;
+                        }else {
+                            let byDefault = await this.loadTemplate();
+                            if(byDefault == false){
+                                this.subject = '';
+                                this.templateData.logo= "http://api.nimbus.pluralis.com.mx/assets/logo-template.png";
+                                this.templateData.banner= "http://api.nimbus.pluralis.com.mx/assets/banner-template.png";
+                                this.templateData.title= 'Daedalus et Icarus';
+                                this.templateData.content= 'Daedalus, faber ingeniosus, fuit artifex eximius qui Minos, rex Cretensis, auxiliatus est construere labyrinthum in quo Minotaurus, monstro feroce, inclusus est. Sed Daedalus et filius eius, Icarus, a rege in labyrintho inclusi sunt. Non poterant effugere per vias labyrinthi, itaque Daedalus consilium cepit.<br/><br/>Daedalus de pennarum ordine cogitavit. Ipse sibi alas fecit ex cera et plumis, et ínter eas adhesit plumas leviores. Postquam alas sibi et Icaro imposuit, admonuit filium ne nimium ad caelum attolleret neve nimium appropinquare soli.<br/><br/>Sed Icarus, juvenis temerarius, gaudebat nova potentia alarum. Volabat in caelum, felix et libere, sed, ob audaciam, solis radiis nimium appropinquavit. Cera, quae alas iungebat, solis ardori liquefacta est, et Ícarus in mare cecidit. Pater, aegre dolens, Ícarum nuncupavit, atque sedibus caeli debitum poenam petivit.';
+                                // Button text
+                                this.templateData.buttonText= 'ver mas...';
+                                this.templateData.buttonLink= 'pluralis.com.mx';
+                                // social link
+                                this.templateData.facebook_link= null;
+                                this.templateData.instagram_link= null;
+                                this.templateData.youtube_link= null;
+                                // footer
+                                this.templateData.footer= "http://api.nimbus.pluralis.com.mx/assets/logo-template.png";
+                                this.templateData.slogan="Mi empresa - Slogan";
+                                this.templateData.address="Mi ciudad, pais";
+                                this.templateData.email="ejemplo@correo.com";
+                                this.templateData.phone="+1234567890";
+                            }
+                        }
                     }
                 }
             }
@@ -325,10 +333,10 @@
                     youtube_link: null,
                     // footer
                     footer: "http://api.nimbus.pluralis.com.mx/assets/logo-template.png",
-                    slogan: "Pluralis - Desarrollo Web",
-                    address: "Ave. Alejandro Von Humboldt #19264, Tijuana, Mexico CP 22434",
-                    email: "contacto@pluralis.com.mx",
-                    phone: "+52 (664) 252 2024",
+                    slogan: "Mi empresa - slogan",
+                    address: "Mi direccion, 1234",
+                    email: "ejemplo@correo.com",
+                    phone: "+123456789",
                     suscription_token: this.suscription
                 }
             }
@@ -364,6 +372,16 @@
                 }
                 
                 alert('Datos guardados!');
+            },
+            loadTemplate: async function () {
+                const response = await axios.get('api/email/myTemplates/'+this.website+'/callToAction', {withCredentials: true});
+                if(response.data.status == "success"){
+                    let json = JSON.parse(response.data.template);
+                    this.subject = json.subject;
+                    this.templateData = json.templateData;
+                }else{
+                    return Promise.resolve(false);
+                }
             }
         }
     }

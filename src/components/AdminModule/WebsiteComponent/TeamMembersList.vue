@@ -180,7 +180,7 @@ thead tr th:nth-last-child(1) {
 
 .table-container-footer select {
     margin-right: 1rem;
-    width: 50%;
+    width: 75%;
 }
 
 .website-teammates-container {
@@ -189,15 +189,18 @@ thead tr th:nth-last-child(1) {
     flex-direction: column;
 }
 
+
 @media only screen and (min-height: 1024px) {
     .table-container-footer select {
         margin-right: 1rem;
         width: 30%;
     }
+
+    .btn-warning.compact{
+        width: 80px;
+        box-shadow: 1px 1px 2px rgba(0,0,0,.6);
+    }
 }
 
-.btn-warning.compact{
-    width: 80px;
-    box-shadow: 1px 1px 2px rgba(0,0,0,.6);
-}
+
 </style>

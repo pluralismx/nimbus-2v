@@ -77,8 +77,6 @@ tr td:nth-last-child(1) {
     width: 50%;
 }
 
-.btn-primary.compact {
-    width: 80px;
-    box-shadow: 1px 1px 2px rgba(0,0,0,.6);
-}
+
+
 </style>

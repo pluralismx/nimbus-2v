@@ -67,8 +67,8 @@
         },
         data() {
             return {
-                email: 'gerardotopete7@gmail.com',
-                password: '1234',
+                email: '',
+                password: '',
                 error: false,
 
                 // Layout

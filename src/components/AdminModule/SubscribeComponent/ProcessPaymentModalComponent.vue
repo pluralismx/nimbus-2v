@@ -48,6 +48,25 @@
             </div>
 
             <div class="modal-body">
+                <div class="accepted-cards-container">
+                    <div class="credit-cards-block">
+                        <span>Tarjetas de crédito</span>
+                        <div class="credit-cards-container">
+                            <img src="../../../../src/assets/images/tarjetas-mini.png" alt="">
+                        </div>
+                    </div>
+                    <div class="debit-cards-block">
+                        <span>Tarjetas de débito</span>
+                        <div class="debit-cards-container">
+                            <img src="../../../../src/assets/images/bancomer.png" alt="">
+                            <img src="../../../../src/assets/images/santander.png" alt="">
+                            <img src="../../../../src/assets/images/scotiabank.png" alt="">
+                            <img src="../../../../src/assets/images/inbursa.png" alt="">
+                            <img src="../../../../src/assets/images/ixe.png" alt="">
+                            <img src="../../../../src/assets/images/hsbc.png" alt="">
+                        </div>
+                    </div>
+                </div>
                 <form id="payment-form" @submit.prevent>
                     <span>Nombre del titular</span>
                     <div class="input-block">
@@ -76,6 +95,10 @@
                         </div>
                         <img src="../../../assets/images/cvv.png" class="cvv-icon">
                     </div>
+                    <div class="secure-payment-block">
+                        <img src="../../../assets/images/openpay.png">
+                        <img src="../../../assets/images/ssl-payment.png">
+                    </div>
                     <div class="buttons-block">
                         <button class="btn-primary" @click="proceedToCardInfo()">atrás</button>
                         <button class="btn-warning" @click="proceedToPaymentScreen()">siguiente</button>
@@ -93,21 +116,25 @@
                 <span class="close-cross" @click="close()">&times;</span>
             </div>
 
-            <div class="modal-body">
-                <span>Total: ${{ selection.total }}</span>
+            <div v-show="!processingPayment" class="modal-body">
+                <span>Total: ${{ selection.total }}USD</span>
+                <br>
                 <br>
                 <span>Titular: {{ card.holder_name }}</span>
-                <br>
+                <br><br>
                 <span>Metodo de pago: XXXX-XXXX-XXXX-{{ lastFourDigits }}</span>
-                <br>
+                <br><br>
                 <span>Fecha de expiracion: {{ card.expiration_month }}/{{ card.expiration_year }}</span>
-                <br>
+                <br><br>
                 <span>Email: {{ user.email }}</span>
                 <div class="buttons-block">
                     <button class="btn-primary" @click="proceedToCardInfo()">atrás</button>
                     <button class="btn-warning" @click="createToken()">pagar</button>
                 </div>
-            </div>      
+            </div>
+            <div v-show="processingPayment" class="modal-body loading">
+                <img src="../../../../src/assets/images/loading.gif" alt="">
+            </div>     
         </div>
 
         <!-- Status message -->
@@ -165,6 +192,7 @@
                     expiration_year: '24',
                     cvv2: '123'
                 },
+                processingPayment: false,
                 purchaseStatus: '',
                 purchaseMessage: ''
             }
@@ -207,12 +235,14 @@
                 this.isVisiblePaymentStatus =false;
             },
             createToken: function () {
+                this.processingPayment = true;
                 OpenPay.setId(process.env.VUE_APP_OPENPAY_MERCHANT_ID);
                 OpenPay.setApiKey(process.env.VUE_APP_OPENPAY_PUBLIC_API_KEY);
                 OpenPay.setSandboxMode(true);
                 OpenPay.token.extractFormAndCreate('payment-form', this.successCallback, this.errorCallback);
             },
             successCallback: async function (response) {
+
                 const token = response.data.id;
                 let json = {};
                 let url;
@@ -266,6 +296,7 @@
                     
                     if(response.data.status == "success"){
                         // Reset layout
+                        this.processingPayment = false;
                         this.isVisibleUserDetails = false;
                         this.isVisibleCardInfo = false;
                         this.isVisibleConfirmPayment = false;
@@ -315,8 +346,8 @@
 .modal-container {
     width: 80%;
     border-radius: .5rem;
-    background-color: var(--basic);
-    box-shadow: 2px 2px 16px var(--shadows);
+    /* background-color: var(--basic); */
+    box-shadow: 2px 2px 16px rgba(0,0,0,.6);
 }
 
 .modal-header {
@@ -333,7 +364,10 @@
 .modal-body {
     padding: 1rem;
     background-color: var(--basic);
-    border-radius: .5rem;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-left-radius: .5rem;
+    border-bottom-right-radius: .5rem;
 }
 
 .input-block {
@@ -367,11 +401,12 @@
     display: flex;
     width: 100%;
     align-items: center;
+    justify-content: space-around;
 }
 
 .expiration-date-container .input-block input{
     width: 50px;
-    margin-right: 2rem;
+    margin-right: 1rem;
 }
 
 .cvv-icon {
@@ -382,5 +417,81 @@
     .modal-container {
         width: 500px;
     }
+
+    .expiration-date-container {
+        display: flex;
+        width: 100%;
+        align-items: center;
+        justify-content: flex-start;
+    }
+
+    .expiration-date-container .input-block input{
+        margin-right: 2rem;
+    }
+    
 }
+
+.credit-cards-container {
+    padding: 10px 0;
+}
+
+.credit-cards-container img{
+    width: 180px;
+}
+
+.debit-cards-container {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-evenly;
+    padding: 16px 0;
+    gap: 12px;
+}
+
+@media only screen and (min-width: 1024px) {
+    .debit-cards-container {
+        gap: 0;
+    }
+}
+
+.debit-cards-container img{
+    width: 65px;
+}
+
+.secure-payment-block {
+    margin-top: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.secure-payment-block img {
+    width: 120px;
+}
+
+.modal-body.loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 15vh;
+}
+
+.modal-body.loading img{
+    width: 80%;
+}
+
+@media only screen and (min-width: 1024px) {
+    .secure-payment-block img {
+        width: 140px;
+    }
+
+    .modal-body.loading {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+}
+
+
+
 </style>

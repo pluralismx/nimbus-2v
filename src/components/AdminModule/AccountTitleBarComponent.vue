@@ -4,7 +4,7 @@
         <div class="div-options">
             <span v-show="this.type=='free'" @click="toggleDashboard('subscribe')">contratar | </span>
             <span v-show="this.type=='standard'" @click="toggleDashboard('upgrades')">mejoras | </span>
-            <span v-show="this.type=='standard'" @click="toggleDashboard('payments')">pagar mensualidad</span>
+            <span v-show="this.type=='standard'" @click="toggleDashboard('payments')">pagos</span>
         </div>
     </div>
 </template>
