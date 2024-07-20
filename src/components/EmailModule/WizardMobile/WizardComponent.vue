@@ -14,6 +14,7 @@
             :isSelected="template"
             :theme="theme"
             :image="templateImageData"
+            :website="website"
             @open-image-modal="handleOpenImageModal"
             @update-html-template="handleUpdateHtmlTemplate"
         />
@@ -24,8 +25,31 @@
             :isSelected="template"
             :theme="theme"
             :image="templateImageData"
+            :website="website"
             @open-image-modal="handleOpenImageModal"
             @update-html-template="handleUpdateHtmlTemplate"
+        />
+
+        <!-- Institutional -->
+        <InstitutionalSettingsComponent
+            v-show="template == 'institutional' && recipients == false && clientSettings == false"
+            @open-image-modal="handleOpenImageModal"
+            @update-html-template="handleUpdateHtmlTemplate" 
+            :isSelected="template"
+            :theme="theme"
+            :image="templateImageData"
+            :website="website"
+        />
+
+        <!-- Call to action -->
+        <CallToActionSettingsComponent
+            v-show="template == 'callToAction' && recipients == false && clientSettings == false"
+            @open-image-modal="handleOpenImageModal"
+            @update-html-template="handleUpdateHtmlTemplate" 
+            :isSelected="template"
+            :theme="theme"
+            :image="templateImageData"
+            :website="website"
         />
 
         <!-- Custom -->
@@ -74,6 +98,8 @@
     import NewsLetterSettingsComponent from '../TemplateSettings/NewsLetterSettingsComponent'
     import PromotionalSettingsComponent from '../TemplateSettings/PromotionalSettingsComponent.vue'
     import CustomEmailEditorComponent from '../TemplateSettings/CustomEmailEditorComponent.vue'
+    import InstitutionalSettingsComponent from '../TemplateSettings/InstitutionalSettingsComponent.vue'
+    import CallToActionSettingsComponent from '../TemplateSettings/CallToActionSettingsComponent.vue'
     import ImageUploadModalComponent from '../Modals/ImageUploadModalComponent.vue'
     import RecipientsSettingsComponent from '../TemplateSettings/RecipientsSettingsComponent.vue'
     import SendingEmailsModal from '../Modals/SendingEmailsModal.vue'
@@ -86,6 +112,8 @@
             NewsLetterSettingsComponent,
             PromotionalSettingsComponent,
             CustomEmailEditorComponent,
+            CallToActionSettingsComponent,
+            InstitutionalSettingsComponent,
             ImageUploadModalComponent,
             RecipientsSettingsComponent,
             SendingEmailsModal,
@@ -111,14 +139,16 @@
         },
         data() {
             return {
-                template: null,
+                template: '',
                 theme: "#037e99",
                 templateImageSection: '',
                 templateImageData: {},
                 isVisibleUploadImageModal: false,
                 isVisibleSendEmailsModal: false,
+                
                 // isVisibleClientSettings: false,
-                emailContent: ''
+                emailContent: '',
+
             }
         },
         methods: {

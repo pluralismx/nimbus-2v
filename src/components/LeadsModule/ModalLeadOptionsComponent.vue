@@ -145,6 +145,7 @@ export default {
         display: flex;
         align-items: center;
         justify-content: space-evenly;
+        padding-top: 5px;
     }
 
     .buttons-block button {

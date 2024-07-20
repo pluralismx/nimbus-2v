@@ -145,6 +145,7 @@
                 formData.append('json', JSON.stringify(json));
                 const response = await axios.post('api/users/verifyPin', formData);
                 if(response.data.status == 'success'){
+                    this.isVisibleEnterPin = false;
                     this.isVisibleUpdatePassword = true;
                 }else {
                     this.error = 'Pin incorrecto'

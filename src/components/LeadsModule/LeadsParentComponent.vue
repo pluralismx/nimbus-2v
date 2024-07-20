@@ -357,6 +357,7 @@
         box-sizing: border-box;
         overflow-y: scroll;
     }
+    
 
     .leads-container {
         width: 100%;

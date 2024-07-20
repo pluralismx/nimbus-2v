@@ -112,6 +112,7 @@ export default {
     min-height: 0;
     display: flex;
     flex-direction: column;
+    min-height: 50vh;
 }
 
 span {
@@ -129,7 +130,7 @@ span {
     padding: .5rem;
     box-sizing: border-box;
     flex-grow: 1;
-    min-height: 0;
+    min-height: 50svh;
     overflow-y: scroll;
 }
 
@@ -160,13 +161,27 @@ thead {
 thead tr th {
     text-align: left;
     padding: .5rem;
-    width: 50%;
+    width: 30%;
+    text-align: center;
 }
 
-thead tr th:nth-last-child(1) {
+thead tr th:nth-last-child(3) {
     text-align: center;
     padding: .5rem;
-    width: 50%;
+    width: 30%;
+}
+
+tbody tr td {
+    text-align: left;
+    padding: .5rem;
+    width: 30%;
+    text-align: center;
+}
+
+tbody tr td:nth-last-child(3) {
+    text-align: center;
+    padding: .5rem;
+    width: 30%;
 }
 
 .table-container-footer {
@@ -190,17 +205,26 @@ thead tr th:nth-last-child(1) {
 }
 
 
-@media only screen and (min-height: 1024px) {
+@media only screen and (min-width: 1024px) {
     .table-container-footer select {
         margin-right: 1rem;
-        width: 30%;
+        width: 50%;
     }
 
     .btn-warning.compact{
         width: 80px;
         box-shadow: 1px 1px 2px rgba(0,0,0,.6);
     }
+
+    .table-container {
+        min-height: 0;
+    }
 }
 
+@media only screen and (min-width: 1440px) {
+    .table-container-footer select {
+        width: 35%;
+    }
+}
 
 </style>

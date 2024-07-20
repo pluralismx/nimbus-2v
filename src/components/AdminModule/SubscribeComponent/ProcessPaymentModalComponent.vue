@@ -58,12 +58,12 @@
                     <div class="debit-cards-block">
                         <span>Tarjetas de débito</span>
                         <div class="debit-cards-container">
-                            <img src="../../../../src/assets/images/bancomer.png" alt="">
-                            <img src="../../../../src/assets/images/santander.png" alt="">
-                            <img src="../../../../src/assets/images/scotiabank.png" alt="">
-                            <img src="../../../../src/assets/images/inbursa.png" alt="">
-                            <img src="../../../../src/assets/images/ixe.png" alt="">
-                            <img src="../../../../src/assets/images/hsbc.png" alt="">
+                            <img src="../../../../src/assets/images/bancomer.png">
+                            <img src="../../../../src/assets/images/santander.png">
+                            <img src="../../../../src/assets/images/scotiabank.png">
+                            <img src="../../../../src/assets/images/inbursa.png">
+                            <img src="../../../../src/assets/images/ixe.png">
+                            <img src="../../../../src/assets/images/hsbc.png">
                         </div>
                     </div>
                 </div>
@@ -180,13 +180,13 @@
                 isVisibleConfirmPayment: false,
                 isVisiblePaymentStatus: false,
                 user: {
-                    name: 'Gerardo',
-                    surname: 'Topete Perez',
-                    phone: '6642522024',
-                    email: 'gerardotopete7@gmail.com'
+                    name: 'Andrea',
+                    surname: 'Perez',
+                    phone: '526642522024',
+                    email: 'andrea@pluralis.com.mx'
                 },
                 card: {
-                    holder_name: 'Gerardo Topete Perez',
+                    holder_name: 'andrea perez',
                     card_number: '4111111111111111',
                     expiration_month: '12',
                     expiration_year: '24',
@@ -373,7 +373,7 @@
 .input-block {
     display: flex;
     flex-direction: column;
-    margin: 1rem 0;
+    margin: .5rem 0;
     
 }
 
@@ -390,7 +390,7 @@
 
 .buttons-block button{
     width: 100px;
-    margin-top: 2rem;
+    margin-top: 1.5rem;
 }
 
 .buttons-block button:nth-child(1){
@@ -413,7 +413,16 @@
     width: 50px;
 }
 
+
 @media only screen and (min-width: 1024px) {
+    .input-block {
+        margin: 1rem 0;
+    }
+    .buttons-block button{
+        width: 100px;
+        margin-top: 2rem;
+    }
+
     .modal-container {
         width: 500px;
     }
@@ -432,11 +441,12 @@
 }
 
 .credit-cards-container {
-    padding: 10px 0;
+    padding: 0;
 }
 
 .credit-cards-container img{
     width: 180px;
+    filter: grayscale(100%);
 }
 
 .debit-cards-container {
@@ -444,22 +454,28 @@
     flex-wrap: wrap;
     align-items: center;
     justify-content: space-evenly;
-    padding: 16px 0;
-    gap: 12px;
+    padding: 8px 0;
+    gap: 8px;
 }
 
 @media only screen and (min-width: 1024px) {
     .debit-cards-container {
         gap: 0;
+        padding: 16px 0;
+    }
+
+    .credit-cards-container {
+        padding: 10px 0;
     }
 }
 
 .debit-cards-container img{
     width: 65px;
+    filter: grayscale(100%);
 }
 
 .secure-payment-block {
-    margin-top: 16px;
+    margin-top: 8px;
     display: flex;
     align-items: center;
     justify-content: space-evenly;
@@ -478,9 +494,18 @@
 
 .modal-body.loading img{
     width: 80%;
+    filter: grayscale(100%);
 }
 
 @media only screen and (min-width: 1024px) {
+
+    .secure-payment-block {
+        margin-top: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: space-evenly;
+    }
+
     .secure-payment-block img {
         width: 140px;
     }

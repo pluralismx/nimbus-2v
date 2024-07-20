@@ -77,6 +77,21 @@ tr td:nth-last-child(1) {
     width: 50%;
 }
 
+tbody tr td {
+    text-align: left;
+    padding: .5rem;
+    width: 30%;
+    text-align: center;
+}
 
+tbody tr td:nth-last-child(3) {
+    text-align: center;
+    padding: .5rem;
+    width: 30%;
+}
+
+select {
+    width: 50%;
+}
 
 </style>

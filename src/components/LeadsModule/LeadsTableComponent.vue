@@ -2,7 +2,7 @@
     <table>
         <thead>
             <tr class="table-tools">
-                <td class="table-search" colspan="2">
+                <td class="table-search" colspan="3">
                     <label for="">Buscar:&nbsp;</label>
                     <input v-model="search_query" type="text">&nbsp;
                     <button class="btn-warning compact" @click="search()">{{ search_btn_text }}</button>
@@ -267,10 +267,7 @@ export default {
         color: var(--basic);
     }
 
-    tbody tr:nth-child(odd) {
-        background-color: var(--accent);
-        color: var(--warning);
-    }
+
     tbody tr:nth-child(odd) {
         background-color: var(--accent);
         color: var(--warning);

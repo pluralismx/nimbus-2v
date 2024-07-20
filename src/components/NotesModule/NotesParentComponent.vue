@@ -157,17 +157,13 @@ import axios from '@/lib/axios';
         padding-left: 2rem;
         padding-bottom: 2rem;
         padding-right: 2rem;
-        transform: translateY(calc(-45vh - 2rem));
+        transform: translateY(calc(-61svh - 2rem));
         transition: all 300ms;
     }
 
     .showNewNote {
         transform: translateY(0%);
         transition: all 300ms;
-    }
-
-    .hideNewNote {
-        animation: hideNewNote 300ms forwards;
     }
 
     /* Desktop */
@@ -178,6 +174,20 @@ import axios from '@/lib/axios';
             grid-column: 1/2;
             grid-row: 2/3;
         }
+
+        .notes-container {
+            padding-top: 1.5rem;
+            padding-left: 2rem;
+            padding-bottom: 2rem;
+            padding-right: 2rem;
+            transform: translateY(calc(-45vh - 2rem));
+            transition: all 300ms;
+        }
+
+        .showNewNote {
+        transform: translateY(0%);
+        transition: all 300ms;
+    }
 
         .title-bar-container {
             padding-top: 1rem;

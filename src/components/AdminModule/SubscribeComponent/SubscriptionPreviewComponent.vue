@@ -18,18 +18,6 @@
                         <td>${{ this.monthly_payment }}</td>
                     </tr>
                     <tr>
-                        <td>Costo diario</td>
-                        <td>${{ this.price_per_day }}</td>
-                    </tr>
-                    <tr>
-                        <td>Periodo prorrateado</td>
-                        <td>{{ this.prorated_period }} días</td>
-                    </tr>
-                    <tr>
-                        <td>Subtotal</td>
-                        <td>${{ this.prorated_charge }}</td>
-                    </tr>
-                    <tr>
                         <td>Impuestos</td>
                         <td>${{ this.taxes }}</td>
                     </tr>
@@ -41,12 +29,6 @@
             </table>
         </div>
         <div v-show="showNotesMessage" class="footer">
-            <h4>Notas:</h4>
-            <br>
-            <p>&#128073;&#127996; El servicio CRM se ha prorrateado para el período del <span class="span-attention">{{ selection.period_begins }}</span> al <span class="span-attention">{{ selection.period_end }}</span></p>
-            <br>
-            <p>&#128073;&#127996; El costo diario se ha calculado dividiendo el costo mensual entre el número de días del mes.</p>
-            <br>
             <button class="btn-primary" @click="openProcessPaymentModal()">Proceder al pago</button>
         </div>
     </div>
@@ -113,7 +95,8 @@
         padding: 1rem;
         padding-top: 0;
         background-color: #d2d8db;
-        border-radius: .5rem
+        border-radius: .5rem;
+        height: 100%;
     }
 
     .header {

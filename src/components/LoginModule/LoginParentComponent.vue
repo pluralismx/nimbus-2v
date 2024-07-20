@@ -80,16 +80,18 @@
         },
         methods: {
             logIn: async function() {
+                
                 const data = {
                     'email': this.email,
                     'password': this.password
                 }
+
                 const json = JSON.stringify(data);
                 let formData = new FormData();
                 formData.append('json', json);
                 try {
                     
-                    const response = await axios.post('api/login', formData, {"withCredentials": true})
+                    const response = await axios.post('api/login', formData, { withCredentials: true });
                     
                     if(response.data.status=='success') {
                         
@@ -118,7 +120,8 @@
                 formData.append('json', json);
                 
                 try {
-                    const login = await axios.post('api/login', formData, {"withCredentials": true});
+                    const login = await axios.post('api/login', formData, { withCredentials: true });
+                    console.log(login);
                     if(login.data.status == "success"){
                         let identity = JSON.stringify(login.data.identity);
                         localStorage.setItem('identity', identity);

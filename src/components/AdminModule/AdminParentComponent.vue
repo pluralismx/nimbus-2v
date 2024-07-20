@@ -56,9 +56,8 @@
 
         <!-- Plan builder -->
         <div v-show="isVisibleSubscribeSection" class="panel-container">
-            <div class="settings-container">  
+            <div v-if="this.account.type != 'standard'" class="settings-container">  
                 <PlanBuilderComponent
-                    v-if="this.account.type != 'standard'"
                     :account="account"
                     @selection-made="handleSelectionMade"
                     @cant-add-feature="handleCantAddFeature"
@@ -94,6 +93,8 @@
             <div class="settings-container">
                 <UpgradesPreviewComponent
                     :selection="selection"
+                    :clear="clearUpgradePreview"
+                    :account="account"
                     @upgrades-selected="handleUpgradesSelected"
                 />
             </div>
@@ -154,9 +155,10 @@ export default {
             hasNotifications: false,
             selection: '',
             isVisibleProcessPaymentModal: false,
-            isVisibleSubscribeSection: false,
-            isVisiblePaymentSection: true,
+            isVisibleSubscribeSection: true,
+            isVisiblePaymentSection: false,
             isVisibleUpgradeSection: false,
+            clearUpgradePreview: false,
         }
     },
     created() {
@@ -271,6 +273,11 @@ export default {
         },
         handleReloadAccount: function () {
             this.selection = '';
+            this.isVisibleSubscribeSection = false;
+            this.isVisiblePaymentSection = true;
+            this.isVisibleUpgradeSection = false;
+            this.clearUpgradePreview = true;
+            console.log(this.clearUpgradePreview);
             this.$emit('reload-acount');
         }
     },
@@ -291,11 +298,11 @@ export default {
 
     .settings-container {
         margin-bottom: 2rem;
-        box-shadow: 2px 2px 6px rgba(0,0,0,.8);
+        box-shadow: 2px 2px 6px rgba(0,0,0,.5);
         border-radius: .5rem;
         display: flex;
         flex-direction: column;
-        height: 50vh;
+        /* height: 50svh; */
     }
 
     .settings-header {

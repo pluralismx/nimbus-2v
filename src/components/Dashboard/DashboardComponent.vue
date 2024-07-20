@@ -354,7 +354,7 @@ export default {
             this.account.sent_emails = Number(this.account.sent_emails) + qty;
         },
         handleLeadUpdated: function (notification) {
-            // this.loadWebsiteLeads();
+            this.loadWebsiteLeads();
             this.handleStatusBarNotification(notification);
         }
     }
@@ -366,17 +366,24 @@ export default {
 /* Mobile first */
 
 #dashboard {
-    height: 100vh;
-    width: 100vw;
+    height: 100svh;
+    width: 100svw;
     display: grid;
-    grid-template-columns: 100vw;
-    grid-template-rows: 12vh 83vh 5vh;
+    grid-template-columns: 100svw;
+    grid-template-rows: 14svh 79svh 7svh;
     background-color: var(--basic);
 }
 
 /* Desktop */
 
 @media only screen and (min-width: 1024px) {
+    #dashboard {
+        grid-template-columns: 27vw 73vw;
+        grid-template-rows: 8vh 86vh 6vh;
+    }
+}
+
+@media only screen and (min-width: 1440px) {
     #dashboard {
         grid-template-columns: 20vw 80vw;
         grid-template-rows: 8vh 86vh 6vh;

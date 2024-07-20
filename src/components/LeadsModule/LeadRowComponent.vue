@@ -2,7 +2,7 @@
     <!-- Original lead -->
     <tr>
         <td v-show="edit==false" width="18%"><span class="span-clickable" @click="showDetails()">{{ name }}</span></td>
-        <td v-show="edit==false" width="18%"><a :href="'tel:'+phone"><span v-show="this.phone!=''" class="span-call-icon" @click="showDetails()">&#128222;&nbsp;&nbsp;</span></a><a :href="'https://wa.me/'+phone" target="_blank"><span>{{ phone }}</span></a></td>
+        <td v-show="edit==false" width="18%"><a :href="'tel:'+phone"><span v-show="this.phone!=''" class="span-call-icon" @click="showDetails()"><img src="../../../src/assets/images/phone-icon2.png" class="phone-icon"/>&nbsp;</span></a><a :href="'https://wa.me/'+phone" target="_blank"><span>{{ phone }}</span></a></td>
         <td v-show="edit==false" width="18%"><span :class="{ 'unsubscribed': this.lead.subscribed == 0 }">{{ email }}</span></td>
         
         <td v-show="edit==false" width="18%">
@@ -156,6 +156,14 @@ button {
 input {
     width: 85%;
     text-align: center;
+}
+
+.phone-icon {
+    width: 20px;
+}
+
+.phone-icon:hover {
+    filter: invert(1);
 }
     
 </style>

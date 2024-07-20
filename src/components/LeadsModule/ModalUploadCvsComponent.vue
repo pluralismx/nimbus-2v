@@ -148,7 +148,7 @@ input[type="text"] {
 .label-button {
     background-color: var(--primary);
     padding: 7px;
-    font-size: 14px;
+    font-size: 12px;
     color: var(--basic);
     border-top-right-radius: 4px;
     border-bottom-right-radius: 4px;
@@ -196,6 +196,10 @@ input[type="file"] {
 @media only screen and (min-width: 1024px) {
     .modal-container {
         width: 500px;
+    }
+
+    .label-button {
+        font-size: 12px;
     }
 }
 

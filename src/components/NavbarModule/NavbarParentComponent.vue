@@ -41,7 +41,7 @@
 
         <!-- User menu -->
         <ul class="user-menu desktop">
-            <li><span @click="toggleTool('team-desktop')">Administración&nbsp;</span></li>
+            <li><span @click="toggleTool('team-desktop')">Admin&nbsp;</span></li>
             <li><span>|&nbsp;</span></li>
             <li><span @click="logout()">Cerrar sesión</span></li>
         </ul>
@@ -150,7 +150,7 @@
     /* Actual styles */
 
     img {
-        width: 38px;
+        width: 32px;
     }
 
     select {

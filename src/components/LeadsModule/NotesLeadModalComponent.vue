@@ -4,7 +4,7 @@
         <div class="modal-container">
 
             <div class="modal-header">
-                <span>Seguimiento a {{ lead.name }}</span>
+                <span class="lead-card-name">{{ lead.name }}</span>
                 <span class="close-cross" @click="closeNotesModal">&times;</span>
             </div>
 
@@ -111,8 +111,13 @@ export default {
     color: var(--basic);
 }
 
+.lead-card-name {
+    white-space: nowrap;
+    overflow-y: hidden;
+}
+
 .modal-body {
-    padding: 1rem;
+    padding: .5rem;
     background-color: var(--accent);
     display: flex;
     flex-direction: column;
@@ -122,16 +127,17 @@ export default {
 }
 
 .lead-message-container {
-    padding: 1rem;
+    padding: .5rem;
     border: 1px solid var(--primary);
     overflow-y: auto;
     margin-bottom: 1rem;
     border-radius: 4px;
-    height: 20vh;
+    height: 17vh;
     box-sizing: border-box;
     background-color: var(--shadows);
     color: var(--accent);
     line-height: 1.5;
+    font-size: 12px;
 }
 
 .bulletin-board {
@@ -142,7 +148,8 @@ export default {
     margin-bottom: 1rem;
     border-radius: 4px;
     box-sizing: border-box;
-    height: 30vh;
+    height: 50svh;
+    
 }
 
 .comment-container {
@@ -153,7 +160,7 @@ export default {
     margin-bottom: .5rem;
     padding: .5rem;
     box-sizing: border-box;
-    font-size: 14px;
+    font-size: 12px;
 }
 
 .comment-box-container {
@@ -179,6 +186,31 @@ export default {
 @media only screen and (min-width: 1024px) {
     .modal-container {
         width: 35%;
+    }
+
+    .modal-body {
+        padding: 1rem;
+    }
+
+    .lead-message-container {
+        padding: 1rem;
+        height: 17vh;
+        font-size: 14px;
+    }
+
+    .bulletin-board {
+        height: 35vh;
+    }
+
+    .comment-container {
+        background-color: var(--primary);
+        color: var(--basic);
+        width: 100%;
+        border-radius: 4px;
+        margin-bottom: .5rem;
+        padding: .5rem;
+        box-sizing: border-box;
+        font-size: 14px;
     }
 }
 </style>

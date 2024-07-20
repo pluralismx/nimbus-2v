@@ -3,7 +3,7 @@
         <div class="heading">
             <h1>Resumen de mi cuenta</h1>
         </div>
-        <table>
+        <table id="table-desktop">
             <thead>
                 <th>Sitios</th>
                 <th>Contactos</th>
@@ -19,6 +19,39 @@
                 <td>{{ account.users }}</td>
                 <td>{{ account.emails }}</td>
                 <td>${{ account.amount_due }}</td>
+            </tbody>
+        </table>
+        <table id="table-mobile">
+            <thead>
+                <th>Caracteristica</th>
+                <th>Detalle</th>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Sitios</td>
+                    <td>{{ account.websites }}</td>
+                </tr>
+                <tr>
+                    <td>Contactos</td>
+                    <td>{{ account.contacts }}</td>
+                </tr>
+                <tr>
+                    <td>Negocios</td>
+                    <td>{{ account.businesses }}</td>
+                </tr>
+                <tr>
+                    <td>Usuarios</td>
+                    <td>{{ account.users }}</td>
+                </tr>
+                <tr>
+                    <td>Emails</td>
+                    <td>{{ account.emails }}</td>
+                </tr>
+                <tr>
+                    <td>Total</td>
+                    <td>${{ account.amount_due }}</td>
+                </tr>
+
             </tbody>
         </table>
         <h4>Pagar mensualidad (vence el {{ this.due_date }})</h4>
@@ -168,17 +201,55 @@ h4 {
 span {
     font-size: 14px;
 }
+
+#table-desktop {
+    display: none;
+}
+
+#table-mobile {
+    display: table;
+}
+
+#table-mobile {
+    margin-bottom: 2rem;
+}
+
+#table-mobile thead tr th{
+    text-align: left;
+    padding: 4px .5rem;
+}
+
+#table-mobile thead tr th:nth-last-child(1){
+    text-align: center;
+}
+
+#table-mobile tbody tr td{
+    border: none;
+    text-align: left;
+    padding: 8px .5rem;
+}
+
+#table-mobile tbody tr:nth-last-child(1){
+    border-top: 1px solid black;
+}
+
+#table-mobile tbody tr td:nth-last-child(1){
+    text-align: center;
+}
+
 table {
     width: 100%;
     border-collapse: collapse;
     font-size: 10px;
     margin-bottom: 2rem;
+    box-sizing: border-box;
 }
 
 thead {
     width: 100%;
     color: var(--basic);
     background-color: var(--primary);
+    box-sizing: border-box;
 }
 
 td, th {
@@ -209,26 +280,26 @@ td {
     margin-bottom: 2rem;
 }
 
-#table-account-summary thead tr th{
+#table-account-summary, thead tr th{
     text-align: left;
     padding: 4px .5rem;
 }
 
-#table-account-summary thead tr th:nth-last-child(1){
+#table-account-summary, thead tr th:nth-last-child(1){
     text-align: center;
 }
 
-#table-account-summary tbody tr td{
+#table-account-summary, tbody tr td{
     border: none;
     text-align: left;
     padding: 8px .5rem;
 }
 
-#table-account-summary tbody tr:nth-last-child(1){
+#table-account-summary, tbody tr:nth-last-child(1){
     border-top: 1px solid black;
 }
 
-#table-account-summary tbody tr td:nth-last-child(1){
+#table-account-summary, tbody tr td:nth-last-child(1){
     text-align: center;
 }
 
@@ -282,6 +353,14 @@ button {
 
     table {
         font-size: 14px;
+    }
+
+    #table-desktop {
+        display: table;
+    }
+
+    #table-mobile {
+        display: none;
     }
 
     button {

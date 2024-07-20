@@ -24,29 +24,44 @@
         </table>
         <div class="upgrade-card-container">
             <div class="upgrade-card" @click="upgrade('contacts')">
-                <span>Agregar 500 contactos</span>
-                <br>
-                <span>$11.99 USD</span>
-            </div>
-            <div class="upgrade-card" @click="upgrade('businesses')">
-                <span>Agregar negocio</span>
-                <br>
-                <span>$14.99 USD</span>
-            </div>
-            <div class="upgrade-card" @click="upgrade('users')">
-                <span>Agregar usuario</span>
-                <br>
-                <span>$4.99 USD</span>
-            </div>
-            <div class="upgrade-card" @click="upgrade('websites')">
-                <span>Agregar sitio</span>
-                <br>
-                <span>$24.99 USD</span>
+                <div>
+                    <span>Agregar 500 contactos</span>
+                    <br>
+                    <span>$5.99 USD</span>
+                </div>
+                <img src="../../../../src/assets/images/contact.png" alt="">
             </div>
             <div class="upgrade-card" @click="upgrade('emails')">
-                <span>Agregar 500 correos</span>
-                <br>
-                <span>$9.99 USD</span>
+                <div>
+                    <span>Agregar 500 correos</span>
+                    <br>
+                    <span>$4.99 USD</span>
+                </div>
+                <img src="../../../../src/assets/images/email.png" alt="">
+            </div>
+            <div class="upgrade-card" @click="upgrade('businesses')">
+                <div>
+                    <span>Agregar negocio</span>
+                    <br>
+                    <span>$14.99 USD</span>
+                </div>
+                <img src="../../../../src/assets/images/portfolio.png" alt="">
+            </div>
+            <div class="upgrade-card" @click="upgrade('users')">
+                <div>
+                    <span>Agregar usuario</span>
+                    <br>
+                    <span>$4.99 USD</span>
+                </div>
+                <img src="../../../../src/assets/images/boy.png" alt="">
+            </div>
+            <div class="upgrade-card" @click="upgrade('websites')">
+                <div>
+                    <span>Agregar sitio</span>
+                    <br>
+                    <span>$24.99 USD</span>
+                </div>
+                <img src="../../../../src/assets/images/earth.png" alt="">
             </div>
         </div>
         <h4>Quitar caracteristicas</h4>
@@ -114,11 +129,11 @@ export default {
             return Math.floor(number * 100) / 100;
         },
         starterPlan: function () {
-            this.users = 1;
+            this.users = 2;
             this.websites = 1;
-            this.emails = 2000;
-            this.contacts = 1000;
-            this.businesses = 1;
+            this.emails = 10000;
+            this.contacts = 500;
+            this.businesses = 10;
             this.cost = 29.99;
             this.firstPayment();
         },
@@ -137,12 +152,12 @@ export default {
                         break;
                     case 'emails' :
                         this.emails += 500;
-                        this.cost += 9.99;
+                        this.cost += 4.99;
                         this.cost = this.truncateDecimals(this.cost);
                         break;
                     case 'contacts' :
                         this.contacts += 500;
-                        this.cost += 11.99;
+                        this.cost += 5.99;
                         this.cost = this.truncateDecimals(this.cost);
                         break;
                     case 'businesses' :
@@ -151,7 +166,7 @@ export default {
                         this.cost = this.truncateDecimals(this.cost);
                         break;
                     case 'remove-users' :
-                        if(this.users > 1){
+                        if(this.users > 2){
                             this.users--;
                             this.cost -= 4.99;
                             this.cost = this.truncateDecimals(this.cost);
@@ -169,9 +184,9 @@ export default {
                         }
                         break;
                     case 'remove-emails' :
-                        if(this.emails >= 2500){
+                        if(this.emails > 10000){
                             this.emails -= 500;
-                            this.cost -= 9.99;
+                            this.cost -= 4.99;
                             this.cost = this.truncateDecimals(this.cost);
                         }else {
                             // Mandar mensaje de error
@@ -180,7 +195,7 @@ export default {
                     case 'remove-contacts' :
                         if(this.contacts > 1000){
                             this.contacts -= 500;
-                            this.cost -= 11.99;
+                            this.cost -= 5.99;
                             this.cost = this.truncateDecimals(this.cost);
                         }else{
                             // Mandar mensaje de error
@@ -207,57 +222,26 @@ export default {
         firstPayment: function () {
             
             let date = new Date();
-            let today = date.getDate();
-            // let today = 15;
-            let month = date.getMonth();
             let periodBegin = (date.getMonth() + 1) + "/" + date.getDate() + "/" + date.getFullYear(); 
-            let periodEnd = (date.getMonth() + 2) + "/15/" + date.getFullYear();
+            let periodEnd = (date.getMonth() + 2) + "/" + date.getDate() + "/" + date.getFullYear();
 
-            if(today != 15){
-                let prorated_period = (this.months[month].days - today) + 15;
-                let pricePerDay = this.cost / this.months[month].days;
-                
-                let prorated_charge = this.truncateDecimals(pricePerDay) * prorated_period;
-                let taxes = prorated_charge * 0.08;
-                let total = prorated_charge + taxes;
-                const json = {
-                    "type": "new_customer",
-                    "users": this.users,
-                    "websites": this.websites,
-                    "emails": this.emails,
-                    "contacts": this.contacts,
-                    "businesses": this.businesses,
-                    "period_begins": periodBegin,
-                    "period_end": periodEnd,
-                    "monthly_payment": this.cost,
-                    "prorated_period": prorated_period,
-                    "price_per_day": this.truncateDecimals(pricePerDay),
-                    "prorated_charge": this.truncateDecimals(prorated_charge),
-                    "taxes": this.truncateDecimals(taxes),
-                    "total": this.truncateDecimals(total)
-                };
-                this.$emit('selection-made', json);
-            }else {
-                let taxes = this.cost * 0.08;
-                let total = this.cost + taxes;
-                const json = {
-                    "type": "new_customer",
-                    "users": this.users,
-                    "websites": this.websites,
-                    "emails": this.emails,
-                    "contacts": this.contacts,
-                    "businesses": this.businesses,
-                    "period_begins": periodBegin,
-                    "period_end": periodEnd,
-                    "monthly_payment": this.cost,
-                    "prorated_period": "n/a",
-                    "price_per_day": "n/a",
-                    "prorated_charge": "n/a",
-                    "taxes": this.truncateDecimals(taxes),
-                    "total": this.truncateDecimals(total)
-                };
-                this.$emit('selection-made', json);
-            }
+            let taxes = this.cost * 0.08;
+            let total = this.cost + taxes;
+            const json = {
+                "type": "new_customer",
+                "users": this.users,
+                "websites": this.websites,
+                "emails": this.emails,
+                "contacts": this.contacts,
+                "businesses": this.businesses,
+                "period_begins": periodBegin,
+                "period_end": periodEnd,
+                "monthly_payment": this.cost,
+                "taxes": this.truncateDecimals(taxes),
+                "total": this.truncateDecimals(total)
+            };
+            this.$emit('selection-made', json);
+            
         }
     }
 }
@@ -328,9 +312,16 @@ td {
     color: var(--shadows);
     border-radius: .5rem;
     width: calc(50% - .5rem);
-    box-shadow: 2px 2px 6px rgba(0,0,0, .8);
+    box-shadow: 2px 2px 4px rgba(0,0,0, .8);
     transition: all 300ms;
     border-bottom: 2px solid var(--primary);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.upgrade-card img {
+    width: 35px;
 }
 
 .upgrade-card span{
@@ -392,6 +383,10 @@ button {
     .upgrade-card {
         padding: 1rem;
         
+    }
+
+    .upgrade-card img {
+        width: 45px;
     }
 
     .upgrade-card span{

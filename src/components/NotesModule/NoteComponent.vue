@@ -60,7 +60,7 @@
         border-radius: .5rem;
         box-shadow: 2px 2px 3px rgba(0,0,0,0.7);
         box-sizing: border-box;
-        height: 45vh;
+        height: 62svh;
         width: 100%;
         margin-bottom: 2rem;
         transition: transform 300ms;
@@ -109,6 +109,7 @@
         color: var(--warn);
         resize: none;
         line-height: 1.5;
+        font-size: 14px;
     }
 
     .note-body textarea:focus{
@@ -124,10 +125,31 @@
         background-color: transparent;
         border: none;
         padding: 0 .5rem;
+        
     }
 
     button {
         width: 30%;
     }
     
+    @media only screen and (min-width: 1024px) {
+        .note-container {
+            height: 45vh;
+        }
+
+        .note-body textarea {
+            font-size: 12px;
+        }
+
+        button {
+            font-size: 12px;
+            padding: 5px;
+        }
+    }
+
+    @media only screen and (min-width: 1440px) {
+        .note-body textarea {
+            font-size: 14px;
+        }
+    }
 </style>

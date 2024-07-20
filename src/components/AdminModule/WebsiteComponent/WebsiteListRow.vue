@@ -108,12 +108,27 @@ tbody tr:nth-last-child(2){
         margin-left: .5rem;
     }
     .td-actions-desktop {
+        display: none;
+        text-align: center;
+    }
+    .td-actions-mobile {
+        display: block;
+    }
+    .btn-primary.compact{
+        width: 48px;
+        box-shadow: 1px 1px 2px rgba(0,0,0,.6);
+    }
+}
+
+@media only screen and (min-width: 1440px) {
+    .td-actions-desktop {
         display: block;
         text-align: center;
     }
     .td-actions-mobile {
         display: none;
     }
+
     .btn-primary.compact{
         width: 80px;
         box-shadow: 1px 1px 2px rgba(0,0,0,.6);

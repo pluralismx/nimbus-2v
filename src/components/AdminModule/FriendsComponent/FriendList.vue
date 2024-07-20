@@ -134,7 +134,7 @@ span {
     padding: .5rem;
     box-sizing: border-box;
     flex-grow: 1;
-    min-height: 0;
+    min-height: 50svh;
     overflow-y: hidden;
     margin-top: 1rem;
 }
@@ -171,7 +171,9 @@ thead tr th:last-child{
 
 
 @media only screen and (min-width: 1024px) {
-
+    .table-container {
+        min-height: 0;
+    }
 }
 .btn-warning.compact{
     width: 80px;

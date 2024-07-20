@@ -9,73 +9,98 @@
             <div class="settings-body">
                 <!-- Nuevos -->
                 <div class="checkbox-block">
-                    <input type="checkbox" 
-                        @change="updateSelection('nuevo')" 
-                        :disabled="isAllSelected || isIndividualSelected"
-                        v-model="checkboxOptions.nuevo"
-                    />
-                    <label>Nuevos</label>
+                    <label class="custom-checkbox">
+                        <input type="checkbox"
+                            @change="updateSelection('nuevo')" 
+                            :disabled="isAllSelected || isIndividualSelected"
+                            v-model="checkboxOptions.nuevo"
+                        >
+                        <span class="checkmark"></span>
+                        nuevo
+                    </label>
                 </div>
                 <!-- Identificacion -->
                 <div class="checkbox-block">
-                    <input type="checkbox" 
-                        @change="updateSelection('identificacion')" 
-                        :disabled="isAllSelected || isIndividualSelected"
-                        v-model="checkboxOptions.identificacion"
-                    />
-                    <label>Identificación</label>
+                    <label class="custom-checkbox">
+                        <input type="checkbox"
+                            @change="updateSelection('identificacion')" 
+                            :disabled="isAllSelected || isIndividualSelected"
+                            v-model="checkboxOptions.identificacion"
+                        >
+                        <span class="checkmark"></span>
+                        Identificación
+                    </label>
                 </div>
                 <!-- Presentacion -->
                 <div class="checkbox-block">
-                    <input type="checkbox" 
+                    <label class="custom-checkbox">
+                        <input type="checkbox"
                         @change="updateSelection('presentacion')" 
                         :disabled="isAllSelected || isIndividualSelected"
                         v-model="checkboxOptions.presentacion"
-                    />
-                    <label>Presentación</label>
+                        >
+                        <span class="checkmark"></span>
+                        Presentación
+                    </label>
                 </div>
                 <!-- Cotizacion -->
                 <div class="checkbox-block">
-                    <input type="checkbox" 
-                        @change="updateSelection('cotizacion')" 
-                        :disabled="isAllSelected || isIndividualSelected"
-                        v-model="checkboxOptions.cotizacion"
-                    />
-                    <label>Cotización</label>
+                    <label class="custom-checkbox">
+                        <input type="checkbox"
+                            @change="updateSelection('cotizacion')" 
+                            :disabled="isAllSelected || isIndividualSelected"
+                            v-model="checkboxOptions.cotizacion"
+                        >
+                        <span class="checkmark"></span>
+                        Cotización
+                    </label>
                 </div>
                 <!-- Negociacion -->
                 <div class="checkbox-block">
-                    <input type="checkbox" 
-                        @change="updateSelection('negociacion')" 
-                        :disabled="isAllSelected || isIndividualSelected"
-                        v-model="checkboxOptions.negociacion"
-                    />
-                    <label>Negociación</label>
+                    <label class="custom-checkbox">
+                        <input type="checkbox"
+                            @change="updateSelection('negociacion')" 
+                            :disabled="isAllSelected || isIndividualSelected"
+                            v-model="checkboxOptions.negociacion"
+                        >
+                        <span class="checkmark"></span>
+                        Negociación
+                    </label>
                 </div>
                 <!-- Cierre -->
                 <div class="checkbox-block">
-                    <input type="checkbox" 
-                        @change="updateSelection('cierre')" 
-                        :disabled="isAllSelected || isIndividualSelected"
-                        v-model="checkboxOptions.cierre"
-                    />
-                    <label>Cierre</label>
+                    <label class="custom-checkbox">
+                        <input type="checkbox"
+                            @change="updateSelection('cierre')" 
+                            :disabled="isAllSelected || isIndividualSelected"
+                            v-model="checkboxOptions.cierre"
+                        >
+                        <span class="checkmark"></span>
+                        Cierre
+                    </label>
                 </div>
                 <!-- Todos -->
                 <div class="checkbox-block">
-                    <input type="checkbox" 
-                        @change="updateSelection('todos')" 
-                        :disabled="isIndividualSelected"
-                    />
-                    <label>Todos</label>
+                    <label class="custom-checkbox">
+                        <input type="checkbox"
+                            @change="updateSelection('todos')" 
+                            :disabled="isIndividualSelected"
+                        >
+                        <span class="checkmark"></span>
+                        Todos
+                    </label>
                 </div>
+
                 <!-- Individual -->
                 <div class="checkbox-block">
-                    <input type="checkbox" 
-                        @change="updateSelection('individual')" 
-                        :disabled="isAllSelected"
-                    />
-                    <label>Individual</label>
+                    <label class="custom-checkbox">
+                        <input type="checkbox"
+                            @change="updateSelection('individual')" 
+                            :disabled="isAllSelected"
+                        >
+                        <span class="checkmark"></span>
+                        Cierre
+                    </label>
                 </div>
                 <div class="text-input-block">
                     <div>
@@ -208,6 +233,65 @@
 
 .checkbox-block input[type="checkbox"] {
     margin-right: 1rem;
+}
+
+.custom-checkbox {
+    display: block;
+    position: relative;
+    padding-left: 35px;
+    margin-bottom: 15px;
+    cursor: pointer;
+    font-size: 14px;
+    user-select: none;
+    color: black;
+}
+
+.custom-checkbox input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+.checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 15px;
+    width: 15px;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
+
+.custom-checkbox:hover input ~ .checkmark {
+    background-color: #ccc;
+}
+
+.custom-checkbox input:checked ~ .checkmark {
+    background-color: var(--primary);
+    border-color: var(--primary);
+}
+
+.checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+.custom-checkbox input:checked ~ .checkmark:after {
+    display: block;
+}
+
+.custom-checkbox .checkmark:after {
+    left: 4px;
+    top: 0px;
+    width: 4px;
+    height: 8px;
+    border: solid white;
+    border-width: 0 3px 3px 0;
+    transform: rotate(45deg);
 }
 
 .text-input-block {

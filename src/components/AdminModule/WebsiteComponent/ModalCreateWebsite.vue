@@ -13,25 +13,33 @@
             <!-- Form -->
             <div class="modal-body">
                 <div class="checkbox-block">
-                    <div>
-                        <input type="checkbox" v-model="checkboxOptions.website" @change="toggleCheckbox('website')">
-                        <label>Sitio</label>
-                    </div>
-                    <div>
-                        <input type="checkbox" v-model="checkboxOptions.business" @change="toggleCheckbox('business')">
-                        <label>Negocio</label>
-                    </div>
+                    <label class="custom-checkbox">
+                        <input type="checkbox"
+                            v-model="checkboxOptions.website"
+                            @change="toggleCheckbox('website')"
+                        >
+                        <span class="checkmark"></span>
+                        Sitio
+                    </label>
+                    <label class="custom-checkbox">
+                        <input type="checkbox"
+                            v-model="checkboxOptions.business"
+                            @change="toggleCheckbox('business')"
+                        >
+                        <span class="checkmark"></span>
+                        Negocio
+                    </label>
                 </div>
                 <div class="input-block">
                     <label for="name">Nombre: </label>
-                    <input v-model="name"  class="input-primary" type="text">
+                    <input v-model="name"  class="input-primary" type="text" placeholder="ej. prospectos agosto">
                 </div>
                 <div class="input-block" v-show="this.checkboxOptions.website">
                     <label for="name">URL: </label>
                     <input v-model="url"  class="input-primary" type="text">
                 </div>
                 <div class="input-block">
-                    <textarea v-model="apiKey" cols="30" rows="10" placeholder="Una vez que hayas creado el sitio, se te mostrará la clave para la API en este recuadro. Esta clave no estará disponible una vez que cierres esta ventana. Te recomendamos copiarla y guardarla en un lugar seguro tanto para ti como para tu equipo de trabajo." v-show="this.checkboxOptions.website"></textarea>
+                    <textarea v-model="apiKey" cols="30" rows="10" placeholder="Esta es la clave que identificara a tu pagina web, recuerda incluirla en todos los formularios que quieras conectar a tu cuenta de nimbus. Una vez que cierres esta venta no la podras volver a ver" v-show="this.checkboxOptions.website"></textarea>
                 </div>
             </div>
 
@@ -52,8 +60,8 @@ export default {
     name: 'ModalCreateWebsiteComponent',
     data() {
         return {
-            name: 'Pluralis',
-            url: 'http://www.pluralis.com.mx',
+            name: '',
+            url: '',
             apiKey: '',
             button: 'cancelar',
             checkboxOptions: {
@@ -115,6 +123,66 @@ export default {
 
 <style scoped>
 
+.custom-checkbox {
+    display: block;
+    position: relative;
+    padding-left: 35px;
+    margin-bottom: 15px;
+    margin-right: 15px;
+    cursor: pointer;
+    font-size: 14px;
+    user-select: none;
+    color: black;
+}
+
+.custom-checkbox input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+.checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 15px;
+    width: 15px;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
+
+.custom-checkbox:hover input ~ .checkmark {
+    background-color: #ccc;
+}
+
+.custom-checkbox input:checked ~ .checkmark {
+    background-color: var(--primary);
+    border-color: var(--primary);
+}
+
+.checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+.custom-checkbox input:checked ~ .checkmark:after {
+    display: block;
+}
+
+.custom-checkbox .checkmark:after {
+    left: 4px;
+    top: 0px;
+    width: 4px;
+    height: 8px;
+    border: solid white;
+    border-width: 0 3px 3px 0;
+    transform: rotate(45deg);
+}
+
 .modal-container {
     width: 75%;
     border-radius: .5rem;
@@ -135,6 +203,11 @@ export default {
 .modal-body {
     padding: .5rem;
     background-color: var(--basic);
+}
+
+.checkbox-block {
+    margin: 1rem 0;
+    display: flex;
 }
 
 .input-block {

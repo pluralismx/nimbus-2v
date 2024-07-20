@@ -21,30 +21,46 @@
         </table>
         <div class="upgrade-card-container">
             <div class="upgrade-card" @click="upgrade('contacts')">
-                <span>Agregar 500 contactos</span>
-                <br>
-                <span>$11.99 USD</span>
+                <div>
+                    <span>Agregar 500 contactos</span>
+                    <br>
+                    <span>$5.99 USD</span>
+                </div>
+                <img src="../../../../src/assets/images/contact.png" alt="">
             </div>
             <div class="upgrade-card" @click="upgrade('emails')">
-                <span>Agregar 500 correos</span>
-                <br>
-                <span>$9.99 USD</span>
+                <div>
+                    <span>Agregar 500 correos</span>
+                    <br>
+                    <span>$4.99 USD</span>
+                </div>
+                <img src="../../../../src/assets/images/email.png" alt="">
             </div>
             <div class="upgrade-card" @click="upgrade('businesses')">
-                <span>Agregar negocio</span>
-                <br>
-                <span>$14.99 USD</span>
+                <div>
+                    <span>Agregar negocio</span>
+                    <br>
+                    <span>$14.99 USD</span>
+                </div>
+                <img src="../../../../src/assets/images/portfolio.png" alt="">
             </div>
             <div class="upgrade-card" @click="upgrade('users')">
-                <span>Agregar usuario</span>
-                <br>
-                <span>$4.99 USD</span>
+                <div>
+                    <span>Agregar usuario</span>
+                    <br>
+                    <span>$4.99 USD</span>
+                </div>
+                <img src="../../../../src/assets/images/boy.png" alt="">
             </div>
             <div class="upgrade-card" @click="upgrade('websites')">
-                <span>Agregar sitio</span>
-                <br>
-                <span>$24.99 USD</span>
+                <div>
+                    <span>Agregar sitio</span>
+                    <br>
+                    <span>$24.99 USD</span>
+                </div>
+                <img src="../../../../src/assets/images/earth.png" alt="">
             </div>
+            
         </div>
         <h4>Quitar caracteristicas</h4>
         <div class="footer">
@@ -65,13 +81,34 @@ export default {
             required: true
         }
     },
+    computed: {
+        accountComputed() {
+            return this.account;
+        }
+    },
+    watch: {
+        accountComputed: {
+            handler(newVal){
+                this.users = parseInt(newVal.users, 10);
+                this.websites = parseInt(newVal.websites, 10);
+                this.emails = parseInt(newVal.emails, 10);
+                this.contacts = parseInt(newVal.contacts, 10);
+                this.businesses = parseInt(newVal.businesses, 10);
+            }
+        }
+    },
     data() {
         return {
             users: 0,
+            extra_users: 0,
             websites: 0,
+            extra_websites: 0,
             emails: 0,
+            extra_emails: 0,
             contacts: 0,
+            extra_contacts: 0,
             businesses: 0,
+            extra_businesses: 0,
             cost: 0,
             subtotal: 0,
             months: [
@@ -98,32 +135,38 @@ export default {
             switch(feature){
                 case 'users' :
                     this.users++;
+                    this.extra_users++;
                     this.cost += 4.99;
                     this.cost = this.truncateDecimals(this.cost);
                     break;
                 case 'websites' :
                     this.websites++;
+                    this.extra_websites++;
                     this.cost += 24.99;
                     this.cost = this.truncateDecimals(this.cost);
                     break;
                 case 'emails' :
                     this.emails += 500;
-                    this.cost += 9.99;
+                    this.extra_emails += 500;
+                    this.cost += 4.99;
                     this.cost = this.truncateDecimals(this.cost);
                     break;
                 case 'contacts' :
                     this.contacts += 500;
-                    this.cost += 11.99;
+                    this.extra_contacts += 500;
+                    this.cost += 5.99;
                     this.cost = this.truncateDecimals(this.cost);
                     break;
                 case 'businesses' :
                     this.businesses++;
+                    this.extra_businesses++;
                     this.cost += 14.99;
                     this.cost = this.truncateDecimals(this.cost);
                     break;
                 case 'remove-users' :
-                    if(this.users >= 1){
+                    if(this.users > 2 ){
                         this.users--;
+                        this.extra_users--;
                         this.cost -= 4.99;
                         this.cost = this.truncateDecimals(this.cost);
                     }else {
@@ -131,8 +174,9 @@ export default {
                     }
                     break;
                 case 'remove-websites' :
-                    if(this.websites >= 1){
+                    if(this.websites > 1){
                         this.websites--;
+                        this.extra_websites--;
                         this.cost -= 24.99;
                         this.cost = this.truncateDecimals(this.cost);
                     }else{
@@ -140,26 +184,29 @@ export default {
                     }
                     break;
                 case 'remove-emails' :
-                    if(this.emails >= 500){
+                    if(this.emails > 5000){
                         this.emails -= 500;
-                        this.cost -= 9.99;
+                        this.extra_emails -= 500;
+                        this.cost -= 4.99;
                         this.cost = this.truncateDecimals(this.cost);
                     }else {
                         // Mandar mensaje de error
                     }
                     break;
                 case 'remove-contacts' :
-                    if(this.contacts >= 500){
+                    if(this.contacts > 500){
                         this.contacts -= 500;
-                        this.cost -= 11.99;
+                        this.extra_contacts -= 500;
+                        this.cost -= 5.99;
                         this.cost = this.truncateDecimals(this.cost);
                     }else{
                         // Mandar mensaje de error
                     }
                     break;
                 case 'remove-businesses' :
-                    if(this.businesses >= 1) {
+                    if(this.businesses > 10) {
                         this.businesses--;
+                        this.extra_businesses--
                         this.cost -= 14.99;
                         this.cost = this.truncateDecimals(this.cost);
                     }else {
@@ -171,11 +218,11 @@ export default {
         },
         firstPayment: function () {
             const json = {
-                "users": this.users,
-                "websites": this.websites,
-                "emails": this.emails,
-                "contacts": this.contacts,
-                "businesses": this.businesses,
+                "users": this.extra_users,
+                "websites": this.extra_websites,
+                "emails": this.extra_emails,
+                "contacts": this.extra_contacts,
+                "businesses": this.extra_businesses,
             };
 
             this.$emit('selection-made', json);
@@ -246,9 +293,16 @@ td {
     color: var(--shadows);
     border-radius: .5rem;
     width: calc(50% - .5rem);
-    box-shadow: 2px 2px 6px rgba(0,0,0, .8);
+    box-shadow: 2px 2px 4px rgba(0,0,0, .8);
     transition: all 300ms;
     border-bottom: 2px solid var(--primary);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.upgrade-card img {
+    width: 35px;
 }
 
 .upgrade-card span{
@@ -300,6 +354,10 @@ button {
         font-size: 14px;
         margin-bottom: 2rem;
         box-sizing: border-box;
+    }
+
+    .upgrade-card img {
+        width: 45px;
     }
 
     .upgrade-card-container {

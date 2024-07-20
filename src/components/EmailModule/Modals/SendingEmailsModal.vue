@@ -135,6 +135,7 @@ export default {
     border-radius: .5rem;
     width: 75%;
     position: relative;
+    background-color: var(--basic);
 }
 
 .container-head {
@@ -179,9 +180,9 @@ table {
 }
 
 tbody tr td{
-    padding: .5rem;
+    padding: 5px;
     border-bottom: 1px solid var(--accent);
-    font-size: 8px;
+    font-size: 9px;
 }
 
 .td-success {

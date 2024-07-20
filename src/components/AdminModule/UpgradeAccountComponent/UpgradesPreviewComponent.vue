@@ -57,6 +57,7 @@
             </table>
         </div>
         <div class="footer">
+            <span class="price-disclaimer">Después de haber realizado estos cambios a su paquete actual, <br>su nuevo pago mensual sería de ${{ this.amount_due }} (impuestos incluídos)</span>
             <button class="btn-primary" @click="openProcessPaymentModal()">Comprar</button>
         </div>
     </div>
@@ -68,11 +69,22 @@
             selection: {
                 type: Object,
                 required: true
+            },
+            account: {
+                type: Object,
+                required: true
+            },
+            clear: {
+                type: Boolean,
+                required: true
             }
         },
         computed: {
             selectionComputed() {
                 return this.selection;
+            },
+            clearComputed() {
+                return this.clear;
             }
         },
         watch: {
@@ -86,6 +98,24 @@
                         this.businesses = newVal.businesses;
                         this.calculateTotal();
                     }
+                },                
+            },
+            clearComputed: {
+                handler(){
+                    this.users = 0,
+                    this.websites = 0,
+                    this.contacts = 0,
+                    this.emails = 0,
+                    this.businesses = 0
+                    this.additionalUsersCharge = 0,
+                    this.additionalWebsitesCharge = 0,
+                    this.additionalEmailsCharge = 0,
+                    this.additionalContactsCharge = 0,
+                    this.additionalBusinessesCharge = 0
+                    this.subtotal = 0,
+                    this.taxes = 0,
+                    this.total = 0,
+                    this.amount_due = 0
                 }
             }
         },
@@ -109,7 +139,8 @@
                 // Total
                 subtotal: 0,
                 taxes: 0,
-                total: 0
+                total: 0,
+                amount_due: 0
             }
         },
         methods: {
@@ -129,14 +160,21 @@
                 return Math.floor(number * 100) / 100;
             },
             calculateTotal: function () {
+
+                let amountDue = parseFloat(this.account.amount_due);
+
                 this.additionalUsersCharge = this.truncateDecimals(this.users * 4.99);
                 this.additionalWebsitesCharge = this.truncateDecimals(this.websites * 24.99);
-                this.additionalEmailsCharge = this.truncateDecimals((this.emails / 500) * 9.99); 
-                this.additionalContactsCharge = this.truncateDecimals((this.contacts / 500) * 11.99);
+                this.additionalEmailsCharge = this.truncateDecimals((this.emails / 500) * 4.99); 
+                this.additionalContactsCharge = this.truncateDecimals((this.contacts / 500) * 5.99);
                 this.additionalBusinessesCharge = this.truncateDecimals(this.businesses * 14.99);
                 this.subtotal = this.truncateDecimals(this.additionalUsersCharge+this.additionalWebsitesCharge+this.additionalEmailsCharge+this.additionalContactsCharge+this.additionalBusinessesCharge);
                 this.taxes = this.truncateDecimals(this.subtotal * 0.08);
                 this.total = this.truncateDecimals(this.subtotal + this.taxes);
+
+                let new_payment = this.truncateDecimals(this.subtotal + amountDue);
+                let new_taxes = this.truncateDecimals(new_payment * 0.08);
+                this.amount_due = this.truncateDecimals(new_taxes + new_payment);
             }
         }
     }
@@ -147,6 +185,7 @@
     padding-top: 0;
     background-color: #d2d8db;
     border-radius: .5rem;
+
 }
 
 .header {
@@ -205,19 +244,36 @@ button {
     font-size: 10px;
 }
 
+.price-disclaimer {
+    font-size: 10px;
+    font-style: italic;
+}
+
     @media only screen and (min-width: 1024px) {
         
         .header h1 {
             font-size: 1.5em;
-            margin-bottom: 1rem;
+            margin-bottom: 2rem;
         }
-
+        .settings-body {
+            height: 100%;
+        }           
         table {
             font-size: 14px;
         }
 
         button {
             font-size: 14px;
+        }
+
+        .footer {
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .price-disclaimer {
+            font-size: 12px;
+            font-style: italic;
         }
     }
 </style>

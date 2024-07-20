@@ -28,10 +28,10 @@
                 </div>
             </div>
             <div class="lead-actions">
-                <a :href="'tel:'+lead.phone"><button class="btn-warning">Llamar</button></a>
-                <button class="btn-primary" @click="showNotesModal">Notas</button>
-                <button class="btn-primary" @click="showEditLeadModal">Editar</button>
-                <button class="btn-primary" @click="deleteLead()">Eliminar</button>
+                <a :href="'tel:'+lead.phone"><button class="btn-warning compact">Llamar</button></a>
+                <button class="btn-primary compact" @click="showNotesModal">Notas</button>
+                <button class="btn-primary compact" @click="showEditLeadModal">Editar</button>
+                <button class="btn-primary compact" @click="deleteLead()">Eliminar</button>
             </div>
         </div>
     </article>
@@ -87,10 +87,13 @@ import axios from '@/lib/axios';
     a {
         width: 100%;
         display: block;
+        margin: 4px 0px;
+        margin-bottom: 2px;
     }
 
     button {
         width: 100%;
+        margin: 4px 0;
     }
 
     article {
@@ -98,7 +101,7 @@ import axios from '@/lib/axios';
         min-height: 30%;
         width: 100%;
         border-radius: 6px;
-        box-shadow: 2px 2px 3px rgba(0,0,0,0.7);
+        box-shadow: 2px 2px 3px rgba(0,0,0,0.5);
         display: grid;
         grid-template-columns: 100%;
         grid-template-rows: 18% 82%;
@@ -115,11 +118,14 @@ import axios from '@/lib/axios';
         align-items: center;
         justify-content: space-between;
         padding: 0px .5rem;
+        width: 100%;
+        box-sizing: border-box;
     }
 
     .lead-header h3 {
         margin: 0;
         color: var(--basic);
+        font-size: 14px;
     }
 
     .lead-body {
@@ -149,7 +155,7 @@ import axios from '@/lib/axios';
 
     .data-label {
         font-weight: bold;
-        font-size: 17px;
+        font-size: 14px;
     }
 
     .div-info select {

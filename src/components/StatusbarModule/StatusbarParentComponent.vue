@@ -1,10 +1,10 @@
 <template>
     <footer>
-        <div v-show="this.account.type=='standard'" class="account-info">
-            <span id="span-websites">Sitios: {{ account.actual_websites }}/{{ account.websites }}</span>
-            <span id="span-businesses">Negocios: {{ account.actual_businesses }}/{{ account.businesses }}</span>
-            <span>Correos: {{ account.sent_emails }}/{{ account.emails }}</span>
-            <span>Contactos: {{ account.actual_contacts }}/{{ account.contacts }}</span>
+        <div v-show="this.account.type=='standard' || this.account.type=='free'" class="account-info">
+            <span id="span-websites">sitios: {{ account.actual_websites }}/{{ account.websites }}</span>
+            <span id="span-businesses">negocios: {{ account.actual_businesses }}/{{ account.businesses }}</span>
+            <span>correos: {{ account.sent_emails }}/{{ account.emails }}</span>
+            <span>contactos: {{ account.actual_contacts }}/{{ account.contacts }}</span>
         </div>
         <div class="message-bar">
             <span v-show="isVisible" :class="message.status == 'error' ? 'red' : 'green' ">{{ message.text }}</span>
@@ -87,11 +87,12 @@ footer {
     justify-content: flex-start;
     align-items: center;
     color: var(--primary);
+    font-weight: bold;
 }
 
 span {
     font-size: 10px;
-    margin-right: 1rem;
+    margin-right: 12px;
 }
 
 #span-websites {

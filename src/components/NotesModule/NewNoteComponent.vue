@@ -69,10 +69,10 @@ import axios from '@/lib/axios';
     .note-container {
         background-color: var(--basic);
         border-radius: .5rem;
-        box-shadow: 2px 2px 3px var(--shadows);
+        box-shadow: 2px 2px 3px rgba(0,0,0, .6);
         box-sizing: border-box;
         width: 100%;
-        height: 45vh;
+        height: 62svh;
         margin-bottom: 2rem;
         position: relative;
         z-index: 85;
@@ -115,6 +115,7 @@ import axios from '@/lib/axios';
         color: var(--shadows);
         resize: none;
         line-height: 1.5;
+        font-size: 14px;
     }
 
     .note-body textarea:focus{
@@ -131,5 +132,19 @@ import axios from '@/lib/axios';
         border: none;
     }
 
+    @media only screen and (min-width: 1024px) {
+        .note-container {
+            height: 45vh;
+        }
+
+        .note-body textarea {
+            font-size: 12px;
+        }
+
+        button {
+            font-size: 12px;
+            padding: 5px;
+        }
+    }
 
 </style>

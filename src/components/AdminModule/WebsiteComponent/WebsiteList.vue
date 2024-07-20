@@ -190,7 +190,7 @@ span {
 }
 
 .website-list-container {
-    height: 50%;
+    height: 50vh;
     display: flex;
     flex-direction: column;
     box-sizing: border-box;

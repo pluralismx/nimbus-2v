@@ -123,7 +123,7 @@ export default {
     }
 }
 </script>
-<style>
+<style scoped>
 .settings-body {
     display: flex;
     flex-direction: column;

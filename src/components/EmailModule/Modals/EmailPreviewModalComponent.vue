@@ -81,6 +81,11 @@ iframe {
     display: flex;
     flex-direction: column;
     min-height: 0;
+    overflow-y: scroll;
+}
+
+.template-container::-webkit-scrollbar {
+    display: none;
 }
 
 .template-container-header {

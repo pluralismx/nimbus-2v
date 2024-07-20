@@ -224,7 +224,7 @@ export default {
         background-color: var(--accent);
         width: 80%;
         padding: .5rem;
-        height: 45%;
+        height: 65%;
         border-radius: 4px;
         display: flex;
         flex-direction: column;
