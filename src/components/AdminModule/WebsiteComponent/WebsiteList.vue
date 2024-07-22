@@ -15,6 +15,7 @@
                         v-for="website in adminWebsites" :key="website.id" :website="website"
                         @website-selected="handleWebsiteSelected"
                         @authorization-need="handleAuthorizationNeeded"
+                        
                     />
                 </tbody>
             </table>
@@ -32,6 +33,7 @@
 
         <ModalConfirmationComponent
             v-show="isVisibleConfirmationModal"
+            :message="modalMessage"
             @answer="handleConfirmationModalAnswer"
         />
     </div>
@@ -61,7 +63,8 @@ export default {
             selectedWebsiteTeam: [],
             // Layout
             isVisibleCreateWebsiteModal: false,
-            isVisibleConfirmationModal: false
+            isVisibleConfirmationModal: false,
+            modalMessage: ''
         }
     },
     methods: {
@@ -98,6 +101,17 @@ export default {
         },
         handleAuthorizationNeeded: function (action, website) {
             this.action = action;
+            if(action == "dump"){
+                this.modalMessage = {
+                    "title": "Vaciar prospectos",
+                    "message": "Se descargarán los prospectos en una hoja de cálculo y se eliminarán de cuenta"
+                }
+            }else if(action == "delete-website"){
+                this.modalMessage = {
+                    "title": "Eliminar sitio",
+                    "message": "Se eliminará el sitio web y toda la información relacionada a él"
+                } 
+            }
             this.selectedWebsite = website;
             this.toggleConfirmationModal();
         },
@@ -174,10 +188,92 @@ export default {
                             this.$emit('website-updated', {"text":"No se pudo actualizar el sitio", "status":"error"});
                         }
                         break;
+                    case 'dump':
+                        success =  await this.downloadExcel();
+                        if(success == true){
+                            this.loadAdminWebsites();
+                            this.toggleConfirmationModal();
+                            this.$emit('website-updated', {
+                                "text":"Se vacio la tabla", 
+                                "status":"success",
+                                "website":this.selectedWebsite.name
+                            });
+                        }else{
+                            this.$emit('website-updated', {
+                                "text":"Error", 
+                                "status":"error"
+                            });
+                        }
+                    break;
                 }
             }else{
                 this.toggleConfirmationModal();
                 this.answer = false;
+            }
+        },
+        downloadExcel: async function () {
+            try {
+                // Descargar el archivo Excel
+                const response = await axios({
+                    url: 'api/leads/export/' + this.selectedWebsite.id,
+                    method: 'GET',
+                    responseType: 'blob',
+                    withCredentials: true
+                });
+
+                // Crear un enlace para la descarga del archivo Excel
+                const url = window.URL.createObjectURL(new Blob([response.data]));
+                const link = document.createElement('a');
+                link.href = url;
+                link.setAttribute('download', 'leads.xlsx');
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+
+                // Eliminar los leads del sitio web
+                const dump = await this.deleteWebsiteLeads();
+
+                if (dump === true) {
+                    // this.$emit("leads-dumped", {
+                    //     "status": "success",
+                    //     "text": "Se vaciaron los prospectos"
+                    // });
+                    return true;
+                } else {
+                    // this.$emit("leads-dumped", {
+                    //     "status": "error",
+                    //     "text": "No se pudieron vaciar los prospectos"
+                    // });
+                    return false;
+                }
+            } catch (error) {
+                console.error(error);
+                this.$emit("leads-dumped", {
+                    "status": "error",
+                    "text": "No se pudo descargar el archivo"
+                });
+                return false;
+            }
+        },
+
+        deleteWebsiteLeads: async function () {
+            try {
+                let website = this.selectedWebsite.id;
+                const response = await axios.delete(`/api/leads/dump/${website}`, { withCredentials: true });
+
+                if (response.data.status === "success") {
+                    return true;
+                } else {
+                    return false;
+                }
+            } catch (error) {
+                console.error(error);
+                // Emitir un evento de error en caso de excepción
+                this.$emit('leads-dumped', {
+                    "text": "Error en la solicitud",
+                    "status": "error"
+                });
+                return false; // Asegurarse de retornar false en caso de error
             }
         },
     }
@@ -197,7 +293,7 @@ span {
 }
 
 .table-container {
-    background-color: #999;
+    background-color: #aaa;
     border-top-left-radius: .5rem;
     border-top-right-radius: .5rem;
     padding: .5rem;
@@ -249,12 +345,8 @@ thead tr th:nth-last-child(1) {
     border-bottom-left-radius: .5rem;
     border-bottom-right-radius: .5rem;
     display: flex;
-    justify-content: flex-end;
-}
-
-.table-container-footer select {
-    margin-right: 1rem;
-    width: 30%;
+    justify-content: flex-start;
+    border-top: 1px solid #aaa;
 }
 
 .btn-warning.compact{
@@ -262,5 +354,9 @@ thead tr th:nth-last-child(1) {
     box-shadow: 1px 1px 2px rgba(0,0,0,.6);
 }
 
-
+@media only screen and (min-width: 1024px) {
+    .website-list-container {
+        max-height: 50%;
+    }
+}
 </style>

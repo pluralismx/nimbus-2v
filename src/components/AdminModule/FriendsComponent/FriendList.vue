@@ -128,7 +128,7 @@ span {
 }
 
 .table-container {
-    background-color: #999;
+    background-color: #aaa;
     border-top-left-radius: .5rem;
     border-top-right-radius: .5rem;
     padding: .5rem;
@@ -166,7 +166,7 @@ thead tr th:last-child{
     border-bottom-left-radius: .5rem;
     border-bottom-right-radius: .5rem;
     display: flex;
-    justify-content: flex-end;
+    justify-content: flex-start;
 }
 
 

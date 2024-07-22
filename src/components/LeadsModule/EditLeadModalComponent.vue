@@ -86,11 +86,13 @@ export default {
         editLead: async function () {
             let formData = new FormData();
             formData.append('json', JSON.stringify(this.leadData));
-            
             formData.append('_method', 'put');
+            
             const response = await axios.post('api/lead/update/'+this.leadData.id, formData, {"withCredentials":true});
-            if(response.data.staus=="success"){
-                console.log("lead edited");
+            if(response.data.status=="success"){
+                this.$emit("lead-edited", {"text":"Prospecto actualizado", "status":"success"});
+            }else{
+                this.$emit("lead-edited", {"text":"Erro al intentar actualizar", "status":"error"});
             }
         }
     }

@@ -62,13 +62,12 @@
             </div>
             
         </div>
-        <h4>Quitar caracteristicas</h4>
         <div class="footer">
-            <button @click="upgrade('remove-contacts')">quitar 500 contactos</button>
-            <button @click="upgrade('remove-businesses')">quitar negocio</button>
-            <button @click="upgrade('remove-users')">quitar usuario</button>
-            <button @click="upgrade('remove-websites')">quitar sitio</button>
-            <button @click="upgrade('remove-emails')">quitar 500 correos</button>
+            <p @click="upgrade('remove-contacts')">quitar 500 contactos</p>
+            <p @click="upgrade('remove-emails')">quitar 500 correos</p>
+            <p @click="upgrade('remove-businesses')">quitar negocio</p>
+            <p @click="upgrade('remove-users')">quitar usuario</p>
+            <p @click="upgrade('remove-websites')">quitar sitio</p>
         </div>
     </div>
 </template>
@@ -164,7 +163,7 @@ export default {
                     this.cost = this.truncateDecimals(this.cost);
                     break;
                 case 'remove-users' :
-                    if(this.users > 2 ){
+                    if(this.users >= 1  ){
                         this.users--;
                         this.extra_users--;
                         this.cost -= 4.99;
@@ -174,7 +173,7 @@ export default {
                     }
                     break;
                 case 'remove-websites' :
-                    if(this.websites > 1){
+                    if(this.websites >= 1){
                         this.websites--;
                         this.extra_websites--;
                         this.cost -= 24.99;
@@ -184,7 +183,7 @@ export default {
                     }
                     break;
                 case 'remove-emails' :
-                    if(this.emails > 5000){
+                    if(this.emails >= 500){
                         this.emails -= 500;
                         this.extra_emails -= 500;
                         this.cost -= 4.99;
@@ -194,7 +193,7 @@ export default {
                     }
                     break;
                 case 'remove-contacts' :
-                    if(this.contacts > 500){
+                    if(this.contacts >= 500){
                         this.contacts -= 500;
                         this.extra_contacts -= 500;
                         this.cost -= 5.99;
@@ -204,7 +203,7 @@ export default {
                     }
                     break;
                 case 'remove-businesses' :
-                    if(this.businesses > 10) {
+                    if(this.businesses >= 1) {
                         this.businesses--;
                         this.extra_businesses--
                         this.cost -= 14.99;
@@ -326,7 +325,7 @@ td {
     gap: 2px;
 }
 
-button {
+span {
     width: 100px;
     padding: 4px 0px;
     font-size: 10px;
@@ -391,11 +390,24 @@ button {
 
     .footer {
         display: flex;
+        align-items: center;
+        justify-content: space-around;
         flex-wrap: wrap;
-        gap: 8px;
+        min-height: 0;
+        flex: 1;
+
     }
 
-    button {
+    .footer p {
+        font-size: 12px;
+    }
+
+    .footer p:hover {
+        color: var(--primary);
+        cursor: pointer;
+    }
+
+    span {
         width: 150px;
         padding: 4px;
         font-size: 14px;

@@ -3,8 +3,9 @@
         <td>{{ website.name }}</td>
         <td>{{ website.url }}</td>
         <td class="td-actions-desktop">
-            <button class="btn-primary compact" @click="deleteWebsite()">eliminar</button>
             <button class="btn-primary compact" @click="toggleEditWebsiteRow">editar</button>
+            <button class="btn-primary compact" @click="downloadExcel()">vaciar</button>
+            <button class="btn-primary compact" @click="deleteWebsite()">eliminar</button>
         </td>
         <td class="td-actions-mobile">
             <button class="btn-primary compact" @click="deleteWebsite()">&#10006;</button>
@@ -60,7 +61,10 @@ export default {
             }
             this.$emit('authorization-need', "update-website", newWebsiteData);
             this.toggleEditWebsiteRow();
-        }
+        },
+        downloadExcel: async function () {
+          this.$emit("authorization-need", "dump", this.website);
+        },
     }
 }
 </script>
@@ -76,8 +80,7 @@ tbody tr:last-child {
 }
 
 tbody tr:hover {
-    background-color: var(--shadows);
-    color: white;
+    color: var(--basic);
     cursor: pointer;
 }
 
@@ -92,7 +95,12 @@ tbody tr td {
 
 tbody tr td button {
     margin-left: .5rem;
+    margin-bottom: 8px;
     width: 40%;
+}
+
+td button:nth-last-child(1){
+    margin-bottom: 0;
 }
 
 tbody tr:nth-last-child(2){
@@ -108,11 +116,12 @@ tbody tr:nth-last-child(2){
         margin-left: .5rem;
     }
     .td-actions-desktop {
-        display: none;
-        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
     }
     .td-actions-mobile {
-        display: block;
+        display: none;
     }
     .btn-primary.compact{
         width: 48px;
@@ -122,8 +131,9 @@ tbody tr:nth-last-child(2){
 
 @media only screen and (min-width: 1440px) {
     .td-actions-desktop {
-        display: block;
-        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
     }
     .td-actions-mobile {
         display: none;

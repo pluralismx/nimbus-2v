@@ -8,6 +8,7 @@
             @website-deleted="handleWebsiteDeleted"
             @website-updated="handleWebsiteUpdated"
             @website-created="handleWebsiteCreated"
+            @leads-dumped="handleLeadsDumped"
         />
 
         <!-- Website Team Members -->
@@ -108,6 +109,9 @@ export default {
             this.$emit("website-updated", notification);
             this.websiteTeam.website_name = notification.website;
         },
+        handleLeadsDumped: function (notification) {
+            this.$emit("website-updated", notification);
+        }
     }
 }
 </script>

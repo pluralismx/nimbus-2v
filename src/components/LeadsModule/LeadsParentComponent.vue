@@ -51,6 +51,7 @@
 
         <EditLeadModalComponent
             v-show="isVisibleEditLeadModal"
+            @lead-edited="handleLeadUpdated"
             @cancel-edit-lead="handleCancelEditLead"
             :lead="leadToEdit"
         />
@@ -150,10 +151,9 @@
             leadsComputed: {
                 handler(newVal){
                     this.leadsData = newVal;
+                    this.handleSortLeadsBy("name");
                 }
             },
-            immediate: true,
-            deep: true
         },
         data() {
             return {
@@ -185,6 +185,7 @@
 
             // Lead update
             handleLeadUpdated: function (notification) {
+                this.isVisibleEditLeadModal = false;
                 this.$emit('lead-updated', notification);
             },
             handleLeadStatusUpdated: function (notification) {
@@ -287,7 +288,7 @@
                 } else {
                     // Si es una nueva columna, ordenar ascendente por defecto
                     this.orderByColumn = criteria;
-                    this.orderAsc = true;
+                    this.orderAsc = false;
                 }
 
                 // Ordenar según el estado actual

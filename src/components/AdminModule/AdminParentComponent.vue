@@ -155,8 +155,8 @@ export default {
             hasNotifications: false,
             selection: '',
             isVisibleProcessPaymentModal: false,
-            isVisibleSubscribeSection: true,
-            isVisiblePaymentSection: false,
+            isVisibleSubscribeSection: false,
+            isVisiblePaymentSection: true,
             isVisibleUpgradeSection: false,
             clearUpgradePreview: false,
         }

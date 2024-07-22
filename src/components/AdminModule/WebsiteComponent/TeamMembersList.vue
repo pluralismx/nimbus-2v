@@ -124,7 +124,7 @@ span {
 }
 
 .table-container {
-    background-color: #999;
+    background-color: #aaa;
     border-top-left-radius: .5rem;
     border-top-right-radius: .5rem;
     padding: .5rem;
@@ -159,7 +159,6 @@ thead {
 }
 
 thead tr th {
-    text-align: left;
     padding: .5rem;
     width: 30%;
     text-align: center;
@@ -172,14 +171,13 @@ thead tr th:nth-last-child(3) {
 }
 
 tbody tr td {
-    text-align: left;
     padding: .5rem;
     width: 30%;
     text-align: center;
 }
 
 tbody tr td:nth-last-child(3) {
-    text-align: center;
+    text-align: left;
     padding: .5rem;
     width: 30%;
 }
@@ -190,7 +188,7 @@ tbody tr td:nth-last-child(3) {
     border-bottom-left-radius: .5rem;
     border-bottom-right-radius: .5rem;
     display: flex;
-    justify-content: flex-end;
+    justify-content: flex-start;
 }
 
 .table-container-footer select {

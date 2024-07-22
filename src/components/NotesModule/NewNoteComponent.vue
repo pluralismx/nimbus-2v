@@ -138,7 +138,7 @@ import axios from '@/lib/axios';
         }
 
         .note-body textarea {
-            font-size: 12px;
+            font-size: 14px;
         }
 
         button {

@@ -6,15 +6,14 @@
 
             <!-- Title -->
             <div class="modal-header">
-                <span>Eliminar sitio</span>
+                <span>{{ this.message.title }}</span>
                 <span class="close-cross" @click="answer(false)">&times;</span>
             </div>
 
             <!-- Form -->
             <div class="modal-body">
                 <p>
-                Se eliminarán, prospectos, notas, imágenes, amigos y toda información relacionada al sitio/negocio. <br/><br/>
-                ¿Está seguro que desea continuar?
+                    {{ this.message.message }}
                 </p>
             </div>
 
@@ -35,6 +34,12 @@
 // import axios from '@/lib/axios'
 export default {
     name: 'ModalConfirmationComponent',
+    props: {
+        message: {
+            type: Object,
+            required: true
+        }
+    },
     methods: {
         answer: function(answer) {
             this.$emit('answer', answer);
@@ -66,7 +71,7 @@ export default {
 .modal-body {
     padding: .5rem;
     background-color: var(--basic);
-    padding: 2rem 0;
+    padding: 2rem 2rem;
     text-align: center;
 }
 

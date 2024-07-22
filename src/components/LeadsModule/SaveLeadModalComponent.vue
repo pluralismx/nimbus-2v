@@ -67,11 +67,11 @@ export default {
     },
     data(){
         return {
-            name: 'Dillion Harper',
+            name: 'Juan Perez',
             phone: '3056232236',
-            email: 'dillion@pluralis.com.mx',
+            email: 'juan@pluralis.com.mx',
             status: 'nuevo',
-            message: 'Hi'
+            message: 'mensaje...'
         }
     },
     methods: {

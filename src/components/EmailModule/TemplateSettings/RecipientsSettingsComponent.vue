@@ -16,7 +16,7 @@
                             v-model="checkboxOptions.nuevo"
                         >
                         <span class="checkmark"></span>
-                        nuevo
+                        Nuevos
                     </label>
                 </div>
                 <!-- Identificacion -->
@@ -99,7 +99,7 @@
                             :disabled="isAllSelected"
                         >
                         <span class="checkmark"></span>
-                        Cierre
+                        Individual
                     </label>
                 </div>
                 <div class="text-input-block">
