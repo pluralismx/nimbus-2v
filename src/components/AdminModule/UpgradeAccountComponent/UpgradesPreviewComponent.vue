@@ -15,27 +15,27 @@
                 <tbody>
                     <tr>
                         <td>Sitios adicionales</td>
-                        <td>{{ this.websites }}</td>
+                        <td>{{ this.upgrades.websites }}</td>
                         <td>${{ this.additionalWebsitesCharge }}</td>
                     </tr>
                     <tr>
                         <td>Negocios adicionales</td>
-                        <td>{{ this.businesses }}</td>
+                        <td>{{ this.upgrades.businesses }}</td>
                         <td>${{ this.additionalBusinessesCharge }}</td>
                     </tr>
                     <tr>
                         <td>Correos adicionales</td>
-                        <td>{{ this.emails }}</td>
+                        <td>{{ this.upgrades.emails }}</td>
                         <td>${{ this.additionalEmailsCharge }}</td>
                     </tr>
                     <tr>
                         <td>Contactos adicionales</td>
-                        <td>{{ this.contacts }}</td>
+                        <td>{{ this.upgrades.contacts }}</td>
                         <td>${{ this.additionalContactsCharge }}</td>
                     </tr>
                     <tr>
                         <td>Usuarios adicionales</td>
-                        <td>{{ this.users }}</td>
+                        <td>{{ this.upgrades.users }}</td>
                         <td>${{ this.additionalUsersCharge }}</td>
                     </tr>
                     <tr class="tr-subtotal">
@@ -57,7 +57,10 @@
             </table>
         </div>
         <div class="footer">
-            <span class="price-disclaimer">Después de haber realizado estos cambios a su paquete actual, <br>su nuevo pago mensual sería de ${{ this.amount_due }} (impuestos incluídos)</span>
+            <span class="price-disclaimer" v-show="current == true">Su pago mensual es de ${{ amount_due }} (sin impuestos)</span>
+            <span class="price-disclaimer" v-show="modified == true">Su nuevo pago mensual seria de : ${{ amount_due }} (sin impuestos)</span>
+            <span class="price-disclaimer" v-show="basic == true">Mensualidad plan básico : ${{ amount_due }} (sin impuestos)</span>
+
             <button class="btn-primary" @click="openProcessPaymentModal()">Comprar</button>
         </div>
     </div>
@@ -91,22 +94,23 @@
             selectionComputed: {
                 handler(newVal) {
                     if (typeof newVal === 'object' && newVal !== null) {
-                        this.users = newVal.users;
-                        this.websites = newVal.websites;
-                        this.emails = newVal.emails;
-                        this.contacts = newVal.contacts;
-                        this.businesses = newVal.businesses;
+                        this.modifiedPlan.users = newVal.users;
+                        this.modifiedPlan.websites = newVal.websites;
+                        this.modifiedPlan.emails = newVal.emails;
+                        this.modifiedPlan.contacts = newVal.contacts;
+                        this.modifiedPlan.businesses = newVal.businesses;
                         this.calculateTotal();
                     }
-                },                
+                },
+                deep: true                
             },
             clearComputed: {
                 handler(){
-                    this.users = 0,
-                    this.websites = 0,
-                    this.contacts = 0,
-                    this.emails = 0,
-                    this.businesses = 0
+                    this.upgrades.users = 0,
+                    this.upgrades.websites = 0,
+                    this.upgrades.contacts = 0,
+                    this.upgrades.emails = 0,
+                    this.upgrades.businesses = 0
                     this.additionalUsersCharge = 0,
                     this.additionalWebsitesCharge = 0,
                     this.additionalEmailsCharge = 0,
@@ -122,12 +126,30 @@
         data() {
             return {
 
-                // Features qty
-                users: 0,
-                websites: 0,
-                emails: 0,
-                contacts: 0,
-                businesses: 0,
+                basicPlan : {
+                    emails: 10000,
+                    contacts: 500,
+                    businesses: 10,
+                    users: 2,
+                    websites: 1 
+                },
+
+                modifiedPlan : {
+                    users: 0,
+                    websites: 0,
+                    emails: 0,
+                    contacts: 0,
+                    businesses: 0,
+                },
+
+                upgrades : {
+                    users: 0,
+                    websites: 0,
+                    emails: 0,
+                    contacts: 0,
+                    businesses: 0,
+                },
+
 
                 // Charges
                 additionalUsersCharge: 0,
@@ -140,18 +162,21 @@
                 subtotal: 0,
                 taxes: 0,
                 total: 0,
-                amount_due: 0
+                amount_due: 0,
+                basic: false,
+                current: false,
+                modified: false
             }
         },
         methods: {
             openProcessPaymentModal: function () { 
                 const json = {
                     "type":"upgrade",
-                    "users":this.users,
-                    "websites":this.websites,
-                    "emails":this.emails,
-                    "contacts":this.contacts,
-                    "businesses":this.businesses,
+                    "users":this.upgrades.users,
+                    "websites":this.upgrades.websites,
+                    "emails":this.upgrades.emails,
+                    "contacts":this.upgrades.contacts,
+                    "businesses":this.upgrades.businesses,
                     "total":this.total
                 }
                 this.$emit("upgrades-selected", json);
@@ -161,20 +186,176 @@
             },
             calculateTotal: function () {
 
-                let amountDue = parseFloat(this.account.amount_due);
+                // Emails
+                if(this.modifiedPlan.emails != this.account.emails) {
+                    this.upgrades.emails = this.modifiedPlan.emails - this.basicPlan.emails;
+                    if (this.upgrades.emails < 0) {
+                        this.upgrades.emails = 0;
+                    }
+                } else {
+                    this.upgrades.emails = 0;
+                }
 
-                this.additionalUsersCharge = this.truncateDecimals(this.users * 4.99);
-                this.additionalWebsitesCharge = this.truncateDecimals(this.websites * 24.99);
-                this.additionalEmailsCharge = this.truncateDecimals((this.emails / 500) * 4.99); 
-                this.additionalContactsCharge = this.truncateDecimals((this.contacts / 500) * 5.99);
-                this.additionalBusinessesCharge = this.truncateDecimals(this.businesses * 14.99);
-                this.subtotal = this.truncateDecimals(this.additionalUsersCharge+this.additionalWebsitesCharge+this.additionalEmailsCharge+this.additionalContactsCharge+this.additionalBusinessesCharge);
-                this.taxes = this.truncateDecimals(this.subtotal * 0.08);
-                this.total = this.truncateDecimals(this.subtotal + this.taxes);
 
-                let new_payment = this.truncateDecimals(this.subtotal + amountDue);
-                let new_taxes = this.truncateDecimals(new_payment * 0.08);
-                this.amount_due = this.truncateDecimals(new_taxes + new_payment);
+                // Contacts
+                if(this.modifiedPlan.contacts != this.account.contacts) {
+                    this.upgrades.contacts = this.modifiedPlan.contacts - this.basicPlan.contacts;
+                    if (this.upgrades.contacts < 0) {
+                        this.upgrades.contacts = 0;
+                    }
+                } else {
+                    this.upgrades.contacts = 0;
+                }
+
+                // Users
+                if(this.modifiedPlan.users != this.account.users){ 
+                    if(this.modifiedPlan.users < this.account.users){
+                        this.upgrades.users = this.modifiedPlan.users - this.basicPlan.users;
+                    }else{
+                        this.upgrades.users = this.modifiedPlan.users - this.account.users;
+                    }
+                }else {
+                    this.upgrades.users = 0;
+                }
+
+                // Websites
+                if(this.modifiedPlan.websites != this.account.websites){ 
+                    if(this.modifiedPlan.websites < this.account.websites){
+                        this.upgrades.websites = this.modifiedPlan.websites - this.basicPlan.websites;
+                    }else{
+                        this.upgrades.websites = this.modifiedPlan.websites - this.account.websites;
+                    }
+                }else {
+                    this.upgrades.websites = 0;
+                }
+                
+                // Businesses
+                if(this.modifiedPlan.businesses != this.account.businesses){ 
+                    if(this.modifiedPlan.businesses < this.account.businesses){
+                        this.upgrades.businesses = this.modifiedPlan.businesses - this.basicPlan.businesses;
+                    }else{
+                        this.upgrades.businesses = this.modifiedPlan.businesses - this.account.businesses;
+                    }
+                }else {
+                    this.upgrades.businesses = 0;
+                }
+
+                if(
+                    this.modifiedPlan.emails == 10000 &&
+                    this.modifiedPlan.contacts == 500 &&
+                    this.modifiedPlan.websites == 1 &&
+                    this.modifiedPlan.businesses == 10 &&
+                    this.modifiedPlan.users == 2
+                ){
+                    this.additionalEmailsCharge = 0;
+                    this.additionalUsersCharge = 0;
+                    this.additionalContactsCharge = 0;
+                    this.additionalBusinessesCharge = 0;
+                    this.additionalWebsitesCharge = 0;
+                    this.modified = false;  
+                    this.current = false;
+                    this.basic = true;
+                    this.subtotal = 29.99;
+                    this.taxes = this.truncateDecimals(this.subtotal * 0.08);
+                    this.total = this.truncateDecimals(this.taxes + this.subtotal);
+                }else{  // Si se modifica el paquete
+
+                    let emails;
+                    let contacts;
+                    let websites;
+                    let businesses;
+                    let users;
+
+                    // Emails
+                    if(this.upgrades.emails > 0){
+                        emails = this.truncateDecimals(this.upgrades.emails/500 * 4.99);
+                        this.additionalEmailsCharge = this.truncateDecimals(this.upgrades.emails/500 * 4.99);
+                        this.modified = true;  
+                        this.current = false;
+                        this.basic = false;
+                        // console.log(emails);
+                    }else {
+                        emails = 0;
+                        this.additionalEmailsCharge = 0;
+                    }
+                    
+                    
+                    // Contacts 
+                    if(this.upgrades.contacts > 0){
+                        contacts = this.truncateDecimals(this.upgrades.contacts/500 * 5.99 );
+                        this.additionalContactsCharge = this.truncateDecimals(this.upgrades.contacts/500 * 5.99);
+                        this.modified = true;  
+                        this.current = false;
+                        this.basic = false;
+                        // console.log(contacts);
+                    }else{
+                        contacts = 0;
+                        this.additionalContactsCharge = 0;
+                    }
+                    
+
+                    // Websites
+                    if(this.upgrades.websites > 0){
+                        websites = this.truncateDecimals(this.upgrades.websites * 24.99);
+                        this.additionalWebsitesCharge = this.truncateDecimals(this.upgrades.websites * 24.99);
+                        this.modified = true;  
+                        this.current = false;
+                        this.basic = false;
+                        // console.log(websites);
+                    }else {
+                        websites = 0;
+                        this.additionalWebsitesCharge = 0;
+                    }
+                    
+
+                    // businesses
+                    if(this.upgrades.businesses > 0) {
+                        businesses = this.truncateDecimals(this.upgrades.businesses * 14.99);
+                        this.additionalBusinessesCharge = this.truncateDecimals(this.upgrades.businesses * 14.99);
+                        this.modified = true;  
+                        this.current = false;
+                        this.basic = false;
+                        // console.log(businesses);
+                    }else{
+                        businesses = 0;
+                        this.additionalBusinessesCharge = 0;
+                    }
+                    
+
+                    // Users
+                    if(this.upgrades.users > 0){
+                        users = this.truncateDecimals(this.upgrades.users * 4.99);
+                        this.additionalUsersCharge = this.truncateDecimals(this.upgrades.users * 4.99);
+                        this.modified = true;  
+                        this.current = false;
+                        this.basic = false;
+                        // console.log(users);
+                    }else {
+                        users = 0;
+                        this.additionalUsersCharge = 0;
+                    }
+
+                    this.subtotal = this.truncateDecimals(emails+contacts+websites+businesses+users);
+                    this.taxes = this.truncateDecimals(this.subtotal * .08);
+                    this.total = this.truncateDecimals(this.subtotal + this.taxes);
+
+                }
+
+                if(this.basic == true) {
+                    this.amount_due = 29.99;
+                }
+
+                if(this.modified == true) {
+                    this.amount_due = this.truncateDecimals(parseFloat(this.account.amount_due) + this.subtotal);
+                }
+
+                if(this.subtotal == 0) {
+                    this.basic = false;
+                    this.modified = false;
+                    this.current = true;
+                    this.amount_due = this.account.amount_due;
+                }
+
             }
         }
     }
@@ -207,10 +388,13 @@ thead tr th{
     padding: .5rem .5rem;
     background-color: var(--primary);
     color: var(--basic);
+    width: 20%;
+
 }
 
 thead tr th:nth-child(1){
     text-align: left;
+    width: 60%;
 }
 
 .tr-total {

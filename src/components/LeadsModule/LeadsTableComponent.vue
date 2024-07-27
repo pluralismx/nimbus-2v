@@ -154,30 +154,28 @@ export default {
             }
         },
         search() {
-    if (this.results === false) {
-        this.search_btn_text = 'limpiar';
-        let query = this.search_query.toLowerCase(); // Convertir la consulta a minúsculas para una búsqueda insensible a mayúsculas/minúsculas
-        this.results_data = []; // Reiniciar results_data para almacenar solo los resultados coincidentes en la búsqueda actual
+            if (this.results === false) {
+                this.search_btn_text = 'limpiar';
+                let query = this.search_query.toLowerCase();
+                this.results_data = [];
 
-        this.leadsData.forEach(lead => {
-            if (
-                (lead.name && lead.name.toLowerCase().startsWith(query)) || 
-                (lead.phone && lead.phone.toLowerCase().startsWith(query)) || 
-                (lead.email && lead.email.toLowerCase().startsWith(query))
-            ) {
-                this.results_data.push(lead);
+                this.leadsData.forEach(lead => {
+                    if (
+                        (lead.name && lead.name.toLowerCase().startsWith(query)) || 
+                        (lead.phone && lead.phone.toLowerCase().startsWith(query)) || 
+                        (lead.email && lead.email.toLowerCase().startsWith(query))
+                    ) {
+                        this.results_data.push(lead);
+                    }
+                });
+                this.results = true;
+            } else {
+                this.results_data = [];
+                this.search_query = null;
+                this.results = false;
+                this.search_btn_text = 'buscar';
             }
-        });
-        this.results = true;
-    } else {
-        this.results_data = [];
-        this.search_query = null;
-        this.results = false;
-        this.search_btn_text = 'buscar';
-    }
-},
-
-
+        },
         handleShowDetails: function (lead) {
             this.$emit('show-details', lead);
         },

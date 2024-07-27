@@ -60,14 +60,43 @@
                 </div>
                 <img src="../../../../src/assets/images/earth.png" alt="">
             </div>
+            <div class="upgrade-card" @click="upgrade(this.toggleButton)">
+                <div>
+                    <span>{{ resetButton }}</span>
+                    <br>
+                    <!-- <span>$29.99</span> -->
+                </div>
+                <img src="../../../../src/assets/images/model.png" alt="">
+            </div>
             
         </div>
         <div class="footer">
-            <p @click="upgrade('remove-contacts')">quitar 500 contactos</p>
-            <p @click="upgrade('remove-emails')">quitar 500 correos</p>
-            <p @click="upgrade('remove-businesses')">quitar negocio</p>
-            <p @click="upgrade('remove-users')">quitar usuario</p>
-            <p @click="upgrade('remove-websites')">quitar sitio</p>
+
+            <div @click="upgrade('remove-contacts')">
+                <img src="../../../../src/assets/images/contact.png" alt="">
+                <p>quitar 500 contactos</p>
+            </div>
+
+            <div @click="upgrade('remove-emails')">
+                <img src="../../../../src/assets/images/email.png" alt="">
+                <p>quitar 500 correos</p>
+            </div>
+
+            <div @click="upgrade('remove-businesses')">
+                <img src="../../../../src/assets/images/portfolio.png" alt="">
+                <p>quitar negocio</p>
+            </div>
+
+            <div @click="upgrade('remove-users')">
+                <img src="../../../../src/assets/images/boy.png" alt="">
+                <p>quitar usuario</p>
+            </div>
+            
+            <div @click="upgrade('remove-websites')">
+                <img src="../../../../src/assets/images/earth.png" alt="">
+                <p>quitar sitio</p>
+            </div>
+        
         </div>
     </div>
 </template>
@@ -99,31 +128,12 @@ export default {
     data() {
         return {
             users: 0,
-            extra_users: 0,
             websites: 0,
-            extra_websites: 0,
             emails: 0,
-            extra_emails: 0,
             contacts: 0,
-            extra_contacts: 0,
             businesses: 0,
-            extra_businesses: 0,
-            cost: 0,
-            subtotal: 0,
-            months: [
-                {"name": "enero", "days": 31},
-                {"name": "febrero", "days": 28},
-                {"name": "marzo", "days": 31},
-                {"name": "abril", "days": 30},
-                {"name": "mayo", "days": 31},
-                {"name": "junio", "days": 30},
-                {"name": "julio", "days": 31},
-                {"name": "agosto", "days": 31},
-                {"name": "septiembre", "days": 30},
-                {"name": "octubre", "days": 31},
-                {"name": "noviembre", "days": 30},
-                {"name": "diciembre", "days": 31}
-            ]
+            toggleButton: "basic",
+            resetButton: "Regresar al plan basico"
         }
     },
     methods: {
@@ -133,39 +143,48 @@ export default {
         upgrade: function (feature) {
             switch(feature){
                 case 'users' :
-                    this.users++;
-                    this.extra_users++;
-                    this.cost += 4.99;
-                    this.cost = this.truncateDecimals(this.cost);
+                    if(this.users < 10) {
+                        this.users++;
+                        this.cost += 4.99;
+                        this.cost = this.truncateDecimals(this.cost);
+                        // this.resetButton = "Regresar a mi plan actual";
+                    }
                     break;
                 case 'websites' :
-                    this.websites++;
-                    this.extra_websites++;
-                    this.cost += 24.99;
-                    this.cost = this.truncateDecimals(this.cost);
+                    if(this.websites < 30){
+                        this.websites++;
+                        this.cost += 24.99;
+                        this.cost = this.truncateDecimals(this.cost);
+                        // this.resetButton = "Regresar a mi plan actual";
+                    }
                     break;
                 case 'emails' :
-                    this.emails += 500;
-                    this.extra_emails += 500;
-                    this.cost += 4.99;
-                    this.cost = this.truncateDecimals(this.cost);
+                    if(this.emails < 25000){
+                        this.emails += 500;
+                        this.cost += 4.99;
+                        this.cost = this.truncateDecimals(this.cost);
+                        // this.resetButton = "Regresar a mi plan actual";
+                    }
                     break;
                 case 'contacts' :
-                    this.contacts += 500;
-                    this.extra_contacts += 500;
-                    this.cost += 5.99;
-                    this.cost = this.truncateDecimals(this.cost);
+                    if(this.contacts < 10000){
+                        this.contacts += 500;
+                        this.cost += 5.99;
+                        this.cost = this.truncateDecimals(this.cost);
+                        // this.resetButton = "Regresar a mi plan actual";
+                    }
                     break;
                 case 'businesses' :
-                    this.businesses++;
-                    this.extra_businesses++;
-                    this.cost += 14.99;
-                    this.cost = this.truncateDecimals(this.cost);
+                    if(this.businesses < 30){
+                        this.businesses++;
+                        this.cost += 14.99;
+                        this.cost = this.truncateDecimals(this.cost);
+                        // this.resetButton = "Regresar a mi plan actual";
+                    }
                     break;
                 case 'remove-users' :
-                    if(this.users >= 1  ){
+                    if(this.users > 2  ){
                         this.users--;
-                        this.extra_users--;
                         this.cost -= 4.99;
                         this.cost = this.truncateDecimals(this.cost);
                     }else {
@@ -173,9 +192,8 @@ export default {
                     }
                     break;
                 case 'remove-websites' :
-                    if(this.websites >= 1){
+                    if(this.websites > 1){
                         this.websites--;
-                        this.extra_websites--;
                         this.cost -= 24.99;
                         this.cost = this.truncateDecimals(this.cost);
                     }else{
@@ -183,9 +201,8 @@ export default {
                     }
                     break;
                 case 'remove-emails' :
-                    if(this.emails >= 500){
+                    if(this.emails > 10000){
                         this.emails -= 500;
-                        this.extra_emails -= 500;
                         this.cost -= 4.99;
                         this.cost = this.truncateDecimals(this.cost);
                     }else {
@@ -193,7 +210,7 @@ export default {
                     }
                     break;
                 case 'remove-contacts' :
-                    if(this.contacts >= 500){
+                    if(this.contacts > 500){
                         this.contacts -= 500;
                         this.extra_contacts -= 500;
                         this.cost -= 5.99;
@@ -203,7 +220,7 @@ export default {
                     }
                     break;
                 case 'remove-businesses' :
-                    if(this.businesses >= 1) {
+                    if(this.businesses > 10) {
                         this.businesses--;
                         this.extra_businesses--
                         this.cost -= 14.99;
@@ -212,16 +229,47 @@ export default {
                         // Mandar mensaje de error
                     }
                     break;
+                case 'original' : 
+                    this.businesses = parseInt(this.account.businesses, 10);
+                    this.contacts = parseInt(this.account.contacts, 10);
+                    this.websites = parseInt(this.account.websites, 10);
+                    this.users = parseInt(this.account.users, 10);
+                    this.emails = parseInt(this.account.emails, 10);
+                    this.resetButton = "Regresar al plan basico";
+                    this.toggleButton = 'basic';
+
+                break;
+                
+                case 'basic' :
+                    this.businesses = 10;
+                    this.extra_businesses = 0;
+                    
+                    this.contacts = 500;
+                    this.extra_contacts = 0;
+
+                    this.websites = 1;
+                    this.extra_websites = 0;
+
+                    this.users = 2;
+                    this.extra_users = 0;
+
+                    this.emails = 10000;
+                    this.extra_emails = 0;
+
+                    this.cost = this.truncateDecimals(29.99);
+                    this.resetButton = "Regresar a mi plan actual";
+                    this.toggleButton = 'original';
+                    break;
             }
             this.firstPayment();
         },
         firstPayment: function () {
             const json = {
-                "users": this.extra_users,
-                "websites": this.extra_websites,
-                "emails": this.extra_emails,
-                "contacts": this.extra_contacts,
-                "businesses": this.extra_businesses,
+                "users": this.users,
+                "websites": this.websites,
+                "emails": this.emails,
+                "contacts": this.contacts,
+                "businesses": this.businesses
             };
 
             this.$emit('selection-made', json);
@@ -321,8 +369,27 @@ td {
 
 .footer {
     display: flex;
+    justify-content: center;
     flex-wrap: wrap;
-    gap: 2px;
+    gap: 28px;
+    margin: 2rem 0;
+}
+
+.footer div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.footer p {
+    font-size: 10px;
+}
+
+.footer div img{
+    filter: grayscale(1);
+    width: 30px;
+    margin-bottom: 10px;
 }
 
 span {
@@ -395,7 +462,24 @@ span {
         flex-wrap: wrap;
         min-height: 0;
         flex: 1;
+        gap: 16px;
+    }
 
+    .footer div {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .footer p {
+        font-size: 10px;
+    }
+
+    .footer div img{
+        filter: grayscale(1);
+        width: 25px;
+        margin-bottom: 10px;
     }
 
     .footer p {
