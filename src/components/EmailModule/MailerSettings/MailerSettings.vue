@@ -73,10 +73,17 @@ export default {
     },
     methods: {
         showEmailSettings: async function () {
-            const response = await axios.get("api/website/websiteEmail/"+this.website, {withCredentials: true});
-            if(response.data.status=="success"){
-                this.email = response.data.website_email;
-                this.smtpServer = response.data.email_server;
+            try {
+                const response = await axios.get("api/website/websiteEmail/" + this.website, { withCredentials: true });
+                if (response.data.status === "success") {
+                    this.email = response.data.website_email;
+                    this.smtpServer = response.data.email_server;
+                } else {
+                    // Opcionalmente, maneja el caso cuando la respuesta no es exitosa
+                }
+            } catch (error) {
+                // Silenciar el error
+                // Puedes añadir algún código opcional aquí si quieres manejar el error de otra manera
             }
         },
         addEmail: async function () {

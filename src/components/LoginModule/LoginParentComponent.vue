@@ -43,6 +43,7 @@
         <ResetPasswordComponent 
             v-if="isVisibleResetPassword"
             @cancel="showForgotPassword"
+            @password-updated="showForgotPassword"
         />
 
         <!-- Success modal -->

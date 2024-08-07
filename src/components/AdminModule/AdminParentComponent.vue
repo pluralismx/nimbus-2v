@@ -66,18 +66,18 @@
             <div v-show="selection != ''" class="settings-container">
                 <SubscriptionPreviewComponent
                     :selection="selection"
-                    @open-card-information-modal="handleToggleProcessPaymentModal"
+                    @proceed-to-payment="handleProceedToPayment"
                 />
             </div>
         </div>
 
         <!-- My account -->
-        <div v-show="isVisiblePaymentSection" class="panel-container">
+        <div v-if="this.account.type != 'free'" v-show="isVisiblePaymentSection" class="panel-container">
             <div class="settings-container">  
                 <AccountSummaryComponent
                     :account="account"
-                    @selection-made="handleSelectionMade"
-                />
+                    @selection-made="handleProceedToPayment"
+                /> 
             </div>
         </div>
 
@@ -87,15 +87,17 @@
                 <AccountUpgradesComponent
                     :account="account"
                     @selection-made="handleSelectionMade"
+                    @downgrade-not-valid="handleDowngradeInvalid"
                     @cant-add-feature="handleCantAddFeature"
                 />
             </div>
             <div class="settings-container">
                 <UpgradesPreviewComponent
+                    :account="account"
                     :selection="selection"
                     :clear="clearUpgradePreview"
-                    :account="account"
                     @upgrades-selected="handleUpgradesSelected"
+                    @modify-plan="handleModifyPlan"
                 />
             </div>
         </div>
@@ -107,6 +109,13 @@
             @close-proccess-payment-modal="handleToggleProcessPaymentModal"
             @reload-account="handleReloadAccount"
         />
+
+        <ModifyPlanModalComponent
+            v-show="isVisibleConfirmationModal" 
+            :selection="selection"
+            @close-modal="toggleConfirmationModal"
+        />
+        
     </section>
 </template>
 <script>
@@ -119,10 +128,10 @@ import PlanBuilderComponent from './SubscribeComponent/PlanBuilderComponent.vue'
 import SubscriptionPreviewComponent from './SubscribeComponent/SubscriptionPreviewComponent.vue';
 import FriendManagerComponent from './FriendsComponent/FriendManager.vue';
 import ProcessPaymentModalComponent from './SubscribeComponent/ProcessPaymentModalComponent.vue';
-
 import AccountSummaryComponent from './MyAccountComponent/AccountSummaryComponent.vue';
 import AccountUpgradesComponent from './UpgradeAccountComponent/AccountUpgradesComponent.vue';
 import UpgradesPreviewComponent from './UpgradeAccountComponent/UpgradesPreviewComponent';
+import ModifyPlanModalComponent from './UpgradeAccountComponent/ModifyPlanModalComponent.vue';
 
 
 export default {
@@ -138,7 +147,8 @@ export default {
         ProcessPaymentModalComponent,
         AccountSummaryComponent,
         AccountUpgradesComponent,
-        UpgradesPreviewComponent
+        UpgradesPreviewComponent,
+        ModifyPlanModalComponent
     },
     props: {
         account: {
@@ -159,6 +169,8 @@ export default {
             isVisiblePaymentSection: true,
             isVisibleUpgradeSection: false,
             clearUpgradePreview: false,
+            purchase: '',
+            isVisibleConfirmationModal: false,        
         }
     },
     created() {
@@ -226,15 +238,30 @@ export default {
         // Account
         handleSelectionMade: function (selection) {
             this.selection = selection;
-            if(selection.type=="monthly_payment"){
-                this.handleToggleProcessPaymentModal();
+        },
+        handleModifyPlan: function (selection) {
+            this.selection = selection;
+            console.log(this.selection);
+            this.toggleConfirmationModal();
+        },
+        toggleConfirmationModal: function (){
+            
+            if(this.isVisibleConfirmationModal == false){
+                this.isVisibleConfirmationModal = true;
+            }else{
+                this.isVisibleConfirmationModal = false;
             }
-            if(selection.type=="upgrade"){
-                this.handleToggleProcessPaymentModal();
-            }
+            
+        },     
+        handleProceedToPayment: function (selection) {
+            this.selection = selection;
+            this.handleToggleProcessPaymentModal();
         },
         handleCantAddFeature: function (notification) {
             this.$emit('cant-add-feature', notification);
+        },
+        handleDowngradeInvalid: function (notification) {
+            this.$emit('downgrade-invalid', notification);
         },
         handleToggleProcessPaymentModal: function () {
             if(this.isVisibleProcessPaymentModal == false){
@@ -268,8 +295,15 @@ export default {
                 break;
             }
         },
-        handleUpgradesSelected: function (data) {
-            this.handleSelectionMade(data);
+        handleUpgradesSelected: function (selection) {
+            this.selection = selection;
+            
+            if(selection.type=="monthly_payment"){
+                this.handleToggleProcessPaymentModal();
+            }
+            if(selection.type=="upgrade"){
+                this.handleToggleProcessPaymentModal();
+            }
         },
         handleReloadAccount: function () {
             this.selection = '';

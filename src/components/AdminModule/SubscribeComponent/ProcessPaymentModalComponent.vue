@@ -117,7 +117,7 @@
             </div>
 
             <div v-show="!processingPayment" class="modal-body">
-                <span>Total: ${{ selection.total }}USD</span>
+                <span>Total: ${{ selection.total }} USD</span>
                 <br>
                 <br>
                 <span>Titular: {{ card.holder_name }}</span>
@@ -146,9 +146,9 @@
             </div>
 
             <div class="modal-body">
-                <h2>{{ purchaseStatus }}</h2>
+                <h2>{{ selectionStatus }}</h2>
                 <br>
-                <p><span>Respuesta del banco: </span><span class="error-message">{{ purchaseMessage }}</span></p>
+                <p><span>Respuesta del banco: </span><span class="error-message">{{ selectionMessage }}</span></p>
                 <div class="buttons-block">
                     <button class="btn-primary" @click="close()">aceptar</button>
                 </div>  
@@ -179,12 +179,18 @@
                 isVisibleCardInfo: false,
                 isVisibleConfirmPayment: false,
                 isVisiblePaymentStatus: false,
+                processingPayment: false,
+                selectionStatus: '',
+                selectionMessage: '',
+
+                // Data
                 user: {
                     name: 'Andrea',
                     surname: 'Perez',
                     phone: '526642522024',
                     email: 'andrea@pluralis.com.mx'
                 },
+                
                 card: {
                     holder_name: 'andrea perez',
                     card_number: '4111111111111111',
@@ -192,12 +198,10 @@
                     expiration_year: '24',
                     cvv2: '123'
                 },
-                processingPayment: false,
-                purchaseStatus: '',
-                purchaseMessage: ''
             }
         },
         methods: {
+            // Template
             proceedToCardInfo: function () {
                 if(this.isVisibleUserDetails == true) {
                     this.isVisibleUserDetails = false;
@@ -234,6 +238,8 @@
                 this.isVisibleConfirmPayment = false;
                 this.isVisiblePaymentStatus =false;
             },
+
+            // Payment
             createToken: function () {
                 this.processingPayment = true;
                 OpenPay.setId(process.env.VUE_APP_OPENPAY_MERCHANT_ID);
@@ -242,18 +248,19 @@
                 OpenPay.token.extractFormAndCreate('payment-form', this.successCallback, this.errorCallback);
             },
             successCallback: async function (response) {
-
+                console.log(this.selection);
                 const token = response.data.id;
                 let json = {};
                 let url;
+                
                 if(this.selection.type == "new_customer"){
-                    json = {
+                    json = { 
+                        "description": "Nimbus CRM",
                         "token": token,
                         "name": this.user.name,
                         "surname": this.user.surname,
                         "email": this.user.email,
-                        "phone": this.user.phone,
-                        "description": "Nimbus CRM",
+                        "phone": this.user.phone,                      
                         "users": this.selection.users,
                         "websites": this.selection.websites,
                         "emails": this.selection.emails,
@@ -263,12 +270,12 @@
                     url = 'payCRM';
                 }else if(this.selection.type == "upgrade"){
                     json = {
+                        "description": "Nimbus CRM Account upgrades",
                         "token": token,
                         "name": this.user.name,
                         "surname": this.user.surname,
                         "email": this.user.email,
-                        "phone": this.user.phone,
-                        "description": "Nimbus CRM Account upgrades",
+                        "phone": this.user.phone,                       
                         "users": this.selection.users,
                         "websites": this.selection.websites,
                         "emails": this.selection.emails,
@@ -276,6 +283,7 @@
                         "businesses": this.selection.businesses,
                     }
                     url = 'addUpgrades';
+                    console.log(json);
                 }else{
                     json = {
                         "token": token,
@@ -314,8 +322,8 @@
                         this.card.cvv2 = '';
 
                         // Show server response
-                        this.purchaseMessage = "Su compra se realizó exitosamente. Se ha enviado un correo a la direccion proporcionada con la confirmación de su compra";
-                        this.purchaseStatus = "Se procesó el pago";
+                        this.selectionMessage = "Su compra se realizó exitosamente. Se ha enviado un correo a la direccion proporcionada con la confirmación de su compra";
+                        this.selectionStatus = "Se procesó el pago";
                     }
                     this.$emit('reload-account');
                 })
@@ -325,8 +333,8 @@
                     this.isVisibleCardInfo = false;
                     this.isVisibleConfirmPayment = false;
                     this.isVisiblePaymentStatus = true;
-                    this.purchaseMessage = error.response.data.message;
-                    this.purchaseStatus = "No se pudo procesar el pago";
+                    this.selectionMessage = error.response.data.message;
+                    this.selectionStatus = "No se pudo procesar el pago";
                 });
             },
             errorCallback: function (response) {
@@ -340,7 +348,7 @@
 <style scoped>
 
 .error-message {
-    color: var(--warn);
+    color: var(--primary);
 }
 
 .modal-container {

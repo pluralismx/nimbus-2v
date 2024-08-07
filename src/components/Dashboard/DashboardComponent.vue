@@ -73,6 +73,7 @@
             @website-updated="handleUpdateWebsiteList"
             @cant-add-feature="handleStatusBarNotification"
             @reload-acount="loadAccountData"
+            @downgrade-invalid="handleStatusBarNotification"
             
         />
 

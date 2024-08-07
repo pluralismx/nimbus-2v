@@ -8,8 +8,7 @@
                 <h2>Bienvenido a Nimbus!</h2>
                 <br/>
                 <p>
-                    Bienvenido a Nimbus CRM, el CRM que te permite hacer llamadas, mandar correos masivos, organizarte con tu equipo de ventas
-                    y darle seguimiento a tus prospectos. Para ver tutoriales por favor haz clic en el siguienta enlace.
+                    Bienvenido a Nimbus CRM, tu periodo de prueba expirará en 15 días. Para contratar ve a la sección administrativa de tu cuenta y elige la opción contratar. Puedes comenzar con el plan básico o personalizar tu paquete... éxito
                 </p>
                 <br/>
                 <div class="button-block">
@@ -36,7 +35,7 @@ export default {
             let answer = false;
             try {
                 const response = await axios.get('api/welcome/' + answer, { withCredentials: true });
-                if (response.data.status === "success") {
+                if (response.data.status == "success") {
                     this.$emit('welcome-message-accepted');
                 } else {
                     console.error('Error:', response.data.message);

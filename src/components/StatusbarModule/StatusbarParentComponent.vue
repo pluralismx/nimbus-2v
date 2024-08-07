@@ -50,10 +50,12 @@
 
 .green {
     color: yellowgreen;
+    z-index: 100;
 }
 
 .red {
     color: var(--warn);
+    z-index: 100;
 }
 
 /* Mobile first */

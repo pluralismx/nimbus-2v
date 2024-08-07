@@ -2,8 +2,8 @@
     <div class="div-main">
         <h1>Mi cuenta</h1>
         <div class="div-options">
-            <span v-show="this.type=='trial' || this.type=='basic'" @click="toggleDashboard('subscribe')">contratar</span>
-            <span v-show="this.type=='basic' || this.type=='free'">&nbsp;|&nbsp;</span>
+            <span v-show="this.type=='free' || this.type=='basic'" @click="toggleDashboard('subscribe')">contratar</span>
+            <span v-show="this.type=='free' || this.type=='basic'">&nbsp;|&nbsp;</span>
             <span v-show="this.type=='standard'" @click="toggleDashboard('upgrades')">mejoras | </span>
             <span v-show="this.type=='standard'" @click="toggleDashboard('payments')">pagos</span>
         </div>

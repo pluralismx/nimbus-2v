@@ -282,6 +282,7 @@ export default {
     @media only screen and (min-width: 1024px) {
         .modal-container {
             background-color: var(--accent);
+            height: auto;
             width: 500px;
             padding: .5rem;
             box-shadow: 4px 4px 16px var(--shadows);

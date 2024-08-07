@@ -20,7 +20,7 @@
             </tbody>
         </table>
         <div class="upgrade-card-container">
-            <div class="upgrade-card" @click="upgrade('contacts')">
+            <div class="upgrade-card" v-on:click="handleClick('contacts')" v-bind:class="{ disabled: disableDivs }">
                 <div>
                     <span>Agregar 500 contactos</span>
                     <br>
@@ -28,7 +28,7 @@
                 </div>
                 <img src="../../../../src/assets/images/contact.png" alt="">
             </div>
-            <div class="upgrade-card" @click="upgrade('emails')">
+            <div class="upgrade-card" v-on:click="handleClick('emails')" v-bind:class="{ disabled: disableDivs }">
                 <div>
                     <span>Agregar 500 correos</span>
                     <br>
@@ -36,7 +36,7 @@
                 </div>
                 <img src="../../../../src/assets/images/email.png" alt="">
             </div>
-            <div class="upgrade-card" @click="upgrade('businesses')">
+            <div class="upgrade-card" v-on:click="handleClick('businesses')" v-bind:class="{ disabled: disableDivs }">
                 <div>
                     <span>Agregar negocio</span>
                     <br>
@@ -44,7 +44,7 @@
                 </div>
                 <img src="../../../../src/assets/images/portfolio.png" alt="">
             </div>
-            <div class="upgrade-card" @click="upgrade('users')">
+            <div class="upgrade-card" v-on:click="handleClick('users')" v-bind:class="{ disabled: disableDivs }">
                 <div>
                     <span>Agregar usuario</span>
                     <br>
@@ -52,7 +52,7 @@
                 </div>
                 <img src="../../../../src/assets/images/boy.png" alt="">
             </div>
-            <div class="upgrade-card" @click="upgrade('websites')">
+            <div class="upgrade-card" v-on:click="handleClick('websites')" v-bind:class="{ disabled: disableDivs }">
                 <div>
                     <span>Agregar sitio</span>
                     <br>
@@ -127,139 +127,170 @@ export default {
     },
     data() {
         return {
-            users: 0,
-            websites: 0,
+            toggleButton: "basic",
+            resetButton: "Regresar al plan basico",
+
             emails: 0,
             contacts: 0,
+            websites: 0,
             businesses: 0,
-            toggleButton: "basic",
-            resetButton: "Regresar al plan basico"
+            users: 0,
+
+            disableDivs: false
+
         }
     },
     methods: {
-        truncateDecimals: function (number) {
-            return Math.floor(number * 100) / 100;
+        truncateDecimals: function (number, digits = 2) {
+            const factor = Math.pow(10, digits);
+            return Math.round(number * factor) / factor;
+        },
+        handleClick(feature) {
+            if (!this.disableDivs) {
+                this.upgrade(feature);
+            }
         },
         upgrade: function (feature) {
+
             switch(feature){
-                case 'users' :
-                    if(this.users < 10) {
-                        this.users++;
-                        this.cost += 4.99;
-                        this.cost = this.truncateDecimals(this.cost);
-                        // this.resetButton = "Regresar a mi plan actual";
-                    }
-                    break;
-                case 'websites' :
-                    if(this.websites < 30){
-                        this.websites++;
-                        this.cost += 24.99;
-                        this.cost = this.truncateDecimals(this.cost);
-                        // this.resetButton = "Regresar a mi plan actual";
-                    }
-                    break;
-                case 'emails' :
-                    if(this.emails < 25000){
+                // Add features
+                case "emails" :
+                    if(this.emails != 25000){
                         this.emails += 500;
-                        this.cost += 4.99;
-                        this.cost = this.truncateDecimals(this.cost);
-                        // this.resetButton = "Regresar a mi plan actual";
-                    }
-                    break;
-                case 'contacts' :
-                    if(this.contacts < 10000){
+                    } 
+                break;
+                case "contacts" :
+                    if(this.contacts != 10000){
                         this.contacts += 500;
-                        this.cost += 5.99;
-                        this.cost = this.truncateDecimals(this.cost);
-                        // this.resetButton = "Regresar a mi plan actual";
                     }
-                    break;
-                case 'businesses' :
-                    if(this.businesses < 30){
-                        this.businesses++;
-                        this.cost += 14.99;
-                        this.cost = this.truncateDecimals(this.cost);
-                        // this.resetButton = "Regresar a mi plan actual";
+                break;
+                case "websites" :
+                    if(this.websites != 30){
+                        this.websites += 1;
                     }
-                    break;
-                case 'remove-users' :
-                    if(this.users > 2  ){
-                        this.users--;
-                        this.cost -= 4.99;
-                        this.cost = this.truncateDecimals(this.cost);
-                    }else {
-                        // Mostrar mensaje de error
+                break;
+                case "businesses" :
+                    if(this.businesses != 30){
+                        this.businesses += 1;
                     }
-                    break;
-                case 'remove-websites' :
-                    if(this.websites > 1){
-                        this.websites--;
-                        this.cost -= 24.99;
-                        this.cost = this.truncateDecimals(this.cost);
-                    }else{
-                        // Mandar mensaje de error
+                break;
+                case "users" : 
+                    if(this.users != 5){
+                        this.users += 1;
                     }
-                    break;
-                case 'remove-emails' :
+                break;
+                case "basic" :
+                    if(
+                        this.account.actual_contacts <= 500 &&
+                        this.account.actual_websites <= 1 &&
+                        this.account.actual_businesses <= 10 &&
+                        this.account.actual_users <= 2
+                    ){
+                        this.emails = 10000;
+                        this.contacts = 500;
+                        this.websites = 1;
+                        this.businesses = 10;
+                        this.users = 2;
+                        this.toggleButton = "actual";
+                        this.resetButton = "Regresar al plan actual";
+                        this.disableDivs = true;
+                    } else {
+                        if(this.account.actual_contacts > 500) {
+                            this.$emit("cant-add-feature", {
+                                "text" : "Elimina contactos",
+                                "status" : "error"
+                            });
+                        }
+                        if(this.account.actual_websites > 1) {
+                            this.$emit("cant-add-feature", {
+                                "text" : "Elimina sitios",
+                                "status" : "error"
+                            });
+                        }
+                        if(this.account.actual_businesses > 10) {
+                            this.$emit("cant-add-feature", {
+                                "text" : "Elimina negocios",
+                                "status" : "error"
+                            });
+                        }
+                        if(this.account.actual_users > 2) {
+                            this.$emit("cant-add-feature", {
+                                "text" : "Elimina usuarios",
+                                "status" : "error"
+                            });
+                        }
+                    }
+                break;
+
+                case "actual" :
+                    this.emails=parseFloat(this.account.emails);
+                    this.contacts=parseFloat(this.account.contacts);
+                    this.websites=parseFloat(this.account.websites);
+                    this.businesses=parseFloat(this.account.businesses);
+                    this.users=parseFloat(this.account.users);
+                    this.disableDivs = false;
+                    this.toggleButton="basic";
+                    this.resetButton="Regresar al plan basico";
+                break;
+
+                // Remove features
+                case "remove-emails" :
                     if(this.emails > 10000){
                         this.emails -= 500;
-                        this.cost -= 4.99;
-                        this.cost = this.truncateDecimals(this.cost);
-                    }else {
-                        // Mandar mensaje de error
-                    }
-                    break;
-                case 'remove-contacts' :
+                    } 
+                break;
+
+                case "remove-contacts" : 
                     if(this.contacts > 500){
                         this.contacts -= 500;
-                        this.extra_contacts -= 500;
-                        this.cost -= 5.99;
-                        this.cost = this.truncateDecimals(this.cost);
-                    }else{
-                        // Mandar mensaje de error
+                        if(this.contacts < this.account.actual_contacts){
+                            this.contacts += 500;
+                            this.$emit('downgrade-not-valid', {
+                                "text": "Elimina contactos para poder modificar tu plan",
+                                "status": "error"
+                            });
+                        }
                     }
-                    break;
-                case 'remove-businesses' :
-                    if(this.businesses > 10) {
-                        this.businesses--;
-                        this.extra_businesses--
-                        this.cost -= 14.99;
-                        this.cost = this.truncateDecimals(this.cost);
-                    }else {
-                        // Mandar mensaje de error
-                    }
-                    break;
-                case 'original' : 
-                    this.businesses = parseInt(this.account.businesses, 10);
-                    this.contacts = parseInt(this.account.contacts, 10);
-                    this.websites = parseInt(this.account.websites, 10);
-                    this.users = parseInt(this.account.users, 10);
-                    this.emails = parseInt(this.account.emails, 10);
-                    this.resetButton = "Regresar al plan basico";
-                    this.toggleButton = 'basic';
-
                 break;
-                
-                case 'basic' :
-                    this.businesses = 10;
-                    this.extra_businesses = 0;
-                    
-                    this.contacts = 500;
-                    this.extra_contacts = 0;
 
-                    this.websites = 1;
-                    this.extra_websites = 0;
+                case "remove-websites" :
+                    if(this.websites > 1){
+                        this.websites -= 1;
+                        if(this.websites < this.account.actual_websites){
+                            this.websites += 1;
+                            this.$emit('downgrade-not-valid', {
+                                "text": "Elimina sitios para poder modificar tu plan",
+                                "status": "error"
+                            });
+                        }
+                    }
+                break;
 
-                    this.users = 2;
-                    this.extra_users = 0;
+                case "remove-businesses" :
+                    if(this.businesses > 10){
+                        this.businesses -= 1;
+                        if(this.businesses < this.account.actual_businesses){
+                            this.businesses += 1;
+                            this.$emit('downgrade-not-valid', {
+                                "text": "Elimina negocios para poder modificar tu plan",
+                                "status": "error"
+                            });
+                        }               
+                    }
+                break;
 
-                    this.emails = 10000;
-                    this.extra_emails = 0;
-
-                    this.cost = this.truncateDecimals(29.99);
-                    this.resetButton = "Regresar a mi plan actual";
-                    this.toggleButton = 'original';
-                    break;
+                case "remove-users" : 
+                    if(this.users > 2){
+                        this.users -= 1;
+                        if(this.users < this.account.actual_users){
+                            this.users += 1;
+                            this.$emit('downgrade-not-valid', {
+                                "text": "Elimina usuarios para poder modificar tu plan",
+                                "status": "error"
+                            });
+                        }
+                    }
+                break;
             }
             this.firstPayment();
         },
@@ -392,12 +423,21 @@ td {
     margin-bottom: 10px;
 }
 
+.footer div img:hover{
+    filter: grayscale(0);
+    cursor: pointer;
+}
+
 span {
     width: 100px;
     padding: 4px 0px;
     font-size: 10px;
 }
 
+.disabled {
+    pointer-events: none;
+    opacity: 0.6;
+}
 
 @media only screen and (min-width: 1024px) {
     

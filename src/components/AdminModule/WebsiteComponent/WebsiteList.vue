@@ -109,7 +109,7 @@ export default {
             }else if(action == "delete-website"){
                 this.modalMessage = {
                     "title": "Eliminar sitio",
-                    "message": "Se eliminará el sitio web y toda la información relacionada a él"
+                    "message": "Se eliminará el sitio web y toda la información relacionada"
                 } 
             }
             this.selectedWebsite = website;

@@ -38,11 +38,11 @@
             </div>
             <!-- Body -->
             <div class="login-container-body">
-                <span v-show="error" class="error-message">Credenciales invalidas</span>
+                <span v-show="error" class="error-message">PIN incorrecto o expirado</span>
                 <div class="login-form">
                     <!-- Email -->
                     <div class="input-block">
-                        <input v-model="pin" type="text" placeholder="email">
+                        <input v-model="pin" type="text" placeholder="PIN">
                     </div>
 
                     <!-- Login -->
@@ -67,12 +67,12 @@
                 <div class="login-form">
                     <!-- Email -->
                     <div class="input-block">
-                        <input v-model="password" type="text" placeholder="email">
+                        <input v-model="password" type="text" placeholder="nueva contraseña">
                     </div>
 
                     <!-- Verify Email -->
                     <div class="input-block">
-                        <input v-model="p_verified" type="text" placeholder="confirm email">
+                        <input v-model="p_verified" type="text" placeholder="confirmar contraseña">
                     </div>
 
                     <!-- Login -->
@@ -161,7 +161,8 @@
                 formData.append('json', JSON.stringify(json));
                 const response = await axios.post('api/users/resetPassword', formData);
                 if(response.data.status == 'success'){
-                    console.log('contraseña actualizada');
+                    alert("contraseña reestablecida correctamente");
+                    this.$emit('password-updated');
                 }else {
                     this.error = 'Error desconocido'
                 }

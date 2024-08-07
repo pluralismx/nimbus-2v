@@ -64,13 +64,33 @@
                 <img src="../../../../src/assets/images/earth.png" alt="">
             </div>
         </div>
-        <h4>Quitar caracteristicas</h4>
         <div class="footer">
-            <button @click="upgrade('remove-contacts')">quitar 500 contactos</button>
-            <button @click="upgrade('remove-businesses')">quitar negocio</button>
-            <button @click="upgrade('remove-users')">quitar usuario</button>
-            <button @click="upgrade('remove-websites')">quitar sitio</button>
-            <button @click="upgrade('remove-emails')">quitar 500 correos</button>
+
+            <div @click="upgrade('remove-contacts')">
+                <img src="../../../../src/assets/images/contact.png" alt="">
+                <p>quitar 500 contactos</p>
+            </div>
+
+            <div @click="upgrade('remove-emails')">
+                <img src="../../../../src/assets/images/email.png" alt="">
+                <p>quitar 500 correos</p>
+            </div>
+
+            <div @click="upgrade('remove-businesses')">
+                <img src="../../../../src/assets/images/portfolio.png" alt="">
+                <p>quitar negocio</p>
+            </div>
+
+            <div @click="upgrade('remove-users')">
+                <img src="../../../../src/assets/images/boy.png" alt="">
+                <p>quitar usuario</p>
+            </div>
+            
+            <div @click="upgrade('remove-websites')">
+                <img src="../../../../src/assets/images/earth.png" alt="">
+                <p>quitar sitio</p>
+            </div>
+        
         </div>
     </div>
 </template>
@@ -96,11 +116,13 @@ export default {
     },
     data() {
         return {
+            // Caracteristicas del paquete
             users: 0,
             websites: 0,
             emails: 0,
             contacts: 0,
             businesses: 0,
+            
             cost: 0,
             subtotal: 0,
             paymentMonth: 0,
@@ -108,6 +130,7 @@ export default {
             proratedPeriod: 0,
             dailyCost: 0,
             prorated: 0,
+            
             months: [
                 {"name": "enero", "days": 31},
                 {"name": "febrero", "days": 28},
@@ -125,123 +148,98 @@ export default {
         }
     },
     methods: {
-        truncateDecimals: function (number) {
-            return Math.floor(number * 100) / 100;
-        },
         starterPlan: function () {
             this.users = 2;
             this.websites = 1;
             this.emails = 10000;
             this.contacts = 500;
             this.businesses = 10;
-            this.cost = 29.99;
+            this.cost = parseFloat(process.env.VUE_APP_BASIC_PLAN_CHARGE);
             this.firstPayment();
         },
+        truncateDecimals: function (number, digits = 2) {
+            const factor = Math.pow(10, digits);
+            return Math.round(number * factor) / factor;
+        },
         upgrade: function (feature) {
-            if(this.cost >= 29.99){
-                switch(feature){
-                    case 'users' :
+            const emailsCharge = parseFloat(process.env.VUE_APP_EMAILS_CHARGE);
+            const contactsCharge = parseFloat(process.env.VUE_APP_CONTACTS_CHARGE);
+            const websitesCharge = parseFloat(process.env.VUE_APP_WEBSITES_CHARGE);
+            const businessesCharge = parseFloat(process.env.VUE_APP_BUSINESSES_CHARGE);
+            const usersCharge = parseFloat(process.env.VUE_APP_USERS_CHARGE);
+            const baseCharge = parseFloat(process.env.VUE_APP_BASIC_PLAN_CHARGE);
+
+            if (this.cost >= baseCharge) {
+                switch (feature) {
+                    case 'users':
                         this.users++;
-                        this.cost += 4.99;
-                        this.cost = this.truncateDecimals(this.cost);
+                        this.cost = this.truncateDecimals(this.cost + usersCharge);
                         break;
-                    case 'websites' :
+                    case 'websites':
                         this.websites++;
-                        this.cost += 24.99;
-                        this.cost = this.truncateDecimals(this.cost);
+                        this.cost = this.truncateDecimals(this.cost + websitesCharge);
                         break;
-                    case 'emails' :
+                    case 'emails':
                         this.emails += 500;
-                        this.cost += 4.99;
-                        this.cost = this.truncateDecimals(this.cost);
+                        this.cost = this.truncateDecimals(this.cost + emailsCharge);
                         break;
-                    case 'contacts' :
+                    case 'contacts':
                         this.contacts += 500;
-                        this.cost += 5.99;
-                        this.cost = this.truncateDecimals(this.cost);
+                        this.cost = this.truncateDecimals(this.cost + contactsCharge);
                         break;
-                    case 'businesses' :
+                    case 'businesses':
                         this.businesses++;
-                        this.cost += 14.99;
-                        this.cost = this.truncateDecimals(this.cost);
+                        this.cost = this.truncateDecimals(this.cost + businessesCharge);
                         break;
-                    case 'remove-users' :
-                        if(this.users > 2){
+                    // Remove features
+                    case 'remove-users':
+                        if (this.users > 2) {
                             this.users--;
-                            this.cost -= 4.99;
-                            this.cost = this.truncateDecimals(this.cost);
-                        }else {
-                            // Mostrar mensaje de error
+                            this.cost = this.truncateDecimals(this.cost - usersCharge);
                         }
                         break;
-                    case 'remove-websites' :
-                        if(this.websites > 1){
+                    case 'remove-websites':
+                        if (this.websites > 1) {
                             this.websites--;
-                            this.cost -= 24.99;
-                            this.cost = this.truncateDecimals(this.cost);
-                        }else{
-                            // Mandar mensaje de error
+                            this.cost = this.truncateDecimals(this.cost - websitesCharge);
                         }
                         break;
-                    case 'remove-emails' :
-                        if(this.emails > 10000){
+                    case 'remove-emails':
+                        if (this.emails > 10000) {
                             this.emails -= 500;
-                            this.cost -= 4.99;
-                            this.cost = this.truncateDecimals(this.cost);
-                        }else {
-                            // Mandar mensaje de error
+                            this.cost = this.truncateDecimals(this.cost - emailsCharge);
                         }
                         break;
-                    case 'remove-contacts' :
-                        if(this.contacts > 1000){
+                    case 'remove-contacts':
+                        if (this.contacts >= 1000) {
                             this.contacts -= 500;
-                            this.cost -= 5.99;
-                            this.cost = this.truncateDecimals(this.cost);
-                        }else{
-                            // Mandar mensaje de error
+                            this.cost = this.truncateDecimals(this.cost - contactsCharge);
                         }
                         break;
-                    case 'remove-businesses' :
-                        if(this.businesses > 1) {
+                    case 'remove-businesses':
+                        if (this.businesses > 1) {
                             this.businesses--;
-                            this.cost -= 14.99;
-                            this.cost = this.truncateDecimals(this.cost);
-                        }else {
-                            // Mandar mensaje de error
+                            this.cost = this.truncateDecimals(this.cost - businessesCharge);
                         }
                         break;
                 }
                 this.firstPayment();
-            }else {
+            } else {
                 this.$emit('cant-add-feature', {
-                    "text":"Agrega primero el plan basico",
-                    "status":"error"
+                    "text": "Agrega primero el plan basico",
+                    "status": "error"
                 });
             }
         },
         firstPayment: function () {
-            
-            let date = new Date();
-            let periodBegin = (date.getMonth() + 1) + "/" + date.getDate() + "/" + date.getFullYear(); 
-            let periodEnd = (date.getMonth() + 2) + "/" + date.getDate() + "/" + date.getFullYear();
-
-            let taxes = this.cost * 0.08;
-            let total = this.cost + taxes;
             const json = {
-                "type": "new_customer",
                 "users": this.users,
                 "websites": this.websites,
                 "emails": this.emails,
                 "contacts": this.contacts,
                 "businesses": this.businesses,
-                "period_begins": periodBegin,
-                "period_end": periodEnd,
-                "monthly_payment": this.cost,
-                "taxes": this.truncateDecimals(taxes),
-                "total": this.truncateDecimals(total)
             };
             this.$emit('selection-made', json);
-            
         }
     }
 }
@@ -339,10 +337,30 @@ td {
     border-radius: .5rem;
 }
 
+
 .footer {
     display: flex;
+    justify-content: center;
     flex-wrap: wrap;
-    gap: 2px;
+    gap: 28px;
+    margin: 2rem 0;
+}
+
+.footer div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.footer p {
+    font-size: 10px;
+}
+
+.footer div img{
+    filter: grayscale(1);
+    width: 30px;
+    margin-bottom: 10px;
 }
 
 button {
@@ -402,8 +420,43 @@ button {
 
     .footer {
         display: flex;
+        align-items: center;
+        justify-content: space-around;
         flex-wrap: wrap;
-        gap: 8px;
+        min-height: 0;
+        flex: 1;
+        gap: 16px;
+    }
+
+    .footer div {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .footer p {
+        font-size: 10px;
+    }
+
+    .footer div img{
+        filter: grayscale(1);
+        width: 25px;
+        margin-bottom: 10px;
+    }
+
+    .footer div img:hover{
+        filter: grayscale(0);
+        cursor: pointer;
+    }
+
+    .footer p {
+        font-size: 12px;
+    }
+
+    .footer p:hover {
+        color: var(--primary);
+        cursor: pointer;
     }
 
     button {

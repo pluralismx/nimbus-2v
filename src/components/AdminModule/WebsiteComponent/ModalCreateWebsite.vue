@@ -61,7 +61,7 @@ export default {
     data() {
         return {
             name: '',
-            url: '',
+            url: 'https://',
             apiKey: '',
             button: 'cancelar',
             checkboxOptions: {
@@ -112,7 +112,7 @@ export default {
             if (response.data.status == 'success') {
                 this.apiKey = response.data.api_key;
                 this.button = 'aceptar';
-                this.$emit('website-created', {"text":"Sitio creado con éxito", "status":"success"});
+                this.$emit('website-created', {"text":"Sitio/Negocio creado con éxito", "status":"success"});
             }else {
                 this.$emit('website-created', {"text":"No se pudo crear el sitio", "status":"error"});
             }
