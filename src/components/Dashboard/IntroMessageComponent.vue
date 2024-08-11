@@ -7,9 +7,13 @@
 
                 <h2>Bienvenido a Nimbus!</h2>
                 <br/>
-                <p>
-                    Bienvenido a Nimbus CRM, tu periodo de prueba expirará en 15 días. Para contratar ve a la sección administrativa de tu cuenta y elige la opción contratar. Puedes comenzar con el plan básico o personalizar tu paquete... éxito
-                </p>
+                <div class="message-container">
+                    <img src="../../assets/images/like.png" alt="">
+                    <p>
+                    Tu periodo de prueba expirará en 15 días. Para contratar ve a la sección administrativa de tu cuenta y elige la opción contratar.
+                    </p>
+                </div>
+
                 <br/>
                 <div class="button-block">
                     <button class="btn-primary" @click="acceptIntro()">aceptar</button>
@@ -68,10 +72,32 @@ export default {
     justify-content: center;
 }
 
+.message-container {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+    }
+
+    .message-container img{
+        width: 45px;
+        margin-right: 1rem;
+    }
+
 
 @media only screen and (min-width: 1024px) {
     .modal-container {
-        width: 350px;
+        width: 450px;
+    }
+
+    .message-container {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+    }
+
+    .message-container img{
+        width: 60px;
+        margin-right: 1rem;
     }
 }
 </style>

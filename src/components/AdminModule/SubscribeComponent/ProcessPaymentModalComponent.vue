@@ -185,18 +185,18 @@
 
                 // Data
                 user: {
-                    name: 'Andrea',
-                    surname: 'Perez',
-                    phone: '526642522024',
-                    email: 'andrea@pluralis.com.mx'
+                    name: '',
+                    surname: '',
+                    phone: '',
+                    email: ''
                 },
                 
                 card: {
-                    holder_name: 'andrea perez',
-                    card_number: '4111111111111111',
-                    expiration_month: '12',
-                    expiration_year: '24',
-                    cvv2: '123'
+                    holder_name: '',
+                    card_number: '',
+                    expiration_month: '',
+                    expiration_year: '',
+                    cvv2: ''
                 },
             }
         },

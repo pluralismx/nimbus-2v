@@ -347,7 +347,7 @@ export default {
         handleCsvUploaded: function (notification) {
             this.handleStatusBarNotification(notification);
             if(notification && notification.owner){
-                this.account.actual_contacts = Number(this.account.actual_contacts + notification.records_added);
+                this.account.actual_contacts = Number(this.account.actual_contacts) + Number(notification.records_added);
             }
             this.loadWebsiteLeads();
         },

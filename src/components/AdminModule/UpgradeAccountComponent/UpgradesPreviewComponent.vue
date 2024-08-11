@@ -328,7 +328,7 @@
                 }
 
                 // Si quito algo
-                if(this.amount_due < this.account.amount_due){
+                if(this.amount_due < this.account.amount_due && this.total == 0){
                     this.purchaseButton = false;
                     this.modifyButton = true;
                 }

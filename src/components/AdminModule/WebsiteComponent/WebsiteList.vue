@@ -111,6 +111,11 @@ export default {
                     "title": "Eliminar sitio",
                     "message": "Se eliminará el sitio web y toda la información relacionada"
                 } 
+            }else if(action == "update-website"){
+                this.modalMessage = {
+                    "title": "Actualizar sitio",
+                    "message": "¿Seguro que desea continuar?"
+                }  
             }
             this.selectedWebsite = website;
             this.toggleConfirmationModal();
