@@ -5,7 +5,7 @@
             <!-- Body -->
             <div class="modal-body">
 
-                <h2>Bienvenido a Nimbus!</h2>
+                <h2>Bienvenido a Cielo CRM!</h2>
                 <br/>
                 <div class="message-container">
                     <img src="../../assets/images/like.png" alt="">

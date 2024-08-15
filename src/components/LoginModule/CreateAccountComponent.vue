@@ -33,10 +33,20 @@
                     <input v-model="verified" type="password" placeholder="confirm password" required>
                 </div>
 
+                <div class="input-block">
+                    <label class="custom-checkbox">
+                        <input type="checkbox"
+                            v-model="termsAndConditions"
+                        >
+                        <span class="checkmark"></span>
+                        He leído y acepto los <a href="/terminos-y-condiciones" target="_blank">Términos y Condiciones</a> y la <a href="/politica-de-privacidad" target="_blank">Política de Privacidad</a>.
+                    </label>
+                </div>
+
                 <!-- confirm password -->
                 <div class="login-block">
                     <button @click="cancel" class="btn-warning">cancelar</button>
-                    <button @click="register" class="btn-primary">continuar</button>                    
+                    <button @click="register" v-bind:class="{ 'disableButton': termsAndConditions == false }" class="btn-primary">continuar</button>                    
                 </div>
             </form>
         </div>
@@ -53,6 +63,7 @@ export default {
             email: '',
             password: '',
             verified: '',
+            termsAndConditions: false
         }
     },
     methods: {
@@ -156,6 +167,23 @@ export default {
 
 button {
     width: 30%;
+}
+
+.disableButton {
+    pointer-events: none;
+    opacity: 0.6;
+}
+
+.custom-checkbox {
+    display: block;
+    position: relative;
+    padding-left: 35px;
+    margin-bottom: 15px;
+    margin-right: 15px;
+    cursor: pointer;
+    font-size: 14px;
+    user-select: none;
+    color: var(--basic);
 }
 
 @media only screen and (min-width: 1024px){

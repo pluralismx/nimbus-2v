@@ -259,3 +259,63 @@ input[type="checkbox"] {
     -moz-appearance: none;
     appearance: none;
 }
+
+.custom-checkbox {
+    display: block;
+    position: relative;
+    padding-left: 35px;
+    margin-bottom: 15px;
+    margin-right: 15px;
+    cursor: pointer;
+    font-size: 14px;
+    user-select: none;
+    color: black;
+}
+
+.custom-checkbox input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+.checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 15px;
+    width: 15px;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
+
+.custom-checkbox:hover input ~ .checkmark {
+    background-color: #ccc;
+}
+
+.custom-checkbox input:checked ~ .checkmark {
+    background-color: var(--primary);
+    border-color: var(--primary);
+}
+
+.checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+.custom-checkbox input:checked ~ .checkmark:after {
+    display: block;
+}
+
+.custom-checkbox .checkmark:after {
+    left: 4px;
+    top: 0px;
+    width: 4px;
+    height: 8px;
+    border: solid white;
+    border-width: 0 3px 3px 0;
+    transform: rotate(45deg);
+}
