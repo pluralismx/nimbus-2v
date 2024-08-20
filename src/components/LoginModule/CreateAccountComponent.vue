@@ -39,7 +39,7 @@
                             v-model="termsAndConditions"
                         >
                         <span class="checkmark"></span>
-                        He leído y acepto los <a href="/terminos-y-condiciones" target="_blank">Términos y Condiciones</a> y la <a href="/politica-de-privacidad" target="_blank">Política de Privacidad</a>.
+                        He leído y acepto los <a href="https://pluralis.com.mx/terminos-y-condiciones" target="_blank">Términos y Condiciones</a> y la <a href="https://pluralis.com.mx/politica-de-privacidad" target="_blank">Política de Privacidad</a>.
                     </label>
                 </div>
 
@@ -183,9 +183,13 @@ button {
     cursor: pointer;
     font-size: 14px;
     user-select: none;
-    color: var(--basic);
+    color: white;
 }
 
+a {
+    color: var(--basic);
+    text-decoration: underline;
+}
 @media only screen and (min-width: 1024px){
     .login-container {
         background-color: var(--shadows);

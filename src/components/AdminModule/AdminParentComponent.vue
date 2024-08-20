@@ -311,7 +311,6 @@ export default {
             this.isVisiblePaymentSection = true;
             this.isVisibleUpgradeSection = false;
             this.clearUpgradePreview = true;
-            console.log(this.clearUpgradePreview);
             this.$emit('reload-acount');
         }
     },

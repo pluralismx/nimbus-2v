@@ -141,16 +141,16 @@
         <div v-show="isVisiblePaymentStatus" class="modal-container">
     
             <div class="modal-header">
-                <span>4. Estado de la compra</span>
+                <span>4. Procesando...</span>
                 <span class="close-cross" @click="close()">&times;</span>
             </div>
 
             <div class="modal-body">
                 <h2>{{ selectionStatus }}</h2>
                 <br>
-                <p><span>Respuesta del banco: </span><span class="error-message">{{ selectionMessage }}</span></p>
+                <p><span class="error-message">{{ selectionMessage }}</span></p>
                 <div class="buttons-block">
-                    <button class="btn-primary" @click="close()">aceptar</button>
+                    <button class="btn-primary" @click="reloadPage()">aceptar</button>
                 </div>  
             </div>
         </div>
@@ -224,21 +224,23 @@
             },
             close: function () {
                 this.$emit("close-proccess-payment-modal");
-                // this.user.name = '';
-                // this.user.surname = '';
-                // this.user.phone = '';
-                // this.user.email = '';
-                // this.card.holder_name = '';
-                // this.card.card_number = '';
-                // this.card.expiration_month = '';
-                // this.card.expiration_year = '';
-                // this.card.cvv2 = '';
+                this.user.name = '';
+                this.user.surname = '';
+                this.user.phone = '';
+                this.user.email = '';
+                this.card.holder_name = '';
+                this.card.card_number = '';
+                this.card.expiration_month = '';
+                this.card.expiration_year = '';
+                this.card.cvv2 = '';
                 this.isVisibleUserDetails = true;
                 this.isVisibleCardInfo = false;
                 this.isVisibleConfirmPayment = false;
                 this.isVisiblePaymentStatus =false;
             },
-
+            reloadPage: function() {
+                location.reload();
+            },
             // Payment
             createToken: function () {
                 this.processingPayment = true;
@@ -248,14 +250,12 @@
                 OpenPay.token.extractFormAndCreate('payment-form', this.successCallback, this.errorCallback);
             },
             successCallback: async function (response) {
-                console.log(this.selection);
                 const token = response.data.id;
                 let json = {};
                 let url;
-                
                 if(this.selection.type == "new_customer"){
                     json = { 
-                        "description": "Nimbus CRM",
+                        "description": "cielo subscription",
                         "token": token,
                         "name": this.user.name,
                         "surname": this.user.surname,
@@ -270,7 +270,7 @@
                     url = 'payCRM';
                 }else if(this.selection.type == "upgrade"){
                     json = {
-                        "description": "Nimbus CRM Account upgrades",
+                        "description": "account upgrades",
                         "token": token,
                         "name": this.user.name,
                         "surname": this.user.surname,
@@ -283,7 +283,6 @@
                         "businesses": this.selection.businesses,
                     }
                     url = 'addUpgrades';
-                    console.log(json);
                 }else{
                     json = {
                         "token": token,
@@ -291,7 +290,7 @@
                         "surname": this.user.surname,
                         "email": this.user.email,
                         "phone": this.user.phone,
-                        "description": "Nimbus CRM monthly payment",
+                        "description": "cielo monthly payment",
                     }
                     url = 'monthlyPayment'
                 }
@@ -322,10 +321,11 @@
                         this.card.cvv2 = '';
 
                         // Show server response
-                        this.selectionMessage = "Su compra se realizó exitosamente. Se ha enviado un correo a la direccion proporcionada con la confirmación de su compra";
-                        this.selectionStatus = "Se procesó el pago";
+                        this.selectionMessage = "Se abrirá un página de verificación de su banco para proteger su compra, una vez que confirme su cargo haga click en aceptar";
+                        this.selectionStatus = "Pago seguro 3d secure";
+                        let url = response.data.url;
+                        window.open(url);
                     }
-                    this.$emit('reload-account');
                 })
                 .catch(error => {
                     console.log(error.response.data);
@@ -333,7 +333,7 @@
                     this.isVisibleCardInfo = false;
                     this.isVisibleConfirmPayment = false;
                     this.isVisiblePaymentStatus = true;
-                    this.selectionMessage = error.response.data.message;
+                    this.selectionMessage = "Error al intentar realizar el pago";
                     this.selectionStatus = "No se pudo procesar el pago";
                 });
             },

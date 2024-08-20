@@ -288,6 +288,7 @@ export default {
             if(response.data.status=="success"){
                 this.account = response.data.account;
             }
+            
         },
 
         // Update dashboard data

@@ -5,7 +5,7 @@
         <div class="login-container" v-show="isVisibleLogIn">
             <!-- Header -->
             <div class="login-container-header">
-                <h1>Nimbus CRM 2.0</h1>
+                <h1>Cielo CRM</h1>
             </div>
             <!-- Body -->
             <div class="login-container-body">
@@ -13,12 +13,12 @@
                 <div class="login-form">
                     <!-- Email -->
                     <div class="input-block">
-                        <input v-model="email" type="text" placeholder="email">
+                        <input v-model="email" type="text" placeholder="correo">
                     </div>
 
                     <!-- Password -->
                     <div class="input-block">
-                        <input v-model="password" type="password" placeholder="password">
+                        <input v-model="password" type="password" placeholder="contraseña">
                     </div>
 
                     <!-- Login -->
@@ -241,6 +241,12 @@
         }
         100% {
             background-position: 0% 50%;
+        }
+    }
+
+    @media only screen and (min-width: 1024px) {
+        .login-container {
+            width: 300px;
         }
     }
 </style>
