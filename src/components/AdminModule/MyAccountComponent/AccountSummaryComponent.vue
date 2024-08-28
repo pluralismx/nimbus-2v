@@ -88,6 +88,7 @@
         <div class="footer">
             <button class="btn-warning" @click="makePayment()">Pagar mensualidad</button>
         </div>
+        <a href="https://pluralis.com.mx/terminos-y-condiciones">Términos y condiciones</a>
     </div>
 </template>
 <script>

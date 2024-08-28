@@ -101,6 +101,7 @@ export default {
                 "smtp_port": this.smtpPort,
                 "smtp_server": this.smtpServer
             }
+            
             formData.append('json', JSON.stringify(json));
 
             const response = await axios.post('api/website/addEmailAccount', formData, {"withCredentials": true});

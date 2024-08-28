@@ -49,14 +49,25 @@
             :theme="theme"
             :image="templateImageData"
             :website="website"
-
         />
+
+        <!-- Invoice  -->
+         <InvoiceSettingsComponent
+            v-show="template == 'invoice' && templateSettings == true"
+            @open-image-modal="handleOpenImageModal"
+            @update-html-template="handleUpdateHtmlTemplate" 
+            :isSelected="template"
+            :theme="theme"
+            :image="templateImageData"
+            :website="website" 
+         />
 
         <!-- Custom -->
         <CustomEmailEditorComponent 
             v-show="template == 'custom' && templateSettings == true"
             @update-html-template="handleUpdateHtmlTemplate"
             :isSelected="template"
+            :website="website"
         />
 
         <!-- Recipients -->
@@ -95,6 +106,7 @@
     import ImageUploadModalComponent from '../Modals/ImageUploadModalComponent.vue'
     import RecipientsSettingsComponent from '../TemplateSettings/RecipientsSettingsComponent.vue'
     import MailerSettingsComponent from '../MailerSettings/MailerSettings.vue'
+    import InvoiceSettingsComponent from '../TemplateSettings/InvoiceSettingsComponent.vue'
 
     export default {
         name: 'WizardAsideComponent',
@@ -104,6 +116,7 @@
             PromotionalSettingsComponent,
             InstitutionalSettingsComponent,
             CallToActionSettingsComponent,
+            InvoiceSettingsComponent,
             CustomEmailEditorComponent,
             ImageUploadModalComponent,
             RecipientsSettingsComponent,

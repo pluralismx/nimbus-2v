@@ -67,39 +67,40 @@ export default {
     },
     data(){
         return {
-            name: 'Juan Perez',
-            phone: '3056232236',
-            email: 'juan@pluralis.com.mx',
+            name: '',
+            phone: '',
+            email: '',
             status: 'nuevo',
-            message: 'mensaje...'
+            message: ''
         }
     },
     methods: {
         createLead: async function () {
+            console.log("Starting createLead method");
+
             const json = {
                 "name": this.name,
                 "phone": this.phone,
                 "email": this.email,
                 "status": this.status,
                 "message": this.message
-            }
+            };
+            
+
             let formData = new FormData();
             formData.append('json', JSON.stringify(json));
+            
 
             if (this.website_id !== undefined && this.website_id !== '' && this.website_id !== null) {
                 try {
                     const response = await axios.post('api/lead/create/' + this.website_id, formData, { withCredentials: true });
-                    
                     if (response.data.status === "success") {
-                        
-                        if(response.data.owner == true){
+                        if (response.data.owner === true) {
                             this.$emit('lead-created', { text: "Prospecto creado", status: "success" });
-                        }else {
+                        } else {
                             this.$emit('lead-created', { text: "Prospecto creado", status: "success", "owner": false });
                         }
-                        
-
-                    } else if (response.data.message === "Forbidden"){
+                    } else if (response.data.message === "Forbidden") {
                         this.$emit('lead-created', { text: "Permisos insuficientes", status: "error" });
                     } else {
                         this.$emit('lead-created', { text: response.data.message, status: "error" });
@@ -111,6 +112,7 @@ export default {
                 this.$emit('lead-created', { text: "No tienes sitios webs o negocios", status: "error" });
             }
         },
+
         cancelSaveLead(){
             this.$emit('cancel-save-lead');
         }

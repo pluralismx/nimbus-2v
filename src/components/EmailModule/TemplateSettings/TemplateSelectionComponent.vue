@@ -12,6 +12,7 @@
                     <option value="newsletter">Newsletter</option>
                     <option value="institutional">Institucional</option>
                     <option value="callToAction">Llamada a la acción</option>
+                    <option value="invoice">Recibo</option>
                     <option value="custom">personalizado</option>
                 </select>
             </div>
