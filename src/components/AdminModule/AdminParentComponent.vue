@@ -48,6 +48,27 @@
             />
         </div>
 
+        <!-- Product list -->
+        <ProductTitleBarComponent 
+        />
+
+        <!-- Product editor -->
+        <div class="panel-container">
+            <!-- Website manager -->
+            <div class="settings-container">
+                <!-- Header -->
+                <div class="settings-header">
+                    <span>Administrar Productos</span>
+                </div>
+                <!-- Body -->
+                <ProductEditorComponent
+                    :identity="this.identity"
+                    @product-added="handleProductAdded"
+                    @product-updated="handleProductUpdated"
+                />
+            </div>
+        </div>
+
         <!-- Account Title bar -->
         <AccountPanelTitleBarComponent
             :type="account.type"
@@ -116,6 +137,7 @@
             @close-modal="toggleConfirmationModal"
         />
         
+
     </section>
 </template>
 <script>
@@ -132,6 +154,8 @@ import AccountSummaryComponent from './MyAccountComponent/AccountSummaryComponen
 import AccountUpgradesComponent from './UpgradeAccountComponent/AccountUpgradesComponent.vue';
 import UpgradesPreviewComponent from './UpgradeAccountComponent/UpgradesPreviewComponent';
 import ModifyPlanModalComponent from './UpgradeAccountComponent/ModifyPlanModalComponent.vue';
+import ProductTitleBarComponent from './ProductTitleBarComponent.vue';
+import ProductEditorComponent from './ProductComponent/ProductEditorComponent.vue';
 
 
 export default {
@@ -148,10 +172,16 @@ export default {
         AccountSummaryComponent,
         AccountUpgradesComponent,
         UpgradesPreviewComponent,
-        ModifyPlanModalComponent
+        ModifyPlanModalComponent,
+        ProductTitleBarComponent,
+        ProductEditorComponent
     },
     props: {
         account: {
+            type: Object,
+            required: true
+        },
+        identity: {
             type: Object,
             required: true
         }
@@ -312,6 +342,14 @@ export default {
             this.isVisibleUpgradeSection = false;
             this.clearUpgradePreview = true;
             this.$emit('reload-acount');
+        },
+
+        // Products
+        handleProductAdded: function (notification) {
+            this.$emit("product-added", notification);
+        },
+        handleProductUpdated: function (notification) {
+            this.$emit("product-updated", notification);
         }
     },
 

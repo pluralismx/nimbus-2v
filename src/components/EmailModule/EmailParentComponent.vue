@@ -162,7 +162,7 @@
                 } else if (Array.isArray(list)) {
                     const includeTodos = list.includes("todos");
                     this.leads.forEach((item) => {
-                        if (includeTodos || list.includes(item.status) && item.subscribed == true && item.email != '') {
+                        if (includeTodos && item.subscribed == true && item.email != '' || list.includes(item.status) && item.subscribed == true && item.email != '') {
                             this.recipients.push({ 
                                 address: item.email, 
                                 sentStatus: '', 

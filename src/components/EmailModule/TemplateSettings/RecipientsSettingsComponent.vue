@@ -204,7 +204,7 @@
 <style scoped>
 .settings-container {
     margin-top: 2rem;
-    box-shadow: 2px 2px 6px var(--shadows);
+    box-shadow: 2px 2px 6px rgba(0,0,0,0.5);
     border-radius: .5rem;
 }
 

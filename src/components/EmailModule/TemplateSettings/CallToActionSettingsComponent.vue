@@ -328,9 +328,9 @@
                     buttonText: 'ver mas...',
                     buttonLink: 'pluralis.com.mx',
                     // social link
-                    facebook_link: null,
-                    instagram_link: null,
-                    youtube_link: null,
+                    facebook_link: '',
+                    instagram_link: '',
+                    youtube_link: '',
                     // footer
                     footer: "http://api.nimbus.pluralis.com.mx/assets/logo-template.png",
                     slogan: "Mi empresa - slogan",

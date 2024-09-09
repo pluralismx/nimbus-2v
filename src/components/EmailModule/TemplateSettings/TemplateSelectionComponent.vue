@@ -1,7 +1,7 @@
 <template>
     <div class="settings-container">
         <div class="settings-header">
-            <span>Seleccione un templete</span>
+            <span>Seleccione una plantilla</span>
         </div>
         <div class="settings-body">
             <div class="select-block">
@@ -12,8 +12,8 @@
                     <option value="newsletter">Newsletter</option>
                     <option value="institutional">Institucional</option>
                     <option value="callToAction">Llamada a la acción</option>
-                    <option value="invoice">Recibo</option>
-                    <option value="custom">personalizado</option>
+                    <option value="invoice">Presupuesto</option>
+                    <option value="custom">Personalizado</option>
                 </select>
             </div>
             <div class="select-block">

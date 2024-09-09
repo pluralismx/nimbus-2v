@@ -37,6 +37,7 @@
                 @lead-updated="handleLeadUpdated"
                 @lead-status-updated="handleLeadStatusUpdated"
                 @delete-lead="handleDeleteLead"
+                @close-sale="handleCloseSale"
             />
         </tbody>
         <tbody v-if="results">
@@ -47,6 +48,7 @@
                 @lead-updated="handleLeadUpdated"
                 @lead-status-updated="handleLeadStatusUpdated"
                 @delete-lead="handleDeleteLead"
+                @close-sale="handleCloseSale"
             />
         </tbody>
     </table>
@@ -180,18 +182,10 @@ export default {
             this.$emit('show-details', lead);
         },
         handleLeadUpdated: function (lead, notification) {
-            this.leadsData.forEach((item)=>{
-                if(item.id == lead.id){
-                    item.name = lead.name;
-                    item.surname = lead.surname;
-                    item.email = lead.email;
-                    item.phone = lead.phone;
-                }
-            });
-            this.$emit('lead-updated', notification);
+            this.$emit('lead-updated', lead, notification);
         },
-        handleLeadStatusUpdated: function (notification) {
-            this.$emit('lead-status-updated', notification)
+        handleLeadStatusUpdated: function (lead, notification) {
+            this.$emit('lead-status-updated', lead, notification);
         },
         handleDeleteLead: function (id) {
             this.isVisibleConfirmationModal=true;
@@ -218,6 +212,9 @@ export default {
             }else{
                 this.isVisibleConfirmationModal=false;
             }
+        },
+        handleCloseSale: function (lead) {
+            this.$emit('close-sale', lead);
         }
     }
 }

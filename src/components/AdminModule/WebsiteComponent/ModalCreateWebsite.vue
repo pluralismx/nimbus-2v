@@ -6,7 +6,7 @@
 
             <!-- Title -->
             <div class="modal-header">
-                <span>Crear sitio</span>
+                <span>Crear sitio o lista</span>
                 <span class="close-cross" @click="closeModal()">&times;</span>
             </div>
 
@@ -27,7 +27,7 @@
                             @change="toggleCheckbox('business')"
                         >
                         <span class="checkmark"></span>
-                        Negocio
+                        Lista
                     </label>
                 </div>
                 <div class="input-block">

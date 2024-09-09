@@ -16,7 +16,7 @@
         <td v-show="edit==false" width="18%"><span :class="{ 'unsubscribed': this.lead.subscribed == 0 }">{{ email }}</span></td>
         
         <td v-show="edit==false" width="18%">
-            <select class="select-status" v-model="status" @change="editStatus()">
+            <select class="select-status" @change="editStatus()" v-model="status" :style="{ color: getColor(status) }">
                 <option value="nuevo">nuevo</option>
                 <option value="presentacion">presentacion</option>
                 <option value="cotizacion">cotizacion</option>
@@ -35,7 +35,7 @@
         <td v-show="edit==true" width="18%"><input type="text" v-model="phone"></td>
         <td v-show="edit==true" width="18%"><input type="text" v-model="email"></td>
         <td v-show="edit==true" width="18%">
-            <select class="select-status" v-model="status">
+            <select class="select-status" @change="editStatus()" v-model="status" :style="{ color: getColor(status) }">
                 <option value="nuevo">nuevo</option>
                 <option value="presentacion">presentacion</option>
                 <option value="cotizacion">cotizacion</option>
@@ -72,6 +72,17 @@
             }
         },
         methods: {
+            getColor(status) {
+                // Define los colores para cada estado
+                const colors = {
+                    nuevo: '#007BFF',       // Azul fuerte
+                    presentacion: '#1E3A8A', // Azul oscuro
+                    cotizacion: '#FFB300',  // Amarillo oscuro
+                    negociacion: '#D35400', // Naranja oscuro
+                    cierre: '#218838'       // Verde oscuro
+                };
+                return colors[status] || '#FFFFFF'; // Devuelve el color correspondiente o blanco si no coincide
+            },
             toggleEditWebsiteRow: function () {
                 if(this.edit == true){
                     this.edit = false;
@@ -80,26 +91,34 @@
                 }
             },
             editStatus: async function () {
-                const json = {
-                    'status': this.status
-                }
-                
-                let formData = new FormData();
-                formData.append('json', JSON.stringify(json));
-                
-                formData.append('_method', 'put');
-                const response = await axios.post('api/lead/update/'+this.lead.id, formData, {"withCredentials":true});
-                if(response.data.status=="success"){
-                    this.$emit('lead-status-updated', {"text":"Estado actualizado", "status":"success"});
-                }else {
-                    this.$emit('lead-status-updated', {"text":"No su pudo actualizar el estado", "status":"error"});
+                if(this.status != 'cierre'){
+                    
+                    const json = {
+                        'id': this.lead.id,
+                        'status': this.status
+                    }
+                    
+                    let formData = new FormData();
+                    formData.append('json', JSON.stringify(json));
+                    formData.append('_method', 'put');
+
+                    const response = await axios.post('api/lead/update/'+this.lead.id, formData, {"withCredentials":true});
+                    if(response.data.status=="success"){
+                        this.$emit('lead-status-updated', json, {"text":"Estado actualizado", "status":"success"});
+                    }else {
+                        this.$emit('lead-status-updated', null, {"text":"No su pudo actualizar el estado", "status":"error"});
+                    }
+                }else{
+                    this.$emit('close-sale', this.lead);
                 }
             },
             deleteLead: async function () {
                 this.$emit('delete-lead', this.lead.id);
             },
             updateLead: async function () {
+                
                 if(this.name != ''){
+                    
                     const json = {
                         'id': this.lead.id,
                         'name': this.name,
@@ -107,6 +126,7 @@
                         'email': this.email,
                         'status': this.status,
                     }
+
                     let formData = new FormData();
                     formData.append('json', JSON.stringify(json));
                     
@@ -116,10 +136,10 @@
                         this.$emit('lead-updated', json, {"text":"Prospecto actualizado", "status":"success"});
                         this.toggleEditWebsiteRow();
                     }else {
-                        this.$emit('lead-updated', {"text":"No se pudo actualizar el prospecto", "status":"error"});
+                        this.$emit('lead-updated', null, {"text":"No se pudo actualizar el prospecto", "status":"error"});
                     }
                 }else{
-                    this.$emit('lead-updated', {"text":"No se puedes omitir el nombre", "status":"error"});
+                    this.$emit('lead-updated', null, {"text":"No se puedes omitir el nombre", "status":"error"});
                 }
             },
             showDetails: function () {
@@ -153,6 +173,7 @@ td {
 .unsubscribed {
     color: gray;
 }
+
 .select-status {
     color: var(--shadows);
     width: 75%;

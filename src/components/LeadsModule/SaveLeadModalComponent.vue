@@ -76,7 +76,7 @@ export default {
     },
     methods: {
         createLead: async function () {
-            console.log("Starting createLead method");
+            
 
             const json = {
                 "name": this.name,
@@ -85,8 +85,7 @@ export default {
                 "status": this.status,
                 "message": this.message
             };
-            
-
+                        
             let formData = new FormData();
             formData.append('json', JSON.stringify(json));
             

@@ -31,6 +31,7 @@
                 <button class="btn-primary" @click="nextPage">&gt;</button>
             </div>
         </div>
+
         <!-- Desktop devices -->
         <div class="leads-container" v-else>
             <LeadsTableComponent 
@@ -39,6 +40,7 @@
                 @show-details="handleShowDetails"
                 @lead-updated="handleLeadUpdated"
                 @lead-status-updated="handleLeadStatusUpdated"
+                @close-sale="handleCloseSale"
             />
         </div>
         <!-- Modals -->
@@ -85,19 +87,24 @@
             @search-query="handleSearchQuery"
         />
 
+        <ModalCloseSaleComponent />
+
+
+
     </section>
 </template>
 <script>
     import axios from '@/lib/axios'
-    import LeadsTitleBarComponent from './LeadsTitleBarComponent.vue';
-    import LeadCardComponent from './LeadCard.vue';
-    import LeadsTableComponent from './LeadsTableComponent.vue';
-    import SaveLeadModalComponent from './SaveLeadModalComponent.vue';
-    import EditLeadModalComponent from './EditLeadModalComponent.vue';
-    import NotesLeadModalComponent from './NotesLeadModalComponent';
-    import ModalConfirmationComponent from './ModalConfirmationComponent.vue';
-    import ModalUploadCvsComponent from './ModalUploadCvsComponent.vue';
-    import ModalLeadOptionsComponent from './ModalLeadOptionsComponent.vue';
+    import LeadsTitleBarComponent from './LeadsTitleBarComponent.vue'
+    import LeadCardComponent from './LeadCard.vue'
+    import LeadsTableComponent from './LeadsTableComponent.vue'
+    import SaveLeadModalComponent from './SaveLeadModalComponent.vue'
+    import EditLeadModalComponent from './EditLeadModalComponent.vue'
+    import NotesLeadModalComponent from './NotesLeadModalComponent'
+    import ModalConfirmationComponent from './ModalConfirmationComponent.vue'
+    import ModalUploadCvsComponent from './ModalUploadCvsComponent.vue'
+    import ModalLeadOptionsComponent from './ModalLeadOptionsComponent.vue'
+    import ModalCloseSaleComponent from './ModalCloseSaleComponent.vue'
 
     export default {
         name: 'LeadsParentComponent',
@@ -110,7 +117,9 @@
             NotesLeadModalComponent,
             ModalConfirmationComponent,
             ModalUploadCvsComponent,
-            ModalLeadOptionsComponent
+            ModalLeadOptionsComponent,
+            ModalCloseSaleComponent
+            
         },
         props: {
             smViewport: {
@@ -163,6 +172,7 @@
                 isVisibleConfirmationModal: false,
                 isVisibleCvsModal: false,
                 isVisibleLeadOptions: false,
+                isVisibleCloseSaleModal: false,
                 
                 // Data
                 leadsData: [],
@@ -170,6 +180,7 @@
                 leadDetails: '',
                 leadNotes: [],
                 leadToDelete: '',
+                leadToClose: {},
 
                 // Display options
                 sortBy: '',
@@ -184,12 +195,12 @@
         methods: {
 
             // Lead update
-            handleLeadUpdated: function (notification) {
+            handleLeadUpdated: function (lead, notification) {
                 this.isVisibleEditLeadModal = false;
-                this.$emit('lead-updated', notification);
+                this.$emit('lead-updated', lead, notification);
             },
-            handleLeadStatusUpdated: function (notification) {
-                this.$emit('lead-status-updated', notification);
+            handleLeadStatusUpdated: function (lead, notification) {
+                this.$emit('lead-status-updated', lead, notification);
             },
             handleShowEditLeadModal: function (lead) {
                 this.leadToEdit = lead;
@@ -341,6 +352,17 @@
                     this.results = false;
                 }
             },
+            handleCloseSale: function (lead) {
+                this.leadToClose = lead;
+                this.toggleCloseSaleModal();
+            },
+            toggleCloseSaleModal: function () {
+                if(this.isVisibleCloseSaleModal == false){
+                    this.isVisibleCloseSaleModal = true;
+                }else{
+                    this.isVisibleCloseSaleModal = false;
+                }
+            }
         }
     }
 </script>

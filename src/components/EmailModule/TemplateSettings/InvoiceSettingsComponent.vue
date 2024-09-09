@@ -114,8 +114,8 @@
         </div>
 
         <div class="add-remove-articles-container">
-            <span class="span-add-item" @click="this.addRow()">Agregar articulo</span>
-            <span class="span-add-item" @click="this.removeRow()">Quitar articulo</span>
+            <span class="span-add-item" @click="this.addRow()">Agregar artículo</span>
+            <span class="span-add-item" @click="this.removeRow()">Quitar artículo</span>
         </div>
 
         <!-- Additional notes -->

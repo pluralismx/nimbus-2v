@@ -6,6 +6,13 @@
             </div>
             <div class="settings-body">
                 <div class="text-input-block">
+                    <label>Remitente</label>
+                    <div>
+                        <input v-model="sender" class="input-primary" type="text"/>
+                    </div>
+                </div>
+
+                <div class="text-input-block">
                     <label>Email</label>
                     <div>
                         <input v-model="email" class="input-primary" type="text"/>
@@ -65,6 +72,7 @@ export default {
     },
     data() {
         return {
+            sender: '',
             email: '',
             password: '',
             smtpServer: '',
@@ -78,12 +86,12 @@ export default {
                 if (response.data.status === "success") {
                     this.email = response.data.website_email;
                     this.smtpServer = response.data.email_server;
+                    this.sender = response.data.sender;
                 } else {
                     // Opcionalmente, maneja el caso cuando la respuesta no es exitosa
                 }
             } catch (error) {
                 // Silenciar el error
-                // Puedes añadir algún código opcional aquí si quieres manejar el error de otra manera
             }
         },
         addEmail: async function () {
@@ -96,6 +104,7 @@ export default {
             let formData = new FormData();
             const json = {
                 "id_website": this.website,
+                "sender": this.sender,
                 "email": this.email,
                 "password": password, 
                 "smtp_port": this.smtpPort,
@@ -107,7 +116,7 @@ export default {
             const response = await axios.post('api/website/addEmailAccount', formData, {"withCredentials": true});
             if(response.data.status == "success"){
                 this.$emit('email-added', {
-                    "text":"Se agrego la cuenta de correo",
+                    "text":"Se agregó la cuenta de correo",
                     "status":"success"
                 });
             }else if(response.data.message == "Forbidden"){
@@ -128,7 +137,7 @@ export default {
 <style scoped>
 .settings-container {
     margin-top: 1rem;
-    box-shadow: 2px 2px 6px var(--shadows);
+    box-shadow: 2px 2px 6px rgba(0,0,0,0.5);
     border-radius: .5rem;
 }
 

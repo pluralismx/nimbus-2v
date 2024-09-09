@@ -39,7 +39,7 @@
             @lead-deleted="handleLeadDeleted"
             @lead-created="handleLeadCreated"
             @lead-updated="handleLeadUpdated"
-            @lead-status-updated="handleLeadUpdated"
+            @lead-status-updated="handleLeadStatusUpdated"
             @csv-uploaded="handleCsvUploaded"
             @excel-downloaded="handleStatusBarNotification"
         />
@@ -74,6 +74,8 @@
             @cant-add-feature="handleStatusBarNotification"
             @reload-acount="loadAccountData"
             @downgrade-invalid="handleStatusBarNotification"
+            @product-added="handleStatusBarNotification"
+            @product-updated="handleStatusBarNotification"
             
         />
 
@@ -355,8 +357,27 @@ export default {
         handleEmailsSent: function (qty) {
             this.account.sent_emails = Number(this.account.sent_emails) + qty;
         },
-        handleLeadUpdated: function (notification) {
-            this.loadWebsiteLeads();
+        handleLeadUpdated: function (lead, notification) {
+            if (lead) {
+                this.leads.forEach((item) => {
+                    if (item.id === lead.id) {
+                        item.name = lead.name;
+                        item.email = lead.email;
+                        item.phone = lead.phone;
+                        item.status = lead.status;
+                    }
+                });
+            }
+            this.handleStatusBarNotification(notification);
+        },
+        handleLeadStatusUpdated: function (lead, notification) {
+            if (lead) {
+                this.leads.forEach((item) => {
+                    if (item.id === lead.id) {
+                        item.status = lead.status;
+                    }
+                });
+            }
             this.handleStatusBarNotification(notification);
         }
     }
