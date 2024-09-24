@@ -50,10 +50,11 @@
 
         <!-- Product list -->
         <ProductTitleBarComponent 
+            v-if="account.type!=='basic'"
         />
 
         <!-- Product editor -->
-        <div class="panel-container">
+        <div class="panel-container" v-if="account.type!=='basic'">
             <!-- Website manager -->
             <div class="settings-container">
                 <!-- Header -->
@@ -62,7 +63,8 @@
                 </div>
                 <!-- Body -->
                 <ProductEditorComponent
-                    :identity="this.identity"
+                    :identity="identity"
+                    :products="products"
                     @product-added="handleProductAdded"
                     @product-updated="handleProductUpdated"
                 />
@@ -93,7 +95,7 @@
         </div>
 
         <!-- My account -->
-        <div v-if="this.account.type != 'free'" v-show="isVisiblePaymentSection" class="panel-container">
+        <div v-if="isVisiblePaymentSection" class="panel-container">
             <div class="settings-container">  
                 <AccountSummaryComponent
                     :account="account"
@@ -184,6 +186,19 @@ export default {
         identity: {
             type: Object,
             required: true
+        },
+        products: {
+            type: Object,
+            required: true
+        }
+    },
+    watch: {
+        account: {
+            handler(newVal){
+                if(newVal.type == "basic"){
+                    this.isVisibleSubscribeSection = true;
+                }
+            }
         }
     },
     data() {
@@ -196,7 +211,7 @@ export default {
             selection: '',
             isVisibleProcessPaymentModal: false,
             isVisibleSubscribeSection: false,
-            isVisiblePaymentSection: true,
+            isVisiblePaymentSection: false,
             isVisibleUpgradeSection: false,
             clearUpgradePreview: false,
             purchase: '',
@@ -345,11 +360,12 @@ export default {
         },
 
         // Products
-        handleProductAdded: function (notification) {
-            this.$emit("product-added", notification);
+        handleProductAdded: function (notification, product) {
+            console.log(product);
+            this.$emit("product-added", notification, product);
         },
-        handleProductUpdated: function (notification) {
-            this.$emit("product-updated", notification);
+        handleProductUpdated: function (notification, product) {
+            this.$emit("product-updated", notification, product);
         }
     },
 
@@ -417,11 +433,13 @@ export default {
             margin-bottom: 4rem;
             margin-right: 1rem;
             height: 71vh;
+            
         }
 
         .settings-container {
             width: 100%;
             height: 100%;
+            box-sizing: border-box;
         }
 
         .settings-container-footer button {

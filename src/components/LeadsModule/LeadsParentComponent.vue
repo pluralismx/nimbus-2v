@@ -87,9 +87,14 @@
             @search-query="handleSearchQuery"
         />
 
-        <ModalCloseSaleComponent />
-
-
+        <ModalCloseSaleComponent
+            v-show="isVisibleCloseSaleModal" 
+            :products="products"
+            :identity="identity"
+            :lead="leadToClose"
+            @close-modal="toggleCloseSaleModal"
+            @pending-sale="handlePendingSale"
+        />
 
     </section>
 </template>
@@ -135,6 +140,10 @@
                 required: true
             },
             leads: {
+                type: Array,
+                required: true
+            },
+            products: {
                 type: Array,
                 required: true
             }
@@ -320,12 +329,12 @@
             handleDisplyedResults: function (results) {
                 this.rp = results;
             },
-            nextPage (){
+            nextPage: function (){
                 if(this.cp < this.pages){
                     this.cp++;
                 }
             },
-            previousPage (){
+            previousPage: function (){
                 if(this.cp > 1){
                     this.cp--;
                 }
@@ -334,7 +343,7 @@
                 this.search_query = query;
                 this.search();
             },
-            search: function (){
+            search: function () {
                 if(this.results == false){
                     let query = this.search_query;
                     this.leadsData.forEach(lead => {
@@ -362,6 +371,14 @@
                 }else{
                     this.isVisibleCloseSaleModal = false;
                 }
+            },
+            handlePendingSale: function (lead, notification) {
+                if(lead && notification.status == "success"){
+                    this.handleLeadStatusUpdated(lead, notification);
+                }else{
+                    this.$emit('pending-sale', notification);
+                }
+                
             }
         }
     }

@@ -1,5 +1,7 @@
 <template>
-
+    <div v-show="isVisibleLoadingModal==true" class="modal-screen">
+        <h1>Cargando...</h1>
+    </div>
     <!-- Login -->
     <LoginParentComponent
         @user-logged-in="handleUserLoggedIn"
@@ -9,8 +11,8 @@
     <!-- Dashboard -->
     <DashboardComponent 
         v-if="isLogged==true"
-        :smViewport = smViewport
-        :identity = identity
+        :smViewport = "smViewport"
+        :identity = "identity"
         @user-logged-out="handleUserLoggedOut"
     />
 
@@ -47,7 +49,9 @@
             return {
                 smViewport: null,
                 isLogged: false,
-                identity: {},
+                identity: '',
+                isVisibleLoadingModal: true,
+                account: {}
             }
         },
         methods: {
@@ -55,7 +59,10 @@
                 const response = await axios.get('api/session', {"withCredentials":true});
                 if(response.data.status === "success"){
                     this.identity = await JSON.parse(localStorage.getItem('identity'));
+                    this.isVisibleLoadingModal = false;
                     this.isLogged = true;
+                }else{
+                    this.isVisibleLoadingModal = false;
                 }
             },
             handleUserLoggedIn: async function () {
@@ -73,7 +80,6 @@
                     // Manejar el caso donde no hay datos en localStorage
                 }
             },
-
             handleUserLoggedOut(){
                 axios.get('api/logout', {"withCredentials": true})
                     .then(res=>{
@@ -85,11 +91,17 @@
                     .catch(error=>{
                         console.log(error);
                     });
-            }
+            },
         }
     }
 
 </script>
 
-<style>
+<style scoped>
+
+.modal-screen {
+    background-color: var(--shadows);
+    color: var(--basic);
+}
+
 </style>

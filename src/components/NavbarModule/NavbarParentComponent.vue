@@ -18,7 +18,7 @@
             <li><img src="../../assets/images/white-note.png" @click="toggleTool('notes')"></li>
             <li><img src="../../assets/images/white-funel.png" @click="toggleTool('leads')"></li>
             <li><img src="../../assets/images/white-email.png" @click="toggleTool('email')"></li>
-            <li><img src="../../assets/images/white-manager.png" @click="toggleTool('team')"></li>
+            <li v-if="this.identity.account !='basic'"><img src="../../assets/images/white-manager.png" @click="toggleTool('team')"></li>
             <li><img src="../../assets/images/white-logout.png" @click="logout()"></li>
         </ul>
 
@@ -36,6 +36,8 @@
             </li>
             <li><span @click="toggleTool('notes-desktop')">Memos</span></li>
             <li><span @click="toggleTool('leads-desktop')">Prospectos</span></li>
+            <li><span @click="toggleTool('clients-desktop')">Clientes</span></li>
+            <li v-if="this.identity.account !='basic'"><span @click="toggleTool('statistics-desktop')">Estadísticas</span></li>
             <li><span @click="toggleTool('email-desktop')">Email</span></li>
         </ul>
 

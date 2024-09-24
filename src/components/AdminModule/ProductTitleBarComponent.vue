@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h1>Mi productos y servicio</h1>
+        <h1>Mis productos en venta</h1>
     </div>
 </template>
 <script>

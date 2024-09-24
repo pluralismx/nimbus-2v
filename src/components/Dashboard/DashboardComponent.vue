@@ -2,10 +2,6 @@
 
     <!-- Layout -->
     <div id="dashboard">
-        <!-- Loading screen -->
-         <div class="loading-app-screen" v-show="loadingApp">
-            <h1>Cargando</h1>
-         </div>
         <!-- Navigation bar -->
         <NavbarParentComponent
             :identity="identity"
@@ -34,6 +30,7 @@
             :identity="identity"
             :website="website_id"
             :leads="leads"
+            :products="list_products"
             :class="{ 'wide' : !isVisibleNotes }" 
             :smViewport = smViewport
             @lead-deleted="handleLeadDeleted"
@@ -42,6 +39,7 @@
             @lead-status-updated="handleLeadStatusUpdated"
             @csv-uploaded="handleCsvUploaded"
             @excel-downloaded="handleStatusBarNotification"
+            @pending-sale="handleStatusBarNotification"
         />
 
         <EmailParentComponent 
@@ -63,6 +61,7 @@
             :class="{ 'wide' : !isVisibleNotes }"
             :identity="identity"
             :account="account"
+            :products="products"
             @teammate-role-updated="handleStatusBarNotification"
             @teammate-added="handleStatusBarNotification"
             @teammate-deleted="handleStatusBarNotification"
@@ -74,10 +73,24 @@
             @cant-add-feature="handleStatusBarNotification"
             @reload-acount="loadAccountData"
             @downgrade-invalid="handleStatusBarNotification"
-            @product-added="handleStatusBarNotification"
+            @product-added="handleProductAdded"
             @product-updated="handleStatusBarNotification"
-            
         />
+
+        <StatisticsParentComponent
+            v-if="account.type != 'basic'"
+            v-show="isVisibleStatistics"
+            :identity="identity"
+            :class="{ 'wide' : !isVisibleNotes }"
+            @sale-dismissed="handleStatusBarNotification"
+        />
+
+        <ClientsParentComponent
+            v-show="isVisibleClients"
+            :identity="identity"
+            :class="{ 'wide' : !isVisibleNotes }"
+        />
+
 
         <!-- Status bar -->
         <StatusbarParentComponent 
@@ -96,13 +109,15 @@
 
 <script>
 import axios from '@/lib/axios'
-import IntroMessageComponent from './IntroMessageComponent.vue';
-import NavbarParentComponent from '../NavbarModule/NavbarParentComponent.vue';
-import NotesParentComponent from '../NotesModule/NotesParentComponent.vue';
-import LeadsParentComponent from '../LeadsModule/LeadsParentComponent.vue';
-import EmailParentComponent from '../EmailModule/EmailParentComponent.vue';
-import AdminParentComponent from '../AdminModule/AdminParentComponent.vue';
-import StatusbarParentComponent from '../StatusbarModule/StatusbarParentComponent.vue';
+import IntroMessageComponent from './IntroMessageComponent.vue'
+import NavbarParentComponent from '../NavbarModule/NavbarParentComponent.vue'
+import NotesParentComponent from '../NotesModule/NotesParentComponent.vue'
+import LeadsParentComponent from '../LeadsModule/LeadsParentComponent.vue'
+import EmailParentComponent from '../EmailModule/EmailParentComponent.vue'
+import AdminParentComponent from '../AdminModule/AdminParentComponent.vue'
+import StatisticsParentComponent from '../StatisticsModule/StatisticsParentComponent.vue'
+import ClientsParentComponent from '../ClientsModule/ClientsParentComponent.vue'
+import StatusbarParentComponent from '../StatusbarModule/StatusbarParentComponent.vue'
 
 export default {
     name: 'DashboardComponent',
@@ -112,8 +127,10 @@ export default {
         LeadsParentComponent,
         EmailParentComponent,
         AdminParentComponent,
+        StatisticsParentComponent,
+        ClientsParentComponent,
         StatusbarParentComponent,
-        IntroMessageComponent
+        IntroMessageComponent,
     },
     props: {
         smViewport: {
@@ -126,7 +143,8 @@ export default {
         },
     },
     mounted() {
-        this.loadAccountData()    
+        this.loadAccountData();
+        this.loadProducts();
         this.showIntroMessage();
     },
     data() {
@@ -139,6 +157,8 @@ export default {
             isVisibleEmail: false,
             isVisibleTeam: false,
             isVisibleIntroMessageComponent: false,
+            isVisibleStatistics: false,
+            isVisibleClients: false,
             
             // Dashboard data
             reload: false,
@@ -146,6 +166,8 @@ export default {
             notes: [],
             leads: [],
             images: [],
+            products: [],
+            list_products: [],
             account: {},
 
             // Status bar notification data
@@ -187,8 +209,10 @@ export default {
                 case 'leads-desktop':
                     if (this.isVisibleLeads == false) {
                         this.isVisibleLeads = true;
+                        this.isVisibleStatistics = false;
                         this.isVisibleEmail = false;
                         this.isVisibleTeam = false;
+                        this.isVisibleClients = false;
                     } else {
                         this.isVisibleLeads = false;
                     }
@@ -206,8 +230,10 @@ export default {
                 case 'email-desktop':
                     if (this.isVisibleEmail == false) {
                         this.isVisibleEmail = true;
+                        this.isVisibleStatistics = false;
                         this.isVisibleLeads = false;
                         this.isVisibleTeam = false;
+                        this.isVisibleClients = false;
                     } else {
                         this.isVisibleEmail = false;
                     }
@@ -225,10 +251,34 @@ export default {
                 case 'team-desktop':
                     if (this.isVisibleTeam == false) {
                         this.isVisibleTeam = true;
+                        this.isVisibleStatistics = false;
+                        this.isVisibleLeads = false;
+                        this.isVisibleEmail = false;
+                        this.isVisibleClients = false;
+                    } else {
+                        this.isVisibleTeam = false;
+                    }
+                    break;
+                case 'statistics-desktop':
+                    if (this.isVisibleStatistics == false) {
+                        this.isVisibleStatistics = true;
+                        this.isVisibleTeam = false;
+                        this.isVisibleLeads = false;
+                        this.isVisibleEmail = false;
+                        this.isVisibleClients = false;
+                    } else {
+                        this.isVisibleStatistics = false;
+                    }
+                    break;
+                case 'clients-desktop':
+                    if (this.isVisibleClients == false) {
+                        this.isVisibleClients = true;
+                        this.isVisibleStatistics = false;
+                        this.isVisibleTeam = false;
                         this.isVisibleLeads = false;
                         this.isVisibleEmail = false;
                     } else {
-                        this.isVisibleTeam = false;
+                        this.isVisibleClients = false;
                     }
                     break;
             }
@@ -249,15 +299,14 @@ export default {
 
         // Dashboard data
         handleLoadDashboardData: async function (website_id) {
-            
             this.website_id = website_id;
             await Promise.all([
                 this.loadWebsiteNotes(),
                 this.loadWebsiteLeads(),
                 this.loadWebsiteImages(),
-                this.loadAccountData()
+                this.loadAccountData(),
+                this.loadListProducts(),
             ]);
-            
         },
         loadWebsiteLeads: async function () {
             
@@ -285,12 +334,23 @@ export default {
                 }
             }
         },
+        loadProducts: async function () {
+            const response = await axios.get("api/product/list/"+this.identity.sub, {"withCredentials": true});
+            if(response.data.status == "success"){
+                this.products = response.data.products;
+            }
+        },
+        loadListProducts: async function () {
+            const response = await axios.get("api/product/listProducts/"+this.website_id, {"withCredentials": true});
+            if(response.data.status == "success"){
+                this.list_products = response.data.products;
+            }
+        },
         loadAccountData: async function () {
             const response = await axios.get('api/account/accountDetails', {"withCredentials": true});
             if(response.data.status=="success"){
                 this.account = response.data.account;
             }
-            
         },
 
         // Update dashboard data
@@ -372,14 +432,23 @@ export default {
         },
         handleLeadStatusUpdated: function (lead, notification) {
             if (lead) {
-                this.leads.forEach((item) => {
-                    if (item.id === lead.id) {
-                        item.status = lead.status;
-                    }
-                });
+                console.log(lead);
+                // Buscar el lead que coincide con el id
+                const foundLead = this.leads.find(item => item.id === lead.id);
+
+                // Si se encuentra, actualizar el status
+                if (foundLead && lead.status) {
+                    foundLead.status = lead.status;
+                }
             }
             this.handleStatusBarNotification(notification);
+        },
+        handleProductAdded: function (notification, product){
+            this.products.push(product);
+            this.loadListProducts();
+            this.handleStatusBarNotification(notification);
         }
+
     }
 }
 

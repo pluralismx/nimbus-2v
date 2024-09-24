@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h1>Panel administrativo</h1>
+        <h1>Mis listas de ventas y colaboradores</h1>
         <span v-show="!hasNotifications" @click="showNotificationModal()">&#128235;</span>
         <span v-show="hasNotifications" @click="showNotificationModal()">&#128236;</span>
     </div>

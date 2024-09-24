@@ -64,7 +64,7 @@
         components: {
             CreateAccountComponent,
             ResetPasswordComponent,
-            SuccessModalComponent
+            SuccessModalComponent,
         },
         data() {
             return {

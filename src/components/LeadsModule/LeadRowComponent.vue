@@ -16,12 +16,13 @@
         <td v-show="edit==false" width="18%"><span :class="{ 'unsubscribed': this.lead.subscribed == 0 }">{{ email }}</span></td>
         
         <td v-show="edit==false" width="18%">
-            <select class="select-status" @change="editStatus()" v-model="status" :style="{ color: getColor(status) }">
+            <select class="select-status" @change="editStatus()" v-model="status" :style="{ color: getColor(status) }" :disabled="status=='pendiente'">
                 <option value="nuevo">nuevo</option>
                 <option value="presentacion">presentacion</option>
                 <option value="cotizacion">cotizacion</option>
                 <option value="negociacion">negociacion</option>
                 <option value="cierre">cierre</option>
+                <option value="pendiente" v-if="status=='pendiente'">pendiente</option>
             </select>
         </td>
         <td v-show="edit==false">{{ date }}</td>
@@ -35,12 +36,13 @@
         <td v-show="edit==true" width="18%"><input type="text" v-model="phone"></td>
         <td v-show="edit==true" width="18%"><input type="text" v-model="email"></td>
         <td v-show="edit==true" width="18%">
-            <select class="select-status" @change="editStatus()" v-model="status" :style="{ color: getColor(status) }">
+            <select class="select-status" @change="editStatus()" v-model="status" :style="{ color: getColor(status) }" :disabled="status=='pendiente'">
                 <option value="nuevo">nuevo</option>
                 <option value="presentacion">presentacion</option>
                 <option value="cotizacion">cotizacion</option>
                 <option value="negociacion">negociacion</option>
                 <option value="cierre">cierre</option>
+                <option value="pendiente" v-if="status=='pendiente'">pendiente</option>
             </select>
         </td>
         <td v-show="edit==true">26/03/24</td>
@@ -61,6 +63,18 @@
                 required: true
             }
         },
+        watch: {
+            lead: {
+                handler(newVal){
+                    this.name = newVal.name,
+                    this.phone = newVal.phone,
+                    this.email = newVal.email,
+                    this.status = newVal.status,
+                    this.date = newVal.date
+                },
+                deep: true
+            }
+        },
         data() {
             return {
                 edit: false,
@@ -79,7 +93,8 @@
                     presentacion: '#1E3A8A', // Azul oscuro
                     cotizacion: '#FFB300',  // Amarillo oscuro
                     negociacion: '#D35400', // Naranja oscuro
-                    cierre: '#218838'       // Verde oscuro
+                    cierre: '#218838',       // Verde oscuro
+                    pendiente: '#D35400'
                 };
                 return colors[status] || '#FFFFFF'; // Devuelve el color correspondiente o blanco si no coincide
             },

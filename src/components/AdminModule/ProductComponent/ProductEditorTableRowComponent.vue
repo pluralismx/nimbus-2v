@@ -7,7 +7,7 @@
         </td>
         <td>
             <!-- precio -->
-            {{ productData.price }}
+            ${{ productData.price }}
         </td>
         <td>
             <!-- acciones -->
@@ -19,11 +19,11 @@
     <tr v-show="isVisibleEditRow">
         <td>
             <!-- Nombre -->
-             <input type="text" v-model="productData.name">
+             <input type="text" v-model="productData.name" class="compact">
         </td>
         <td>
             <!-- precio -->
-            <input type="number" v-model="productData.price">
+            <input type="number" v-model="productData.price" class="compact">
         </td>
         <td>
             <!-- acciones -->
@@ -101,9 +101,15 @@ export default {
 }
 </script>
 <style scoped>
-
-    td:nth-last-child(1) {
+    
+    td {
+        padding: .5rem;
+        border-bottom: 1px solid black;
         text-align: center;
+    }
+
+    td:nth-child(1){
+        text-align: left;
     }
 
     button {
@@ -113,5 +119,6 @@ export default {
     button:nth-child(1){
         margin-right: 5%;
     }
+
 
 </style>
