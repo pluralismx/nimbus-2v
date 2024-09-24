@@ -23,12 +23,7 @@
                 </div>
                 <div class="added-product-container">
                     <span>Product name</span>
-                </div>
-                <div class="added-product-container">
-                    <span>Product name</span>
-                </div>
-                <div class="added-product-container">
-                    <span>Product name</span>
+                    <span class="close-cross">&times;</span>
                 </div>
             </div>
 
@@ -143,6 +138,9 @@ export default {
     color: var(--basic);
     margin-bottom: .5rem;
     box-sizing: border-box;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 @media only screen and (min-width: 1024px) {
