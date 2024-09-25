@@ -89,6 +89,7 @@
             v-show="isVisibleClients"
             :identity="identity"
             :class="{ 'wide' : !isVisibleNotes }"
+            @invoice-payment="handleStatusBarNotification"
         />
 
 

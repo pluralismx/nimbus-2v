@@ -13,23 +13,64 @@
 
             <!-- cards -->
             <div class="modal-body">
-                <h2 v-show="pendingSales == ''">
+                <h2 v-show="products.length==0 && isVisibleInvoiceDetails==true">
                     Cargando...
                 </h2>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Concepto</th>
-                            <th>Cantidad</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="product in products" :key="product.id">
-                            <td>{{ product.product }}</td>
-                            <td>{{ product.quantity }}</td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div v-show="products.length > 0 && isVisibleInvoiceDetails==true">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th width="50%">Concepto</th>
+                                <th width="50%">Cantidad</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="product in products" :key="product.id">
+                                <td width="50%" style="text-align: center;">{{ product.product }}</td>
+                                <td width="50%" style="text-align: center;">{{ product.quantity }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <br>
+                    <p>Total: ${{ invoice.total }}</p>
+                    <p>Saldo: ${{ invoice.balance }}</p>
+                    <span class="legend" @click="loadPaymentsHistory()">Ver historial de pagos</span>
+                    <div class="input-block">
+                        <label for="">Abonar</label>
+                        <div>
+                            <input type="text" class="compact" v-model="payment">
+                            <button class="btn-warning compact" @click="makePayment()">abonar</button>
+                        </div>
+                    </div>
+                </div>
+                <!-- Payments screen -->
+                 <div>
+                    <h1 v-show="invoiceHistory.length == 0 && isVisibleInvoiceDetails==false">
+                        Cargando...
+                    </h1>
+                    <div v-show="invoiceHistory.length > 0 && isVisibleInvoiceDetails==false">
+                        <div class="invoice-history-actions">
+                            <p @click="toggleScreen()" class="legend">&larr;Regresar</p>
+                            <p @click="downloadExcel()" class="legend">Descargar XCEL</p>
+                        </div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th width="33%">Fecha</th>
+                                    <th width="33%">Abono</th>
+                                    <th width="33%">Balance</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="invoice in invoiceHistory" :key="invoice.id">
+                                    <td style="text-align: center;">{{ invoice.date }}</td>
+                                    <td style="text-align: center;">${{ invoice.payment }}</td>
+                                    <td style="text-align: center;">${{ invoice.balance }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                 </div>
             </div>
 
             <!-- Buttons -->
@@ -57,7 +98,10 @@ export default {
     },
     data() {
         return {
-            products: []
+            isVisibleInvoiceDetails: true,
+            products: [],
+            invoiceHistory: [],
+            payment: ''
         }
     },
     mounted(){
@@ -70,17 +114,85 @@ export default {
         loadInvoiceData: async function () {
             try {
                 const response = await axios.get("api/invoice/details/"+this.invoice.invoice_number, { withCredentials: true });
-
                 if (response.data.status === "success") {
                     this.products = response.data.products;
-                    console.log(this.products);
                 } else {
                     console.error('Error al cargar los detalles de la factura:', response.data.message);
                 }
             } catch (error) {
                 console.error('Error en la solicitud:', error);
             }
-        }
+        },
+        loadPaymentsHistory: async function () {
+            this.isVisibleInvoiceDetails=false;
+            try{
+                const response = await axios.get("api/invoice/records/"+this.invoice.invoice_number, { withCredentials: true });
+                if (response.data.status === "success") {
+                    this.invoiceHistory = response.data.invoices;
+                } else {
+                    console.error('Error al cargar los detalles de la factura:', response.data.message);
+                }
+            }catch(e){
+                console.log(e);
+            }
+        },
+        toggleScreen: function () {
+            this.isVisibleInvoiceDetails=true;
+        },
+        makePayment: async function () {
+            const json = {
+                "payment": this.payment
+            }
+            let formData = new FormData();
+            formData.append('json', JSON.stringify(json));
+            try{
+                const response = await axios.post("api/invoice/payment/"+this.invoice.invoice_number, formData, { withCredentials: true });
+                if (response.data.status === "success") {
+                    this.$emit('invoice-payment', {
+                        "status": "success",
+                        "text": "Se realizó el pago"
+                    });
+                    this.closeModal();
+                } else {
+                    this.$emit('invoice-payment', {
+                        "status": "success",
+                        "text": "No se pudo realizar el pago"
+                    });
+                    this.closeModal();
+                }
+            }catch(e){
+                console.log(e);
+            }
+        },
+        downloadExcel: async function () {
+            axios({
+                url: 'api/invoice/download/' + this.invoice.invoice_number,
+                method: 'GET',
+                responseType: 'blob',
+                withCredentials: true
+            })
+            .then(response => {
+                const url = window.URL.createObjectURL(new Blob([response.data]));
+                const link = document.createElement('a');
+                link.href = url;
+                link.setAttribute('download', 'historial_de_pagos_'+this.invoice.invoice_number+'.xlsx');
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+
+                this.$emit("excel-downloaded", {
+                    "status": "success",
+                    "text": "Excel descargado exitosamente"
+                });
+            })
+            .catch(error => {
+                console.error(error);
+                this.$emit("excel-downloaded", {
+                    "status": "error",
+                    "text": "No se pudo descargar el archivo"
+                });
+            });
+        },
     }
 }
 </script>
@@ -117,13 +229,15 @@ export default {
 
 .input-block {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: left;
     margin: 1rem 0;
 }
 
 .input-block input {
-    width: 60%;
+    width: 20%;
+    margin-right: .5rem;
 }
 
 .input-block select {
@@ -131,7 +245,7 @@ export default {
 }
 
 .input-block button {
-    width: 65%;
+    width: 80px;
 }
 
 .input-block textarea {
@@ -139,6 +253,10 @@ export default {
     resize: none;
     border: none;
     padding: .5rem;
+}
+
+.input-block label {
+    margin-bottom: .5rem;
 }
 
 .modal-footer {
@@ -163,6 +281,46 @@ export default {
 
 h2 {
     color: var(--primary);
+}
+
+table{
+    border-collapse: collapse;
+    border: 1px solid var(--primary);
+    width: 100%;
+}
+
+tr {
+    border: 1px solid var(--primary);
+}
+
+th {
+    background-color: var(--primary);
+    color: var(--basic);
+}
+
+th, td {
+    border: 1px solid var(--primary);
+    padding: 5px;
+}
+
+.legend {
+    font-size: 14px;
+}
+
+.legend:hover {
+    color: var(--primary);
+    cursor: pointer;
+}
+
+p {
+    font-size: 14px;
+}
+
+.invoice-history-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: .5rem;
 }
 
 @media only screen and (min-width: 1024px) {

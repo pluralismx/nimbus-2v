@@ -32,10 +32,12 @@
         <ModalInvoiceDetailsComponent
             v-if="isVisibleInvoiceModal"
             @close-modal="toggleModal()"
+            @invoice-payment="handleInvoicePayment"
             :invoice="invoiceEdit"
         />
 </template>
 <script>
+import axios from '@/lib/axios'
 import WalletRowComponent from './WalletRowComponent.vue'
 import ModalInvoiceDetailsComponent from './ModalInvoiceDetailsComponent.vue'
 export default {
@@ -58,7 +60,6 @@ export default {
     },
     methods: {
         handleOpenInvoiceModal: function (invoice){
-            console.log(invoice);
             this.invoiceEdit = invoice;
             this.toggleModal();
         },
@@ -68,7 +69,39 @@ export default {
             }else{
                 this.isVisibleInvoiceModal=false;
             }
-        }
+        },
+        handleInvoicePayment: function (notification){
+            this.$emit('invoice-payment', notification);
+        },
+        downloadExcel: async function () {
+            axios({
+                url: 'api/clients/downloadWallet',
+                method: 'GET',
+                responseType: 'blob',
+                withCredentials: true
+            })
+            .then(response => {
+                const url = window.URL.createObjectURL(new Blob([response.data]));
+                const link = document.createElement('a');
+                link.href = url;
+                link.setAttribute('download', 'cuentas_por_cobrar.xlsx');
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+
+                this.$emit("excel-downloaded", {
+                    "status": "success",
+                    "text": "Excel descargado exitosamente"
+                });
+            })
+            .catch(error => {
+                console.error(error);
+                this.$emit("excel-downloaded", {
+                    "status": "error",
+                    "text": "No se pudo descargar el archivo"
+                });
+            });
+        },
     }
 }
 </script>

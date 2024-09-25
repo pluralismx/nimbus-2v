@@ -23,24 +23,32 @@
                     />
                 </tbody>
             </table>
+            
             <div v-show="!isVisibleConfirmAction">
                 <span class="span-action" @click="showConfimationOptions('approve')">Aprobar</span>
                 <span>&nbsp;|&nbsp;</span>
                 <span class="span-action" @click="showConfimationOptions('deny')">Denegar</span>
             </div>
+            
             <div class="confirm-sale-container" v-show="isVisibleConfirmAction">
+                
+                <!-- Generate Invoice -->
                 <div class="input-block">
                     <label>Cliente:&nbsp;</label>
                     <input type="text" class="compact" v-model="client">
                     <label for="">Abono:&nbsp;</label>
                     <input type="text" class="compact" v-model="payment">
                 </div>
+
+                <!-- Generate Invoice -->
                 <div class="input-block">
                     <label for="">No. factura:&nbsp;</label>
                     <input type="text" class="compact" v-model="invoice">
                     <label for="">NIF:&nbsp;</label>
                     <input type="text" class="compact" v-model="nif">
                 </div>
+
+                <!-- Accept action -->
                 <div>
                     <span class="span-action" @click="takeAction()">aceptar</span>
                     <span>&nbsp;|&nbsp;</span>
@@ -95,8 +103,6 @@ export default {
             };
 
             formData.append('json', JSON.stringify(json));
-            console.log(JSON.stringify(json));
-            console.log(this.pendingSale.sale_id);
             try{
                 const response = await axios.post("api/sale/aprove/"+this.pendingSale.sale_id, formData, {"withCredentials": true});
                 if(response.data.status == "success"){

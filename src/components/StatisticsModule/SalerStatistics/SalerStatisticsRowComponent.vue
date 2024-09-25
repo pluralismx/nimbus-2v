@@ -5,7 +5,7 @@
         <td @click="showAprovalModal()">{{ seller.pending_sales }}</td>
         <td>{{ seller.incomplete_sales }}</td>
         <td>{{ seller.conversion_rate }}%</td>
-        <td>${{ seller.revenue }}</td>
+        <td>${{ revenue }}</td>
     </tr>
 </template>
 <script>
@@ -19,8 +19,9 @@ export default {
     },
     computed: {
         revenue() {
-            let truncated = this.truncateDecimals(this.seller.revenue);
-            return truncated.toLocaleString('es-MX');
+            let revenueValue = parseFloat(this.seller.revenue);
+            let truncated = this.truncateDecimals(revenueValue);
+            return truncated.toFixed(2).toLocaleString('es-MX');
         }
     },
     methods: {
@@ -29,11 +30,13 @@ export default {
         },
         truncateDecimals: function (number, digits = 2) {
             const factor = Math.pow(10, digits);
-            return Math.round(number * factor) / factor;
+            const truncated = Math.round(number * factor) / factor;
+            return parseFloat(truncated.toFixed(digits));
         },
     }
 }
 </script>
+
 <style scoped>
     tbody td {
         padding: .5rem;

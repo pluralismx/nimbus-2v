@@ -295,6 +295,7 @@ span {
     display: flex;
     flex-direction: column;
     box-sizing: border-box;
+    
 }
 
 .table-container {
@@ -306,6 +307,7 @@ span {
     flex-grow: 1;
     min-height: 0;
     overflow-y: scroll;
+    box-shadow: 1px 1px 2px rgba(0,0,0,0.5);
 }
 
 /* Hide scrollbar for Chrome, Safari and Opera */
@@ -352,6 +354,7 @@ thead tr th:nth-last-child(1) {
     display: flex;
     justify-content: flex-start;
     border-top: 1px solid #aaa;
+    box-shadow: 1px 1px 2px rgba(0,0,0,0.5);
 }
 
 .btn-warning.compact{
