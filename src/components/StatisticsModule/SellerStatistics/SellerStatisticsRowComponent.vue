@@ -10,7 +10,7 @@
 </template>
 <script>
 export default {
-    name: "SalerStatisticsRowComponent",
+    name: "SellerStatisticsRowComponent",
     props: {
         seller: {
             type: Object,
@@ -21,7 +21,10 @@ export default {
         revenue() {
             let revenueValue = parseFloat(this.seller.revenue);
             let truncated = this.truncateDecimals(revenueValue);
-            return truncated.toFixed(2).toLocaleString('es-MX');
+            return truncated.toLocaleString('es-MX', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
         }
     },
     methods: {

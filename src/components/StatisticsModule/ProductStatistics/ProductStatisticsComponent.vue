@@ -1,7 +1,11 @@
 <template>
 
     <div class="title-bar-container">
-        <h1>Desempeño de mis productos</h1>
+        <div class="title-container">
+            <img src="../../../assets/images/sales-growth.png" alt="">
+            <h1>Desempeño de mis productos</h1>
+        </div>  
+        
         <div class="range-selection-container">
             <span @click="downloadExcel()" class="span-excel">descargar XCEL</span>
         </div>
@@ -82,9 +86,20 @@ export default {
 }
 </script>
 <style scoped>
+    .title-container {
+        display: flex;
+        align-items: center;
+        margin-bottom: 8px;
+    }
+
+    .title-container img {
+        width: 30px;
+        margin-right: .5rem;
+    }
+
+
     h1 {
         font-size: 1.5em;
-        margin-bottom: 8px;
     }
 
     .team-statistics-container {

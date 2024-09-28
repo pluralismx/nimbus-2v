@@ -1,37 +1,34 @@
 <template>
     <section>
 
-        <SalerStatisticsComponent
-            :teamData="teamData"
-            :period="period"
+        <SellerStatisticsComponent
+            :sellers="sellers"
             @show-aproval-modal="toggleModalSaleAproval"
             @change-period="handleChangePeriod"
         />
 
         <ProductStatisticsComponent 
-            :productStats="productStats"
-            :period="period"
+            :productStats="products"
             @change-period="handleChangePeriod"
         />
 
         <!-- Modals -->
         <ModalSaleAprovalComponent
             v-if="isVisibleModalSaleAproval"
-            :saler="saler"
+            :seller="seller"
             @close-modal="toggleModalSaleAproval"
             @sale-dismissed="handleSaleDisimissed"
         />
     </section>
 </template>
 <script>
-import axios from "@/lib/axios"
-import SalerStatisticsComponent from "./SalerStatistics/SalerStatisticsComponent.vue"
-import ModalSaleAprovalComponent from "./SalerStatistics/ModalSaleAprovalComponent.vue"
+import SellerStatisticsComponent from "./SellerStatistics/SellerStatisticsComponent.vue"
+import ModalSaleAprovalComponent from "./SellerStatistics/ModalSaleAprovalComponent.vue"
 import ProductStatisticsComponent from './ProductStatistics/ProductStatisticsComponent.vue'
 export default {
     name: "StatisticsParentComponent",
     components: {
-        SalerStatisticsComponent,
+        SellerStatisticsComponent,
         ModalSaleAprovalComponent,
         ProductStatisticsComponent
     },
@@ -40,57 +37,36 @@ export default {
             type: Object,
             required: true
         },
-    },
-    mounted(){
-        if(this.identity.account != 'basic'){
-            this.loadStatistics();
-            this.loadProductStats();
+        sellers: {
+            type: Array,
+            required: true
+        },
+        products: {
+            type: Array,
+            required: true
         }
     },
     data(){
         return {
-            teamData: [],
             isVisibleModalSaleAproval: false,
-            saler: '',
-            productStats: [],
-            period: "day"
+            seller: '',
         }
     },
     methods: {
-        loadStatistics: async function () {
-            const response = await axios.get("api/sale/salerStats/"+this.period, {"withCredentials": true});
-            if(response.data.status == "success"){
-                this.teamData = response.data.salers;
-                console.log(this.teamData);
-            }
-        },
-        loadProductStats: async function () {
-            const response = await axios.get("api/product/productStats/"+this.period+"/"+this.identity.sub, {"withCredentials": true});
-            if(response.data.status == "success"){
-                this.productStats = response.data.products;
-            }
-        },
-        toggleModalSaleAproval: function (saler) {
+        toggleModalSaleAproval: function (seller) {
             if(this.isVisibleModalSaleAproval==false){
                 this.isVisibleModalSaleAproval=true;
-                this.saler = saler;
+                this.seller = seller;
             }else{
                 this.isVisibleModalSaleAproval=false;
-                this.saler = '';
+                this.seller = '';
             }
         },
         handleSaleDisimissed: function (notification) {
-            if(notification.status == "success"){
-                this.loadStatistics();
-                this.loadProductStats();
-            }
             this.$emit('sale-dismissed', notification);
         },
         handleChangePeriod: function (range) {
-            console.log(range);
-            this.period = range;
-            this.loadStatistics();
-            this.loadProductStats();
+            this.$emit("change-period", range);
         }
     }
 }

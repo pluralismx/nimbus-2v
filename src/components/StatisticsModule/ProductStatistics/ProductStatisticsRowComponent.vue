@@ -19,14 +19,17 @@ export default {
     computed: {
         revenue() {
             let truncated = this.truncateDecimals(this.product.revenue);
-            return truncated.toLocaleString('es-MX');
-            
+            return truncated.toLocaleString('es-MX', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
         }
     },
     methods: {
         truncateDecimals: function (number, digits = 2) {
             const factor = Math.pow(10, digits);
-            return Math.round(number * factor) / factor;
+            const truncated = Math.round(number * factor) / factor;
+            return parseFloat(truncated.toFixed(digits));
         },
     }
 }

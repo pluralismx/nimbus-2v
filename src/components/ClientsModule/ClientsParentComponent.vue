@@ -1,82 +1,92 @@
 <template>
     <section>
         <WalletComponent
+            v-if="isVisibleWallet"
             :wallet="wallet"
+            :totals="totals"
             @invoice-payment="handleInvoicePayment"
+            @switch-wallet="handleSwitchWallet"
         />
-        <ClientsListComponent
-            :clients="clients"
-            @edit-client="handleEditClient"
+
+        <SettledAccountsComponent
+            v-if="!isVisibleWallet"
+            :settled="settled"
+            @switch-wallet="handleSwitchWallet"
         />
+
+        <div>
+            <ClientsListComponent
+                :clients="clients"
+                @edit-client="handleEditClient"
+            />
+        </div>
 
         <!-- Modals -->
         <ModalUpdateClientComponent
             v-show="isVisibleEditClientModal"
             :client="clientToEdit"
             @close-modal="toggleEditModal"
+            @client-data-updated="handleClientDataUpdated"
         />
     </section>
 </template>
 <script>
 
-import axios from '@/lib/axios'
 import WalletComponent from "./WalletComponent.vue"
 import ClientsListComponent from "./ClientsListComponent.vue"
 import ModalUpdateClientComponent from "./ModalUpdateClientComponent.vue"
+import SettledAccountsComponent from "./SettledAccountsComponent.vue"
 
 export default {
     name: "ClientsParentComponent",
     components: {
         WalletComponent,
         ClientsListComponent,
-        ModalUpdateClientComponent
+        ModalUpdateClientComponent,
+        SettledAccountsComponent
     },
     props: {
         indentity: {
             type: Object,
             required: true
+        },
+        wallet: {
+            type: Array,
+            required: true
+        },
+        totals: {
+            type: Object,
+            required: true
+        },
+        clients: {
+            type: Array,
+            required: true
+        },
+        settled: {
+            type: Array,
+            required: true
+        },
+    },
+    watch: {
+        clients: {
+            handler(newVal){
+                this.clientsData = newVal;
+            },
+            immediate: true,
+            deep: true
         }
     },
     data() {
         return {
-            wallet: [],
-            clients: [],
+            clientsData: [],
             isVisibleEditClientModal: false,
-            clientToEdit: {}
+            clientToEdit: {},
+            isVisibleWallet: true
         }
     },
-    created(){
-        this.loadWallet();
-        this.loadClientsList();
-    },
     methods: {
-        loadWallet: async function () {
-            try{
-                const response = await axios.get('api/clients/records', {"withCredentials":true});
-                if(response.data.status == "success"){
-                    this.wallet = response.data.wallet;
-                }else{
-                    console.log(response.data.message);
-                }
-            }catch(e){
-                console.log(e);
-            }
-        },
         handleInvoicePayment: function (notification) {
             this.$emit('invoice-payment', notification);
-            this.loadWallet();
-        },
-        loadClientsList: async function () {
-            try{
-                const response = await axios.get("api/clients/list", {"withCredentials": true});
-                if(response.data.status == "success"){
-                    this.clients = response.data.clients;
-                }else{
-                    console.log(response.data.message);
-                }
-            }catch(e){
-                console.log(e);
-            }
         },
         handleEditClient: function (client) {
             this.clientToEdit = client;
@@ -88,7 +98,27 @@ export default {
             }else{
                 this.isVisibleEditClientModal=false;
             }
-        }
+        },
+        handleClientDataUpdated: function (notification, client) {
+            if (client) {
+                let item = this.clientsData.find(c => c.id == client.id);
+                if (item) {
+                    item.name = client.name;
+                    item.phone = client.phone;
+                    item.email = client.email;
+                    item.notes = client.notes;
+                }
+            }
+            this.$emit("client-data-updated", notification);
+        },
+        handleSwitchWallet: function () {
+            if(this.isVisibleWallet==true){
+                this.isVisibleWallet=false;
+            }else{
+                this.isVisibleWallet=true;
+            }
+        },
+
     }
 }
 </script>

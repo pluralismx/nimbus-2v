@@ -35,7 +35,7 @@
                     <p>Total: ${{ invoice.total }}</p>
                     <p>Saldo: ${{ invoice.balance }}</p>
                     <span class="legend" @click="loadPaymentsHistory()">Ver historial de pagos</span>
-                    <div class="input-block">
+                    <div class="input-block" v-show="!paying">
                         <label for="">Abonar</label>
                         <div>
                             <input type="text" class="compact" v-model="payment">
@@ -101,7 +101,8 @@ export default {
             isVisibleInvoiceDetails: true,
             products: [],
             invoiceHistory: [],
-            payment: ''
+            payment: '',
+            paying: false
         }
     },
     mounted(){
@@ -140,6 +141,7 @@ export default {
             this.isVisibleInvoiceDetails=true;
         },
         makePayment: async function () {
+            this.paying = true;
             const json = {
                 "payment": this.payment
             }

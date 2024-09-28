@@ -39,7 +39,7 @@
             @lead-status-updated="handleLeadStatusUpdated"
             @csv-uploaded="handleCsvUploaded"
             @excel-downloaded="handleStatusBarNotification"
-            @pending-sale="handleStatusBarNotification"
+            @pending-sale="handlePendingSale"
         />
 
         <EmailParentComponent 
@@ -81,17 +81,26 @@
             v-if="account.type != 'basic'"
             v-show="isVisibleStatistics"
             :identity="identity"
+            :sellers="sellers"
+            :products="productStats"
             :class="{ 'wide' : !isVisibleNotes }"
-            @sale-dismissed="handleStatusBarNotification"
+            @sale-dismissed="handleSaleDismissed"
+            @change-period="handleChangePeriod"
         />
 
         <ClientsParentComponent
             v-show="isVisibleClients"
             :identity="identity"
             :class="{ 'wide' : !isVisibleNotes }"
-            @invoice-payment="handleStatusBarNotification"
-        />
+            :settled="settled_invoices"
+            :wallet="wallet"
+            :totals="totals"
+            :clients="clients"
+            @invoice-payment="handleInvoicePayment"
+            @client-data-updated="handleStatusBarNotification"
+            @change-period="handleChangeWalletPeriod"
 
+        />
 
         <!-- Status bar -->
         <StatusbarParentComponent 
@@ -144,9 +153,14 @@ export default {
         },
     },
     mounted() {
-        this.loadAccountData();
-        this.loadProducts();
         this.showIntroMessage();
+        this.loadWallet();
+        this.loadProducts();
+        this.loadAccountData();
+        this.loadStatistics();
+        this.loadProductStats();
+        this.loadClientsList();
+        this.loadSettledInvoices();
     },
     data() {
         return {
@@ -167,10 +181,18 @@ export default {
             notes: [],
             leads: [],
             images: [],
-            products: [],
-            list_products: [],
             account: {},
-
+            list_products: [],
+            products: [],
+            clients: [],
+            // Datos para las estidisticas
+            sellers: [], 
+            wallet: [],
+            totals: [],
+            wallet_period: "day",
+            productStats: [],
+            settled_invoices: [],
+            period: "day",
             // Status bar notification data
             statusBarMessage: {}
         }
@@ -353,6 +375,27 @@ export default {
                 this.account = response.data.account;
             }
         },
+        loadWallet: async function () {
+            try{
+                const response = await axios.get('api/clients/records', {"withCredentials":true});
+                if(response.data.status == "success"){
+                    this.wallet = response.data.wallet;
+                    this.totals = response.data.totals;
+                }
+            }catch(e){
+                console.log(e);
+            }
+        },
+        loadSettledInvoices: async function () {
+            try{
+                const response = await axios.get('api/invoice/settled', {"withCredentials": true});
+                if(response.data.status == "success"){
+                    this.settled_invoices = response.data;
+                }
+            }catch(e){
+                console.error(e);
+            }
+        },
 
         // Update dashboard data
         handleNoteCreated: function (notification) {
@@ -434,20 +477,65 @@ export default {
         handleLeadStatusUpdated: function (lead, notification) {
             if (lead) {
                 console.log(lead);
-                // Buscar el lead que coincide con el id
                 const foundLead = this.leads.find(item => item.id === lead.id);
-
-                // Si se encuentra, actualizar el status
                 if (foundLead && lead.status) {
                     foundLead.status = lead.status;
                 }
             }
             this.handleStatusBarNotification(notification);
+            this.loadStatistics();
         },
         handleProductAdded: function (notification, product){
             this.products.push(product);
             this.loadListProducts();
             this.handleStatusBarNotification(notification);
+        },
+        handleSaleDismissed: function (notification) {
+            this.handleStatusBarNotification(notification);
+            this.loadStatistics();
+            this.loadProductStats();
+            this.loadClientsList();
+            this.loadWallet();
+        },
+        handlePendingSale: function (notification){
+            this.handleStatusBarNotification(notification);
+        },
+        loadStatistics: async function () {
+            const response = await axios.get("api/sale/salerStats/"+this.period, {"withCredentials": true});
+            if(response.data.status == "success"){
+                this.sellers = response.data.salers;
+            }
+        },
+        handleChangePeriod: function (period) {
+            this.period = period;
+            this.loadStatistics();
+            this.loadProductStats();
+        },
+        loadProductStats: async function () {
+            const response = await axios.get("api/product/productStats/"+this.period+"/"+this.identity.sub, {"withCredentials": true});
+            if(response.data.status == "success"){
+                this.productStats = response.data.products;
+            }
+        },
+        loadClientsList: async function () {
+            try{
+                const response = await axios.get("api/clients/list", {"withCredentials": true});
+                if(response.data.status == "success"){
+                    this.clients = response.data.clients;
+                }else{
+                    console.log(response.data.message);
+                }
+            }catch(e){
+                console.log(e);
+            }
+        },
+        handleChangeWalletPeriod: function (period){
+            this.wallet_period = period;
+        },
+        handleInvoicePayment: function(notification){
+            this.handleStatusBarNotification(notification);
+            this.loadSettledInvoices();
+            this.loadWallet();
         }
 
     }

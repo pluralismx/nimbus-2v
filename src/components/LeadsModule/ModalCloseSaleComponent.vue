@@ -205,7 +205,7 @@ export default {
     background-color: var(--primary);
     border-top-left-radius: .5rem;
     border-top-right-radius: .5rem;
-    color: var(--basic);
+    color: var(--basic); 
 }
 
 .modal-body {

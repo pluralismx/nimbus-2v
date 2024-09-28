@@ -18,6 +18,7 @@
                 </h2>
                 <PendingSaleCardComponent 
                     v-for="pendingSale in pendingSales" :key="pendingSale.sale_id" :pendingSale="pendingSale"
+                    :lastInvoice="lastInvoice"
                     @sale-dismissed="handleSaleDismissed"
                 />
             </div>
@@ -43,7 +44,7 @@ export default {
         PendingSaleCardComponent
     },
     props: {
-        saler: {
+        seller: {
             type: Number,
             required: true
         }
@@ -53,7 +54,8 @@ export default {
     },
     data() {
         return {
-            pendingSales: []
+            pendingSales: [],
+            lastInvoice: ""
         }
     },
     methods: {
@@ -61,12 +63,12 @@ export default {
             this.$emit("close-modal");
         },
         loadPendingSales: async function () {
-            const response = await axios.get("api/sale/pendingSales/"+this.saler, {"withCredentials": true});
+            const response = await axios.get("api/sale/pendingSales/"+this.seller, {"withCredentials": true});
             if(response.data.status === "success"){
-                console.log(response.data);
                 this.pendingSales = response.data.pending_sales;
+                this.lastInvoice = response.data.invoice_number;
             }else{
-                console.log(response.data);
+                console.log(response.data.message);
             }
         },
         handleSaleDismissed: function (notification) {

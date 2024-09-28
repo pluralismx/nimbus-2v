@@ -10,14 +10,35 @@
                 <span class="close-cross" @click="closeModal()">&times;</span>
             </div>
 
-
-            <!-- cards -->
+            <!-- Form -->
             <div class="modal-body">
+
+                <div class="input-block">
+                    <label for="">Nombre</label>
+                    <input type="text" v-model="clientData.name">
+                </div>
+
+                <div class="input-block">
+                    <label for="">Teléfono</label>
+                    <input type="text" v-model="clientData.phone">
+                </div>
+
+                <div class="input-block">
+                    <label for="">Email</label>
+                    <input type="text" v-model="clientData.email">
+                </div>
+
+                <div class="input-block">
+                    <textarea v-model="clientData.notes">
+                    </textarea>
+                </div>
+
             </div>
 
             <!-- Buttons -->
             <div class="modal-footer">
                 <div class="buttons-block">
+                    <button class="btn-primary" @click="updateClient()">actualizar</button>
                     <button class="btn-primary" @click="closeModal()">cancelar</button>
                 </div>
             </div>
@@ -28,7 +49,7 @@
 </template>
 
 <script>
-// import axios from '@/lib/axios'
+import axios from '@/lib/axios'
 export default {
     name: 'ModalUpdateClientComponent',
     components: {
@@ -39,14 +60,58 @@ export default {
             required: true
         }
     },
+    watch: {
+        client: {
+            handler(newVal){
+                this.clientData = newVal;
+            },
+            immediate: true,
+            deep: true
+        }
+    },
     data() {
         return {
-            pendingSales: []
+            pendingSales: [],
+            clientData: {}
         }
     },
     methods: {
         closeModal: function () {
             this.$emit("close-modal");
+        },
+        updateClient: async function () {
+            
+            let formData = new FormData();
+            
+            const json = {
+                id: this.clientData.id,
+                name: this.clientData.name,
+                phone: this.clientData.phone,
+                email: this.clientData.email,
+                notes: this.clientData.notes
+            }
+
+            console.log(JSON.stringify(json));
+            
+            formData.append('json', JSON.stringify(json));
+            formData.append('_method', 'put');
+            
+            try{
+                const response = await axios.post('api/clients/update/' + this.clientData.id, formData, {"withCredentials": true});
+                if(response.data.status == "success"){
+                    this.$emit("client-data-updated", {
+                        "status": "success",
+                        "text": "Datos del cliente actualizados"
+                    }, json);
+                }else{
+                    this.$emit("client-data-updated", {
+                        "status": "error",
+                        "text": "No se puedieron actualizar los datos"
+                    }, null);
+                }
+            }catch(e){
+                console.log(e);
+            }
         },
     },
 

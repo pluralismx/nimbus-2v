@@ -30,7 +30,7 @@
                 <span class="span-action" @click="showConfimationOptions('deny')">Denegar</span>
             </div>
             
-            <div class="confirm-sale-container" v-show="isVisibleConfirmAction">
+            <div class="confirm-sale-container" v-show="isVisibleInvoiceForm">
                 
                 <!-- Generate Invoice -->
                 <div class="input-block">
@@ -47,14 +47,17 @@
                     <label for="">NIF:&nbsp;</label>
                     <input type="text" class="compact" v-model="nif">
                 </div>
-
-                <!-- Accept action -->
-                <div>
-                    <span class="span-action" @click="takeAction()">aceptar</span>
-                    <span>&nbsp;|&nbsp;</span>
-                    <span class="span-action" @click="showConfimationOptions()">cancelar</span>
-                </div>
             </div>
+
+            <!-- Accept action -->
+            <div v-show="isVisibleConfirmAction">
+                <span class="span-action" @click="takeAction()">aceptar</span>
+                <span>&nbsp;|&nbsp;</span>
+                <span class="span-action" @click="showConfimationOptions()">cancelar</span>
+                <span v-show="isVisibleError">&nbsp;|&nbsp;</span>
+                <span class="error-span" v-show="isVisibleError">No puedes usar el mismo numero de factura</span>
+            </div>
+            
 
         </div>
     </div>
@@ -68,10 +71,22 @@ export default {
         pendingSale: {
             type: Object,
             required: true
+        },
+        lastInvoice: {
+            type: String,
+            required: true
         }
     },
     components:{
         PendingSaleCardRowComponent
+    },
+    watch: {
+        lastInvoice: {
+            handler(newVal){
+                this.invoice = newVal;
+            },
+            immediate: true,
+        }
     },
     data() {
         return {
@@ -82,6 +97,8 @@ export default {
             payment: '',
             invoice: '',
             nif: '',
+            isVisibleInvoiceForm: false,
+            isVisibleError: false
         }
     },
     methods: {
@@ -93,33 +110,36 @@ export default {
             }
         },
         approveSale: async function () {
-            let formData = new FormData();
-            const json = {
-                "client" : this.client,
-                "total" : this.pendingSale.revenue,
-                "payment" : this.payment,
-                "invoice" : this.invoice,
-                "nif" : this.invoice,
-            };
+            if(this.invoice == this.lastInvoice){
+                this.isVisibleError = true;
+            }else{
+                let formData = new FormData();
+                const json = {
+                    "client" : this.client,
+                    "total" : this.pendingSale.revenue,
+                    "payment" : this.payment,
+                    "invoice" : this.invoice,
+                    "nif" : this.invoice,
+                };
 
-            formData.append('json', JSON.stringify(json));
-            try{
-                const response = await axios.post("api/sale/aprove/"+this.pendingSale.sale_id, formData, {"withCredentials": true});
-                if(response.data.status == "success"){
-                    this.$emit('sale-dismissed', {
-                        "status": "success",
-                        "text": "Venta aprobada"
-                    });
-                }else{
-                    this.$emit('sale-dismissed', {
-                        "status": "error",
-                        "text": "No se pudo aprobar la venta"
-                    });
+                formData.append('json', JSON.stringify(json));
+                try{
+                    const response = await axios.post("api/sale/aprove/"+this.pendingSale.sale_id, formData, {"withCredentials": true});
+                    if(response.data.status == "success"){
+                        this.$emit('sale-dismissed', {
+                            "status": "success",
+                            "text": "Venta aprobada"
+                        });
+                    }else{
+                        this.$emit('sale-dismissed', {
+                            "status": "error",
+                            "text": "No se pudo aprobar la venta"
+                        });
+                    }
+                }catch (e){
+                    console.log(e);
                 }
-            }catch (e){
-                console.log(e);
             }
-
         },
         rejectSale: async function () {
             const response = await axios.get("api/sale/rejectSale/"+this.pendingSale.sale_id, {"withCredentials": true});
@@ -138,9 +158,14 @@ export default {
         showConfimationOptions: function (action) {
             if(this.isVisibleConfirmAction == false){
                 this.action = action;
-                this.isVisibleConfirmAction = true
+                if(action == 'approve'){
+                    this.isVisibleInvoiceForm = true;
+                }
+                this.isVisibleConfirmAction = true;
             }else{
-                this.isVisibleConfirmAction = false
+                this.isVisibleInvoiceForm = false;
+                this.isVisibleConfirmAction = false;
+                this.isVisibleError = false;
                 this.action = ''
             }
         },
@@ -150,7 +175,7 @@ export default {
             }else if(this.action == "deny"){
                 this.rejectSale();
             }
-        }
+        },
     }
 }
 </script>
@@ -225,6 +250,7 @@ export default {
         align-items: center;
         font-size: 14px;
         margin-bottom: 10px;
+        justify-content: space-between;
     }
 
     .confirm-sale-container {
@@ -236,5 +262,9 @@ export default {
     .customer-details-container {
         display: flex;
         flex-direction: column;
+    }
+
+    .error-span {
+        color: var(--warn);
     }
 </style>

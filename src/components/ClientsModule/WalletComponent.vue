@@ -1,6 +1,13 @@
 <template>
         <div class="title-bar-container">
-            <h1>Cuentas por cobrar</h1>
+            <div class="title-container">
+                <img src="../../assets/images/wallet.png">
+                <h1 @click="switchWallet()">Cuentas por cobrar</h1>
+            </div>
+            
+            <span>Valor: ${{ value }}</span>
+            <span>Balance: ${{ balance }}</span>
+            <span>Pagado: ${{ paid }}</span>
             <div class="range-selection-container">
                 <span @click="downloadExcel()" class="span-excel">descargar XCEL</span>
             </div>
@@ -27,6 +34,9 @@
                     v-for="client in wallet" :key="client.client_id" :client="client"
                     @open-invoice-modal="handleOpenInvoiceModal"
                 />
+                <tr v-show="wallet.length == 0">
+                    <td colspan="11">No tienes cuentas por cobrar</td>
+                </tr>
             </tbody>
         </table>
         <ModalInvoiceDetailsComponent
@@ -49,16 +59,51 @@ export default {
     props: {
         wallet: {
             type: Array,
+            required: true,
+        },
+        totals: {        
+            type: Object,
             required: true
+        }
+    },
+    computed: {
+        value() {
+            let valueValue = parseFloat(this.totals.value);
+            let truncated = this.truncateDecimals(valueValue);
+            return truncated.toLocaleString('es-MX', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
+        },
+        paid() {
+            let paidValue = parseFloat(this.totals.paid);
+            let truncated = this.truncateDecimals(paidValue);
+            return truncated.toLocaleString('es-MX', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
+        },
+        balance() {
+            let balanceValue = parseFloat(this.totals.balance);
+            let truncated = this.truncateDecimals(balanceValue);
+            return truncated.toLocaleString('es-MX', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
         }
     },
     data() {
         return {
             isVisibleInvoiceModal: false,
-            invoiceEdit: {}
+            invoiceEdit: {},
         }
     },
     methods: {
+        truncateDecimals: function (number, digits = 2) {
+            const factor = Math.pow(10, digits);
+            const truncated = Math.floor(number * factor) / factor;
+            return truncated;
+        },
         handleOpenInvoiceModal: function (invoice){
             this.invoiceEdit = invoice;
             this.toggleModal();
@@ -102,15 +147,33 @@ export default {
                 });
             });
         },
+        switchWallet: function (){
+            this.$emit("switch-wallet");
+        },
     }
 }
 </script>
 <style scoped>
- h1 {
-        font-size: 1.5em;
+
+    .title-container {
+        display: flex;
+        align-items: center;
         margin-bottom: 8px;
     }
 
+    .title-container img {
+        width: 22px;
+        margin-right: .5rem;
+    }
+
+    h1 {
+        font-size: 1.5em;
+    }
+
+    h1:hover {
+        cursor: pointer;
+        color: var(--primary);
+    }
     .team-statistics-container {
         width: 100%;
         box-sizing: border-box;

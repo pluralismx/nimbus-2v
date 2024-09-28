@@ -1,7 +1,11 @@
 <template>
 
     <div class="title-bar-container">
-        <h1>Desempeño de mis vendedores</h1>
+        <div class="title-container">
+            <img src="../../../assets/images/seller.png" alt="">
+            <h1>Desempeño de mis vendedores</h1>
+        </div>
+        
         <div class="range-selection-container">
             <label for="">Periodo:&nbsp;</label>
             <select class="compact" @change="changeStatsPeriod($event.target.value)">
@@ -29,8 +33,8 @@
             </tr>
         </thead>
         <tbody>
-            <SalerStatisticsRowComponent 
-                v-for="seller in teamData" :key="seller.seller_id" :seller="seller"
+            <SellerStatisticsRowComponent 
+                v-for="seller in sellers" :key="seller.seller_id" :seller="seller"
                 @show-aproval-modal="handleShowAprovalModal"
             />
         </tbody>
@@ -38,14 +42,14 @@
 </template>
 <script>
 import axios from "@/lib/axios"
-import SalerStatisticsRowComponent from './SalerStatisticsRowComponent.vue'
+import SellerStatisticsRowComponent from './SellerStatisticsRowComponent.vue'
 export default {
-    name: "SalerStatisticsComponent",
+    name: "SellerStatisticsComponent",
     components: {
-        SalerStatisticsRowComponent
+        SellerStatisticsRowComponent
     },
     props: {
-        teamData: {
+        sellers: {
             type: Array,
             required: true
         },
@@ -55,8 +59,8 @@ export default {
         }
     },
     methods: {
-        handleShowAprovalModal: function (saler) {
-            this.$emit('show-aproval-modal', saler);
+        handleShowAprovalModal: function (seller) {
+            this.$emit('show-aproval-modal', seller);
         },
         downloadExcel: async function () {
             axios({
@@ -94,9 +98,20 @@ export default {
 }
 </script>
 <style scoped>
+
+    .title-container {
+        display: flex;
+        align-items: center;
+        margin-bottom: 8px;
+    }
+
+    .title-container img {
+        width: 25px;
+        margin-right: .5rem;
+    }
+
     h1 {
         font-size: 1.5em;
-        margin-bottom: 8px;
     }
 
     .team-statistics-container {

@@ -1,70 +1,67 @@
 <template>
     <div class="title-bar-container">
         <div class="title-container">
-            <img src="../../assets/images/hand-shake.png" alt="">
-            <h1>Mis clientes</h1>
+            <img src="../../assets/images/money-bag.png">
+            <h1 @click="switchWallet()">Cuentas liquidadas</h1>
         </div>
-        
         <div class="range-selection-container">
             <span @click="downloadExcel()" class="span-excel">descargar XCEL</span>
         </div>
     </div>
-
     <table>
         <thead>
             <tr>
-                <th width="25%">Nombre</th>
-                <th width="25%">Teléfono</th>
-                <th width="25%">E-mail</th>
-                <th width="25%">Frecuencia de Compra</th>
+                <th>No. de factura</th>
+                <th>Fecha</th>
+                <th>Cliente</th>
+                <th>Valor</th>
             </tr>
         </thead>
         <tbody>
-            <ClientsListRowComponent
-                v-for="client in clientsData" :key="client.id" :client="client" 
-                @edit-client="handleEditClient"
+            <SettledAccountRowComponent
+                v-for="invoice in settled.invoices" :key="invoice.id" :invoice="invoice"
             />
         </tbody>
     </table>
 </template>
 <script>
 import axios from '@/lib/axios'
-import ClientsListRowComponent from './ClientsListRowComponent.vue';
+import SettledAccountRowComponent from './SettledAccountsRowComponent.vue'
 export default {
-name: "ClientsListComponent",
+name: "SettledAccountsComponent",
 components: {
-    ClientsListRowComponent
+    SettledAccountRowComponent
 },
 props: {
-    wallet: {
+    settled: {
         type: Array,
         required: true
-    },
-    clients: {
-        type: Array,
-        required: true
-    }
-},
-watch: {
-    clients: {
-        handler(newVal){
-            this.clientsData = newVal;   
-        },
-        immediate: true,
-        deep: true
     }
 },
 data() {
     return {
         isVisibleInvoiceModal: false,
-        invoiceEdit: {},
-        clientsData: []
+        invoiceEdit: {}
     }
 },
 methods: {
+    handleOpenInvoiceModal: function (invoice){
+        this.invoiceEdit = invoice;
+        this.toggleModal();
+    },
+    toggleModal: function () {
+        if(this.isVisibleInvoiceModal==false){
+            this.isVisibleInvoiceModal = true;
+        }else{
+            this.isVisibleInvoiceModal=false;
+        }
+    },
+    handleInvoicePayment: function (notification){
+        this.$emit('invoice-payment', notification);
+    },
     downloadExcel: async function () {
         axios({
-            url: 'api/clients/downloadList',
+            url: 'api/clients/downloadWallet',
             method: 'GET',
             responseType: 'blob',
             withCredentials: true
@@ -73,7 +70,7 @@ methods: {
             const url = window.URL.createObjectURL(new Blob([response.data]));
             const link = document.createElement('a');
             link.href = url;
-            link.setAttribute('download', 'lista_de_clientes.xlsx');
+            link.setAttribute('download', 'cuentas_por_cobrar.xlsx');
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
@@ -91,14 +88,14 @@ methods: {
             });
         });
     },
-    handleEditClient: function (client) {
-        this.$emit('edit-client', client);
+    switchWallet: function (){
+        this.$emit("switch-wallet");
     }
-
 }
 }
 </script>
 <style scoped>
+
 .title-container {
         display: flex;
         align-items: center;
@@ -106,12 +103,17 @@ methods: {
     }
 
 .title-container img {
-    width: 30px;
+    width: 25px;
     margin-right: .5rem;
 }
 
 h1 {
     font-size: 1.5em;
+}
+
+h1:hover {
+    cursor: pointer;
+    color: var(--primary);
 }
 
 .team-statistics-container {
@@ -143,7 +145,7 @@ h1 {
 }
 
 table {
-    width: 50%;
+    width: 100%;
     border-collapse: collapse;
     box-shadow: 1px 1px 2px rgba(0,0,0,0.5);
     margin-bottom: 4rem;
