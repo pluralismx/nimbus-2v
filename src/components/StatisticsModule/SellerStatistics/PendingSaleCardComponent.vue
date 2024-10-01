@@ -110,7 +110,7 @@ export default {
             }
         },
         approveSale: async function () {
-            if(this.invoice == this.lastInvoice){
+            if(this.invoice == this.lastInvoice || this.payment < this.pendingSale.balance){
                 this.isVisibleError = true;
             }else{
                 let formData = new FormData();
@@ -119,7 +119,7 @@ export default {
                     "total" : this.pendingSale.revenue,
                     "payment" : this.payment,
                     "invoice" : this.invoice,
-                    "nif" : this.invoice,
+                    "nif" : this.nif,
                 };
 
                 formData.append('json', JSON.stringify(json));

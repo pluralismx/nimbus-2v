@@ -68,7 +68,7 @@ export default {
     },
     computed: {
         value() {
-            let valueValue = parseFloat(this.totals.value);
+            let valueValue = parseFloat(this.totals.value) || 0;
             let truncated = this.truncateDecimals(valueValue);
             return truncated.toLocaleString('es-MX', {
                 minimumFractionDigits: 2,
@@ -76,7 +76,7 @@ export default {
             });
         },
         paid() {
-            let paidValue = parseFloat(this.totals.paid);
+            let paidValue = parseFloat(this.totals.paid) || 0;
             let truncated = this.truncateDecimals(paidValue);
             return truncated.toLocaleString('es-MX', {
                 minimumFractionDigits: 2,
@@ -84,7 +84,7 @@ export default {
             });
         },
         balance() {
-            let balanceValue = parseFloat(this.totals.balance);
+            let balanceValue = parseFloat(this.totals.balance) || 0;
             let truncated = this.truncateDecimals(balanceValue);
             return truncated.toLocaleString('es-MX', {
                 minimumFractionDigits: 2,
@@ -224,5 +224,11 @@ export default {
 
     tbody tr:nth-child(even){
         background-color: var(--basic);
+    }
+
+    tbody tr:hover {
+        color: var(--basic);
+        background-color: var(--shadows);
+        cursor: pointer;
     }
 </style>

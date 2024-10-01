@@ -51,6 +51,12 @@ export default {
             deep: true
         }
     },
+    computed: {
+        price(){
+            let truncated = this.truncateDecimals(this.productData.price);
+            return truncated.toLocaleString("es-MX");
+        }
+    },
     data(){
         return {
             isVisibleEditRow: false,
@@ -58,6 +64,11 @@ export default {
         }
     },
     methods: {
+        truncateDecimals: function (number, digits=2){
+            const factor = Math.pow(10, digits);
+            const truncated = Math.round(number * factor) / factor;
+            return parseFloat(truncated.toFixed(digits));
+        },
         toggleEditRow: function (){
             if(this.isVisibleEditRow == false){
                 this.isVisibleEditRow = true;

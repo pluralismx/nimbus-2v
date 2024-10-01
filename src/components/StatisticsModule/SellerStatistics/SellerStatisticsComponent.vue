@@ -33,6 +33,9 @@
             </tr>
         </thead>
         <tbody>
+            <tr v-if="sellers.length == 0">
+                <td colspan="5">No hay datos que mostrar</td>
+            </tr>
             <SellerStatisticsRowComponent 
                 v-for="seller in sellers" :key="seller.seller_id" :seller="seller"
                 @show-aproval-modal="handleShowAprovalModal"

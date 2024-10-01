@@ -2,7 +2,7 @@
     <div class="title-bar-container">
         <div class="title-container">
             <img src="../../assets/images/money-bag.png">
-            <h1 @click="switchWallet()">Cuentas liquidadas</h1>
+            <h1 @click="switchWallet()">Cuentas liquidadas ${{ revenue }}</h1>
         </div>
         <div class="range-selection-container">
             <span @click="downloadExcel()" class="span-excel">descargar XCEL</span>
@@ -21,6 +21,9 @@
             <SettledAccountRowComponent
                 v-for="invoice in settled.invoices" :key="invoice.id" :invoice="invoice"
             />
+            <tr v-show="settled.length == 0">
+                <td colspan="11">No hay datos que mostrar</td>
+            </tr>
         </tbody>
     </table>
 </template>
@@ -38,6 +41,16 @@ props: {
         required: true
     }
 },
+computed: {
+    revenue(){
+        let revenueValue = parseFloat(this.settled.revenue) || 0;
+        let truncated = this.truncateDecimals(revenueValue);
+        return truncated.toLocaleString('es-MX', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        });
+    }
+},
 data() {
     return {
         isVisibleInvoiceModal: false,
@@ -45,6 +58,11 @@ data() {
     }
 },
 methods: {
+    truncateDecimals: function (number, digits=2){
+            const factor = Math.pow(10, digits);
+            const truncated = Math.round(number * factor) / factor;
+            return parseFloat(truncated.toFixed(digits));
+    },
     handleOpenInvoiceModal: function (invoice){
         this.invoiceEdit = invoice;
         this.toggleModal();

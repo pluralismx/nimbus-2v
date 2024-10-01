@@ -22,9 +22,13 @@
             </tr>
         </thead>
         <tbody>
+
             <ProductStatisticsRowComponent 
                 v-for="product in productStats" :key="product.id" :product="product"
             />
+            <tr v-show="productStats.length == 0">
+                <td colspan="5">No hay datos que mostrar</td>
+            </tr>
         </tbody>
     </table>
 </template>

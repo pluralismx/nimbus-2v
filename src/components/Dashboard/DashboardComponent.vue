@@ -537,7 +537,6 @@ export default {
             this.loadSettledInvoices();
             this.loadWallet();
         }
-
     }
 }
 

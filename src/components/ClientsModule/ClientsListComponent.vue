@@ -24,6 +24,9 @@
                 v-for="client in clientsData" :key="client.id" :client="client" 
                 @edit-client="handleEditClient"
             />
+            <tr v-show="clientsData.length == 0">
+                <td colspan="5">No hay datos que mostrar</td>
+            </tr>
         </tbody>
     </table>
 </template>
