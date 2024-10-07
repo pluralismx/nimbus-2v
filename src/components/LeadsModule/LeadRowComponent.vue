@@ -16,13 +16,14 @@
         <td v-show="edit==false" width="18%"><span :class="{ 'unsubscribed': this.lead.subscribed == 0 }">{{ email }}</span></td>
         
         <td v-show="edit==false" width="18%">
-            <select class="select-status" @change="editStatus()" v-model="status" :style="{ color: getColor(status) }" :disabled="status=='pendiente'">
+            <select class="select-status" @change="editStatus()" v-model="status" :style="{ color: getColor(status) }" :disabled="status=='pendiente' || status=='completa'">
                 <option value="nuevo">nuevo</option>
                 <option value="presentacion">presentacion</option>
                 <option value="cotizacion">cotizacion</option>
                 <option value="negociacion">negociacion</option>
                 <option value="cierre">cierre</option>
                 <option value="pendiente" v-if="status=='pendiente'">pendiente</option>
+                <option value="completa" v-if="status=='completa'">completa</option>
             </select>
         </td>
         <td v-show="edit==false">{{ date }}</td>
@@ -36,13 +37,14 @@
         <td v-show="edit==true" width="18%"><input type="text" v-model="phone"></td>
         <td v-show="edit==true" width="18%"><input type="text" v-model="email"></td>
         <td v-show="edit==true" width="18%">
-            <select class="select-status" @change="editStatus()" v-model="status" :style="{ color: getColor(status) }" :disabled="status=='pendiente'">
+            <select class="select-status" @change="editStatus()" v-model="status" :style="{ color: getColor(status) }" :disabled="status=='pendiente' || status=='completa'">
                 <option value="nuevo">nuevo</option>
                 <option value="presentacion">presentacion</option>
                 <option value="cotizacion">cotizacion</option>
                 <option value="negociacion">negociacion</option>
                 <option value="cierre">cierre</option>
                 <option value="pendiente" v-if="status=='pendiente'">pendiente</option>
+                <option value="completa" v-if="status=='completa'">completa</option>
             </select>
         </td>
         <td v-show="edit==true">26/03/24</td>
@@ -93,8 +95,9 @@
                     presentacion: '#1E3A8A', // Azul oscuro
                     cotizacion: '#FFB300',  // Amarillo oscuro
                     negociacion: '#D35400', // Naranja oscuro
-                    cierre: '#218838',       // Verde oscuro
-                    pendiente: '#D35400'
+                    cierre: '#D35400',       // Verde oscuro
+                    pendiente: '#D35400',
+                    completa: '#218838'
                 };
                 return colors[status] || '#FFFFFF'; // Devuelve el color correspondiente o blanco si no coincide
             },

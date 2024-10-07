@@ -99,7 +99,6 @@
             @invoice-payment="handleInvoicePayment"
             @client-data-updated="handleStatusBarNotification"
             @change-period="handleChangeWalletPeriod"
-
         />
 
         <!-- Status bar -->
@@ -367,6 +366,8 @@ export default {
             const response = await axios.get("api/product/listProducts/"+this.website_id, {"withCredentials": true});
             if(response.data.status == "success"){
                 this.list_products = response.data.products;
+            }else{
+                this.list_products = [];
             }
         },
         loadAccountData: async function () {
@@ -381,10 +382,14 @@ export default {
                 if(response.data.status == "success"){
                     this.wallet = response.data.wallet;
                     this.totals = response.data.totals;
+                }else{
+                    this.wallet = [],
+                    this.totals = []
                 }
             }catch(e){
                 console.log(e);
             }
+            
         },
         loadSettledInvoices: async function () {
             try{

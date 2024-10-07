@@ -7,8 +7,8 @@
             <!-- Title -->
             <div class="modal-header">
                 <div>
-                    <span>Cerrar venta - {{ lead.name }}</span>
-                    <span v-show="revenue != 0">${{ revenue }}</span>
+                    <span>Cerrar venta - {{ lead.name }}&nbsp;</span>
+                    <span v-show="revenue != 0">- ${{ revenue }}</span>
                 </div>
                 <span class="close-cross" @click="closeModal()">&times;</span>
             </div>

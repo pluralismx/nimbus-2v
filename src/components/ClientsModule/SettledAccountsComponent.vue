@@ -10,30 +10,69 @@
     </div>
     <table>
         <thead>
+            <tr class="table-tools">
+                <td class="table-search" colspan="3">
+                    <label for="">Buscar:&nbsp;</label>
+                    <input v-model="search_query" type="text">&nbsp;
+                    <button class="btn-warning compact" @click="search()">{{ search_btn_text }}</button>
+                </td>
+                <td class="table-pagination" colspan="4">
+                    <label for="rows_per_page">resultados: </label>
+                    <select v-model="this.rp" class="select-rows">
+                        <option value="5">5</option>
+                        <option value="10">10</option>
+                        <option value="25">25</option>
+                        <option value="50">50</option>
+                    </select>
+                    <button class="btn-warning compact" @click="previousPage">&lt;</button>
+                    <span>&nbsp;{{ this.cp }}</span><span>&nbsp;/&nbsp;</span><span>{{ this.pages }}&nbsp;</span>
+                    <button class="btn-warning compact" @click="nextPage">&gt;</button>
+                </td>
+            </tr>
             <tr>
-                <th>No. de factura</th>
-                <th>Fecha</th>
-                <th>Cliente</th>
-                <th>Valor</th>
+                <th width="25%">No. de factura</th>
+                <th width="25%">Fecha</th>
+                <th width="25%">Cliente</th>
+                <th width="25%">Valor</th>
             </tr>
         </thead>
-        <tbody>
+        <!-- All data -->
+        <tbody v-if="!results">
             <SettledAccountRowComponent
-                v-for="invoice in settled.invoices" :key="invoice.id" :invoice="invoice"
+                v-for="invoice in displayedData" :key="invoice.id" :invoice="invoice"
+                @show-details="handleOpenInvoiceModal"
             />
-            <tr v-show="settled.length == 0">
+            <tr v-show="displayedData.length == 0">
                 <td colspan="11">No hay datos que mostrar</td>
             </tr>
         </tbody>
+        <!-- Search results -->
+        <tbody v-if="results">
+            <SettledAccountRowComponent
+                v-for="invoice in results_data" :key="invoice.id" :invoice="invoice"
+                @show-details="handleOpenInvoiceModal"
+            />
+            <tr v-show="results_data.length == 0">
+                <td colspan="11">No hay resultados</td>
+            </tr>
+        </tbody>
     </table>
+    <ModalSettledInvoiceDetailsComponent
+        v-if="isVisibleInvoiceModal"
+        @close-modal="toggleModal()"
+        @invoice-payment="handleInvoicePayment"
+        :invoice="invoiceEdit"
+    />
 </template>
 <script>
 import axios from '@/lib/axios'
+import ModalSettledInvoiceDetailsComponent from './ModalSettledInvoiceDetailsComponent.vue'
 import SettledAccountRowComponent from './SettledAccountsRowComponent.vue'
 export default {
 name: "SettledAccountsComponent",
 components: {
-    SettledAccountRowComponent
+    SettledAccountRowComponent,
+    ModalSettledInvoiceDetailsComponent
 },
 props: {
     settled: {
@@ -49,12 +88,49 @@ computed: {
             minimumFractionDigits: 2,
             maximumFractionDigits: 2
         });
+    },
+    pages() {
+        if (this.settledData && this.settledData.invoices) {
+            return Math.ceil(this.settledData.invoices.length / this.rp);
+        } else {
+            return 0;
+        }
+    },
+    limitStart() {
+        return (this.cp - 1) * this.rp;
+    },
+    limitEnd() {
+        return this.rp * this.cp;
+    },
+    displayedData() {
+        if (this.settledData && this.settledData.invoices) {
+            return this.settledData.invoices.slice(this.limitStart, this.limitEnd);
+        } else {
+            return [];
+        }
+    }
+},
+watch: {
+    settled: {
+        handler(newVal){
+            this.settledData = newVal;
+        },
+        immediate: true,
+        deep: true
     }
 },
 data() {
     return {
         isVisibleInvoiceModal: false,
-        invoiceEdit: {}
+        invoiceEdit: {},
+        settledData: [],
+        leads_per_page: null,
+        rp: 10,
+        cp: 1,
+        search_btn_text: 'buscar',
+        search_query: null,
+        results: false,
+        results_data: [],
     }
 },
 methods: {
@@ -108,7 +184,62 @@ methods: {
     },
     switchWallet: function (){
         this.$emit("switch-wallet");
-    }
+    },
+    nextPage (){
+        if(this.cp < this.pages){
+            this.cp++;
+        }
+    },
+    previousPage (){
+        if(this.cp > 1){
+            this.cp--;
+        }
+    },
+    sortTable(index) {
+        if (this.orderByColumn === index) {
+            this.orderAsc = !this.orderAsc;
+        } else {
+            this.orderByColumn = index;
+            this.orderAsc = true;
+        }
+        if (this.orderAsc) {
+            this.leadsData.sort((a, b) => {
+                let columnA = a[index].toLowerCase(); 
+                let columnB = b[index].toLowerCase(); 
+                return columnA.localeCompare(columnB, 'es', { sensitivity: 'base' });
+            });
+        } else {
+            this.leadsData.sort((a, b) => {
+                let columnA = a[index].toLowerCase(); 
+                let columnB = b[index].toLowerCase();
+                return columnB.localeCompare(columnA, 'es', { sensitivity: 'base' });
+            });
+        }
+    },
+    search() {
+        if (this.results === false && this.settledData.invoices) {
+            this.search_btn_text = 'limpiar';
+            let query = this.search_query ? this.search_query.toLowerCase() : '';
+            this.results_data = [];
+
+            this.settledData.invoices.forEach(invoice => {
+                if (
+                    (invoice.invoice_number && invoice.invoice_number.toLowerCase().startsWith(query)) || 
+                    (invoice.client && invoice.client.toLowerCase().startsWith(query)) || 
+                    (invoice.email && invoice.email.toLowerCase().startsWith(query))
+                ) {
+                    this.results_data.push(invoice);
+                }
+            });
+
+            this.results = true;
+        } else {
+            this.results_data = [];
+            this.search_query = '';  // Usa una cadena vacía en lugar de null
+            this.results = false;
+            this.search_btn_text = 'buscar';
+        }
+    },
 }
 }
 </script>
@@ -184,5 +315,54 @@ tbody tr:nth-child(odd){
 
 tbody tr:nth-child(even){
     background-color: var(--basic);
+}
+
+tbody tr:hover{
+    background-color: var(--shadows);
+    cursor:pointer;
+    color: var(--basic);
+}
+
+.table-tools {
+    background-color: var(--primary);
+    color: var(--basic);
+    border-bottom: 1px solid var(--shadows);
+}
+
+.table-tools td {
+    padding: .5rem;
+}
+
+.table-search {
+    text-align: left;
+}
+
+.table-search input{
+    width: 15rem;
+}
+.column-name:hover {
+    cursor: pointer;
+    color: var(--accent);
+}
+
+.table-pagination {
+    text-align: right;
+}
+
+.select-rows {
+    width: 4rem;
+    margin-right: 1rem;
+    padding: 5px;
+}
+
+input {
+    padding: 5px;
+    width: 75%;
+    border-radius: 4px;
+    border:none;
+}
+
+input:focus{
+    outline: none;
 }
 </style>

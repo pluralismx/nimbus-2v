@@ -18,7 +18,7 @@
                 <tr>
                     <th>No. de factura</th>
                     <th>Fecha</th>
-                    <th>Ultimo pago</th>
+                    <th>Último pago</th>
                     <th>Cliente</th>
                     <th>Valor</th>
                     <th>Pagado</th>
@@ -31,10 +31,10 @@
             </thead>
             <tbody>
                 <WalletRowComponent
-                    v-for="client in wallet" :key="client.client_id" :client="client"
+                    v-for="client in walletData" :key="client.client_id" :client="client"
                     @open-invoice-modal="handleOpenInvoiceModal"
                 />
-                <tr v-show="wallet.length == 0">
+                <tr v-if="walletData.length === 0">
                     <td colspan="11">No tienes cuentas por cobrar</td>
                 </tr>
             </tbody>
@@ -64,6 +64,14 @@ export default {
         totals: {        
             type: Object,
             required: true
+        }
+    },
+    watch: {
+        wallet: {
+            handler(newVal) {
+                this.walletData = newVal;
+            },
+            immediate: true
         }
     },
     computed: {
@@ -96,6 +104,7 @@ export default {
         return {
             isVisibleInvoiceModal: false,
             invoiceEdit: {},
+            walletData: [],
         }
     },
     methods: {

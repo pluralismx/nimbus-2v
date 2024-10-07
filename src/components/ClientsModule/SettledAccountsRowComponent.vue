@@ -1,5 +1,5 @@
 <template>
-    <tr>
+    <tr @click="openDetails()">
         <td>{{ invoice.invoice_number }}</td>
         <td>{{ invoice.date }}</td>
         <td>{{ invoice.client }}</td>
@@ -13,6 +13,11 @@ export default {
         invoice: {
             type: Object,
             required: true
+        }
+    },
+    methods: {
+        openDetails: function (){
+            this.$emit("show-details", this.invoice);
         }
     }
 }

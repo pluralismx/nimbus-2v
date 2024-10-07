@@ -29,8 +29,8 @@
                 </div>
 
                 <div class="input-block">
-                    <textarea v-model="clientData.notes">
-                    </textarea>
+                    <label for="">Detalles</label>
+                    <textarea v-model="clientData.notes"></textarea>
                 </div>
 
             </div>
@@ -171,6 +171,14 @@ export default {
     resize: none;
     border: none;
     padding: .5rem;
+    box-sizing: border-box;
+    margin-top: 1rem;
+    border-radius: 4px;
+}
+
+.input-block:nth-last-child(1){
+    flex-direction: column;
+    align-items: flex-start;
 }
 
 .modal-footer {

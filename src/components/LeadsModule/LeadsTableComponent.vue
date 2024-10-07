@@ -88,7 +88,6 @@ export default {
         }
     },
     computed: {
-
         leadsDataComputed() {
             return this.leads;
         },

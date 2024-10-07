@@ -39,10 +39,6 @@ components: {
     ClientsListRowComponent
 },
 props: {
-    wallet: {
-        type: Array,
-        required: true
-    },
     clients: {
         type: Array,
         required: true
@@ -156,6 +152,7 @@ thead tr {
     background-color: var(--primary);
     color: var(--shadows);
 }
+
 th {
     color: var(--basic);
     padding: .5rem;

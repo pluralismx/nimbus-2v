@@ -2,7 +2,7 @@
     <section>
         <WalletComponent
             v-if="isVisibleWallet"
-            :wallet="wallet"
+            :wallet="walletData"
             :totals="totals"
             @invoice-payment="handleInvoicePayment"
             @switch-wallet="handleSwitchWallet"
@@ -73,12 +73,19 @@ export default {
                 this.clientsData = newVal;
             },
             immediate: true,
+        },
+        wallet: {
+            handler(newVal){
+                this.walletData = newVal;
+            },
+            immediate: true,
             deep: true
         }
     },
     data() {
         return {
             clientsData: [],
+            walletData: [],
             isVisibleEditClientModal: false,
             clientToEdit: {},
             isVisibleWallet: true

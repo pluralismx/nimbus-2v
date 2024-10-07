@@ -30,6 +30,9 @@ export default {
         text-align: center;
     }
 
+    tr:hover{
+        cursor: pointer;
+    }
 
 
 </style>

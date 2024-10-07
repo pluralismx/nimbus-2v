@@ -33,16 +33,7 @@
                     </table>
                     <br>
                     <p>Total: ${{ invoice.total }}</p>
-                    <p>Saldo: ${{ invoice.balance }}</p>
                     <span class="legend" @click="loadPaymentsHistory()">Ver historial de pagos</span>
-                    <div class="input-block" v-show="!paying">
-                        <label for="">Abonar</label>
-                        <div>
-                            <input type="text" class="compact" v-model="payment">
-                            <button class="btn-warning compact" @click="makePayment()">abonar</button>
-                        </div>
-                        <span class="error" v-show="error">Cantidad inválida</span>
-                    </div>
                 </div>
                 <!-- Payments screen -->
                  <div>
@@ -90,7 +81,7 @@
 import axios from "@/lib/axios"
 
 export default {
-    name: 'ModalInvoiceDetailsComponent',
+    name: 'ModalSettledInvoiceDetailsComponent',
     props: {
         invoice: {
             type: Object,
@@ -141,48 +132,6 @@ export default {
         },
         toggleScreen: function () {
             this.isVisibleInvoiceDetails=true;
-        },
-        makePayment: async function () {
-            this.paying = true;
-            
-            if(this.payment <= (this.invoice.total - this.invoice.paid)){
-                const json = {
-                    "payment": this.payment
-                }
-                let formData = new FormData();
-                formData.append('json', JSON.stringify(json));
-                
-                try {
-                    const response = await axios.post("api/invoice/payment/" + this.invoice.invoice_number, formData, { withCredentials: true });
-                    if (response.data.status === "success") {
-                        this.$emit('invoice-payment', {
-                            "status": "success",
-                            "text": "Se realizó el pago"
-                        });
-                        this.closeModal();
-                    } else {
-                        this.$emit('invoice-payment', {
-                            "status": "error",
-                            "text": "No se pudo realizar el pago"
-                        });
-                        this.closeModal();
-                    }
-                } catch (e) {
-                    console.log(e);
-                    this.$emit('invoice-payment', {
-                        "status": "error",
-                        "text": "Ocurrió un error al procesar el pago"
-                    });
-                    this.closeModal();
-                } finally {
-                    this.paying = false; 
-                }
-
-                this.error = false;
-            } else {
-                this.error = true;
-                this.paying = false;
-            }
         },
         downloadExcel: async function () {
             axios({
