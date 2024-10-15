@@ -28,12 +28,6 @@
 import axios from '@/lib/axios'
 export default {
     name: 'IntroMessageComponent',
-    props: {
-        status: {
-            type: String,
-            required: true
-        }
-    },
     methods: {
         acceptIntro: async function () {
             let answer = false;

@@ -318,7 +318,6 @@ export default {
         handleWelcomeMessageAccepted: function () {
             this.isVisibleIntroMessageComponent = false;
         },
-
         // Dashboard data
         handleLoadDashboardData: async function (website_id) {
             this.website_id = website_id;
@@ -399,6 +398,12 @@ export default {
                 }
             }catch(e){
                 console.error(e);
+            }
+        },
+        loadStatistics: async function () {
+            const response = await axios.get("api/sale/sellerStats/"+this.period, {"withCredentials": true});
+            if(response.data.status == "success"){
+                this.sellers = response.data.sellers;
             }
         },
 
@@ -504,12 +509,6 @@ export default {
         },
         handlePendingSale: function (notification){
             this.handleStatusBarNotification(notification);
-        },
-        loadStatistics: async function () {
-            const response = await axios.get("api/sale/salerStats/"+this.period, {"withCredentials": true});
-            if(response.data.status == "success"){
-                this.sellers = response.data.salers;
-            }
         },
         handleChangePeriod: function (period) {
             this.period = period;

@@ -25,7 +25,7 @@
                 @edit-client="handleEditClient"
             />
             <tr v-show="clientsData.length == 0">
-                <td colspan="5">No hay datos que mostrar</td>
+                <td colspan="4" style="text-align: center;">No hay datos que mostrar</td>
             </tr>
         </tbody>
     </table>
@@ -164,5 +164,9 @@ tbody tr:nth-child(odd){
 
 tbody tr:nth-child(even){
     background-color: var(--basic);
+}
+
+td {
+    padding: .5rem;
 }
 </style>

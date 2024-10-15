@@ -27,7 +27,7 @@
                 v-for="product in productStats" :key="product.id" :product="product"
             />
             <tr v-show="productStats.length == 0">
-                <td colspan="5">No hay datos que mostrar</td>
+                <td colspan="5" style="text-align: center;">No hay datos que mostrar</td>
             </tr>
         </tbody>
     </table>
@@ -155,6 +155,10 @@ export default {
     .span-excel:hover {
         cursor: pointer;
         color: var(--primary);
+    }
+
+    td {
+        padding: .5rem;
     }
 
 </style>

@@ -34,7 +34,7 @@
         </thead>
         <tbody>
             <tr v-if="sellers.length == 0">
-                <td colspan="6">No tienes vendedores</td>
+                <td colspan="6" style="text-align: center;">No tienes vendedores</td>
             </tr>
             <SellerStatisticsRowComponent 
                 v-for="seller in sellers" :key="seller.seller_id" :seller="seller"
@@ -168,5 +168,7 @@ export default {
         cursor: pointer;
         color: var(--primary);
     }
-
+    td {
+        padding: .5rem;
+    }
 </style>

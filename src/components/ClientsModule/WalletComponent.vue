@@ -35,7 +35,7 @@
                     @open-invoice-modal="handleOpenInvoiceModal"
                 />
                 <tr v-if="walletData.length === 0">
-                    <td colspan="11">No tienes cuentas por cobrar</td>
+                    <td colspan="11" style="text-align: center;">No tienes cuentas por cobrar</td>
                 </tr>
             </tbody>
         </table>
@@ -239,5 +239,9 @@ export default {
         color: var(--basic);
         background-color: var(--shadows);
         cursor: pointer;
+    }
+
+    td {
+        padding: .5rem;
     }
 </style>
